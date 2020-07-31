@@ -142,3 +142,4 @@ P -> data = ai;
 P -> next -> data = a(i+1);
 ![LinearList items](../imgs/linearListItems.jpg)
 
+<img src="../imgs/linearListItems.jpg" width="500" align=center />
