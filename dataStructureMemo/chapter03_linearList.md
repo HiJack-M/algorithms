@@ -140,6 +140,7 @@ P 是第 i 个元素的指针，数据元素
 
 P -> data = ai;
 P -> next -> data = a(i+1);
+  
 <img src="./imgs/linearListItems.jpg" width="400" align=center />
 
 ---
@@ -309,7 +310,7 @@ void CreateListHead(LinkList *L, int n)
 ```
 注意 L 与 r 的关系，L 是指整个单链表，而 r 是指向尾结点的变量，r 会随着循环不断地变化结点，而 L 则是随着循环增长为一个多结点的链表。
 
-<img src="./imgs/tailInsert.jpg" width="700" align=center />
+<img src="./imgs/tailInsert.jpg" width="600" align=center />
 
 它的意思，就是本来 r 是在 ai-1 元素的结点，可现在它已经不是最后的结点了，现在最后的结点是 ai，所以应该要让将 p 结点这个最后的结点赋值给 r。此时 r 又是最终的尾结点了。
 
@@ -338,4 +339,4 @@ void CreateListHead(LinkList *L, int n)
      return OK;
 }
 ```
-<img src="./imgs/compareLinearList.jpg" width="500" align=center />
+<img src="./imgs/compareLinearList.jpg" width="700" align=center />
