@@ -140,6 +140,6 @@ P 是第 i 个元素的指针，数据元素
 
 P -> data = ai;
 P -> next -> data = a(i+1);
-![LinearList items](../imgs/linearListItems.jpg)
+![LinearList items](./imgs/linearListItems.jpg)
 
-<img src="../imgs/linearListItems.jpg" width="500" align=center />
+<img src="./imgs/linearListItems.jpg" width="500" align=center />
