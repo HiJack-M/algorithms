@@ -340,3 +340,118 @@ void CreateListHead(LinkList *L, int n)
 }
 ```
 <img src="./imgs/compareLinearList.jpg" width="700" align=center />
+
+---
+
+#### 3.12　静态链表
+
+首先我们让数组的元素都是由两个数据域组成，data 和cur。
+也就是说，数组的每个下标都对应一个 data 和一个 cur。数据域 data，用来存放数据元素，也就是通常我们要处理的数据；而 cur 相当于单链表中的 next 指针，存放该元素的后继在数组中的下标，把 cur 叫做游标。
+
+我们把用数组描述的链表叫做静态链表，这种描述方法还有起名叫做游标实现法。
+<img src="./imgs/cursor.jpg" width="600" align='center' />
+
+我们对数组第一个和最后一个元素作为特殊元素处理，不存数据。
+我们通常把未被使用的数组元素称为备用链表。
+数组第一个元素，即下标为 0 的元素的 cur 就存放备用链表的第一个结点的下标；
+数组的最后一个元素的 cur 则存放第一个有数值的元素的下标，相当于单链表中的头结点作用，当整个链表为空时，则为 0。
+```
+/* 将一维数组 space 中各分量链成一备用链表， */
+/* space[0].cur 为头指针，"0" 表示空指针 */
+Status InitList(StaticLinkList space)
+{
+     int i;
+     for (i = 0; i < MAXSIZE - 1; i++)
+         space[i].cur = i + 1;
+     space[MAXSIZE - 1].cur = 0;    /* 目前静态链表为空，最后一个元素的 cur 为 0 */
+     return OK;
+}
+```
+
+##### 3.12.1　静态链表的插入操作
+
+插入思路：
+1. 先找出第一个空闲元素 j，存放插队的值，
+2. 再去修改该要插入元素的 cur 和插入元素前的元素的 cur 
+
+找空闲结点:
+```
+/* 若备用空间链表非空，则返回分配的结点下标，否则返回0 */
+int Malloc_SLL(StaticLinkList space)
+{  
+    int i = space[0].cur;     /* 当前数组第一个元素的cur存的值，就是要返回的第一个备用空闲的下标 */   
+    if (space[0].cur)
+         space[0].cur = space[i].cur;       /* 由于要拿出一个分量来使用了，所以我们就得把它的下一个分量用来做备用 */
+    return i;
+}
+```
+```
+/* 在L中第i个元素之前插入新的数据元素e  */
+Status ListInsert (StaticLinkList L, int i, ElemType e)
+{
+       int j, k, l;
+       k = MAX_SIZE - 1;       /* 注意k首先是最后一个元素的下标 */ 
+       if (i < 1 || i > ListLength(L) + 1)
+          return ERROR;
+       j = Malloc_SSL(L);       /* 获得空闲分量的下标 */
+       if (j)
+       {
+              L[j].data = e;          /* 将数据赋值给此分量的data */
+              for (l = 1; l <= i - 1; l++)               /* 找到第i个元素之前的位置 */ 
+                  k = L[k].cur;    // 不能从 0 开始找起，因为 0 元素的 cur 并不指向第一个元素，而是链表的最后一个元素 cur 指向第一个元素
+              L[j].cur = L[k].cur;          /* 把第i个元素之前的cur赋值给新元素的cur */
+              L[k].cur = j;                  /* 把新元素的下标赋值给第i个元素之前元素的cur */          
+              return OK;
+      }
+      return ERROR;  
+}   
+```
+
+##### 3.12.2　静态链表的删除操作
+```
+/* 将下标为k的空闲结点回收到备用链表 */
+void Free_SSL(StaticLinkList space, int k)
+{
+     space[k].cur = space[0].cur;     /* 把第一个元素cur值赋给要删除的分量cur */
+     space[0].cur = k;                        /* 把要删除的分量下标赋值给第一个元素的cur */        
+}
+```
+```
+/* 删除在L中第i个数据元素e */
+Status ListDelete(StaticLinkList L, int i)
+{
+     int j, k;
+     if (i < 1 || i > ListLength(L))
+         return ERROR;
+     k = MAX_SIZE - 1;
+     for (j = 1; j <= i - 1; j++)    /* 找到第i个元素之前的位置 */ 
+         k = L[k].cur;
+     j = L[k].cur;    /* 找到当前元素的下标 */
+     L[k].cur = L[j].cur;    /* 让上一个元素的 cur 直接指向当前元素的 cur （把当前元素的 cur 给上一个元素，越过 j ）*/
+     Free_SSL(L, j);
+     return OK; 
+}
+```
+
+相关操作：
+```
+/* 初始条件：静态链表L已存在。操作结果：返回L中数据元素个数 */
+int ListLength(StaticLinkList L)
+{
+     int j = 0;
+     int i = L[MAXSIZE - 1].cur;
+     while (i)     {    // 因为：如上图，下一位置数据为空，则 next 用 0 表示
+         i = L[i].cur;
+         j++;
+     }
+     return j; 
+}
+```
+
+---
+
+3.13　循环链表
+
+将单链表中终端结点的指针端由空指针改为指向头结点，就使整个单链表形成一个环，这种头尾相接的单链表称为单循环链表，简称循环链表（circular linked list）。
+
+其实循环链表和单链表的主要差异就在于循环的判断条件上，原来是判断 p->next 是否为空，现在则是 p->next 不等于头结点，则循环未结束。
