@@ -455,3 +455,48 @@ int ListLength(StaticLinkList L)
 将单链表中终端结点的指针端由空指针改为指向头结点，就使整个单链表形成一个环，这种头尾相接的单链表称为单循环链表，简称循环链表（circular linked list）。
 
 其实循环链表和单链表的主要差异就在于循环的判断条件上，原来是判断 p->next 是否为空，现在则是 p->next 不等于头结点，则循环未结束。
+<img src="./imgs/circularList.jpg" width="500" align='center' />
+
+将两个循环链表合并成一个表：
+<img src="./imgs/mergeTwoCirculars.jpg" width="500" align=center />
+
+```
+p = rearA->next;    /* 保存A表的头结点，即① */
+rearA->next = rearB->next->next;    /*将本是指向B表的第一个结点（不是头结点）赋值给reaA->next，即② */
+q = rearB->next;
+rearB->next = p;    /* 将原A表的头结点赋值给rearB->next，即③ */
+free(q);    /* 释放q */                         
+```
+
+---
+
+3.14　双向链表
+
+双向链表（double linkedlist）是在单链表的每个结点中，再设置一个指向其前驱结点的指针域。所以在双向链表中的结点都有两个指针域，一个指向直接后继，另一个指向直接前驱。
+
+```
+/* 线性表的双向链表存储结构 */
+typedef struct DulNode {
+     ElemType data;
+     struct DuLNode *prior;
+     /* 直接前驱指针 */
+     struct DuLNode *next;
+     /* 直接后继指针 */
+} DulNode, *DuLinkList;
+```
+假设存储元素e的结点为s，要实现将结点s插入到结点p和p-&gt;next之间需要下面几步，如下图：
+<img src="./imgs/doubleLinked.jpg" width="300" align=center />
+```
+s->prior = p;                  /* 把p赋值给s的前驱，如图中① */
+s->next = p->next;        /* 把p->next赋值给s的后继，如图中② */ 
+p->next->prior = s;       /* 把s赋值给p->next的前驱，如图中③ */ 
+p->next = s;                  /* 把s赋值给p的后继，如图中④ */  
+```
+
+删除：
+<img src="./imgs/deleteDouble.jpg" width="400" align=center />
+```
+p->prior->next = p->next;      /* 把p->next赋值给p->prior的后继，如图中① */ 
+p->next->prior = p->prior;     /* 把p->prior赋值给p->next的前驱，如图中② */ 
+free(p);    /* 释放结点 */    
+```
