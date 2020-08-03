@@ -228,7 +228,7 @@ const insertSort = (arr) => {
 #### 9.5.2　直接插入排序复杂度分析
 
 从空间上来看，它只需要一个记录的辅助空间，因此关键是看它的时间复杂度。
-<img src="./imgs/insertSortO(n).jpg" width="700" align=center />
+<img src="./imgs/insertSortO(n).jpg" width="650" align=center />
 
 ---
 
@@ -329,7 +329,7 @@ void HeapSort (SqList *L) {
 - 第一个循环要完成的就是将现在的待排序序列构建成一个大顶堆。
 - 第二个循环要完成的就是逐步将每个最大值的根结点与末尾元素交换，并且再调整其成为大顶堆。
 
-<img src="./imgs/heapSort.jpg" width="400" align=center />
+<img src="./imgs/heapSort.jpg" width="330" align=center />
 
 第一个循环为何是 arr.length / 2 呢？如图，从 4 循环到 1，它们都是有孩子的结点，其实就是每次将有孩子的结点和其孩子调整好。
 
@@ -787,5 +787,5 @@ const partition = (arr, low, high) => {
 
 ### 9.10　总结回顾
 
-<img src="./imgs/sortsClassify.jpg" width="400" align=center />
+<img src="./imgs/sortsClassify.jpg" width="500" align=center />
 <img src="./imgs/sortsSummary.jpg" width="600" align=center />
