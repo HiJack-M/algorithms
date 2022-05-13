@@ -37,7 +37,7 @@ console.log(removeElement(nums5, 2))
 
 var removeElementPref = function(nums, val) {
   let left = 0, right = nums.length - 1
-  while (left <= right) {
+  while (left <= right) { // 为何在 == 时也给进循环，因为判断者是 left，要让每一个 left 指针的值都判断过才行
     if (nums[left] == val) {
       nums[left] = nums[right--]
     } else {
