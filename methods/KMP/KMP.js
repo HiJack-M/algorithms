@@ -19,3 +19,33 @@ const getIndexOf = (str, match) => {
   // y 越界了，匹配完了，找合适的匹配起始点
    return y == match.length ? x - y : -1
 }
+
+// next[] 中每个书的含义：
+// 1. match 中该字符之前的子串的最长相等前缀和后缀
+// 2. 若该字符匹配失败，可回溯的位置
+const getNextArray = (match) => {
+  if (match.length == 1) return [-1]
+  let next = new Array(match.length)
+  next[0] = -1
+  next[1] = 0
+  i = 2
+  cn = 0
+  while (i < match.length) {
+    if (match[i-1] == match[cn]) {
+      next[i] = cn + 1
+      i++
+      cn++
+      // 三句合为一句 next[i++] = ++cn
+    } else if (cn > 0) {
+      cn = next[cn]
+    } else {
+      next[i] = 0
+      i++
+    }
+  }
+  return next
+}
+
+// cn 的含义：
+// 1. i-1 位置之前，最长相等前后缀的长度
+// 也代表当前是哪个字符在跟 i-1 字符比较
