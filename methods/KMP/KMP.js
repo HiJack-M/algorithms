@@ -49,3 +49,5 @@ const getNextArray = (match) => {
 // cn 的含义：
 // 1. i-1 位置之前，最长相等前后缀的长度
 // 也代表当前是哪个字符在跟 i-1 字符比较
+
+// 2022.06.06 morning review...
