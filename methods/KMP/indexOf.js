@@ -1,4 +1,4 @@
-const getIndexOf = (str, match) => {
+const indexOf = (str, match) => {
   if (!str || !match) {
     return -1
   }
@@ -53,4 +53,4 @@ const getNextArray = (match) => {
 const str1 = 'asdfghjkl'
 const match1 = 'fgh'
 
-console.log(getIndexOf(str1, match1))
+console.log(indexOf(str1, match1))
