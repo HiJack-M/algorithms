@@ -37,3 +37,54 @@ console.log(strStr(haystack1, needle1))
 
 const hay2 = 'aaaaa', nee2 = 'bba'
 console.log(strStr(hay2, nee2))
+
+// KMP
+
+var strStrKMP = function(haystack, needle) {
+  if (haystack == '') {
+  if (needle == '') return 0
+    else return -1
+  }
+
+  const getNextArray = (match) => {
+    if (match.length == 1) return [-1]
+
+    const next = new Array(match.length)
+    next[0] = -1
+    next[1] = 0
+    let i = 2
+    let cn = 0
+    while (i < match.length) {
+        if (match[i - 1] == match[cn]) {
+        next[i] = cn + 1
+        cn++
+        i++
+        } else if (cn > 0) {
+        cn = next[cn]
+        } else {
+        next[i] = 0
+        i++
+        }
+    }
+    return next
+  }
+
+    let x = 0
+  let y = 0
+  const next = getNextArray(needle)
+  while (x < haystack.length && y < needle.length) {
+    if (haystack[x] == needle[y]) {
+      x++
+      y++
+    } else if (y > 0) {
+      y = next[y]
+    } else {
+      x++
+    }
+  }
+
+  return y == needle.length ? x - y : -1
+};
+
+console.log(strStrKMP(haystack1, needle1))
+console.log(strStrKMP(hay2, nee2))
