@@ -20,7 +20,7 @@ const getIndexOf = (str, match) => {
    return y == match.length ? x - y : -1
 }
 
-// next[] 中每个书的含义：
+// next[] 中每个数的含义：
 // 1. match 中该字符之前的子串的最长相等前缀和后缀
 // 2. 若该字符匹配失败，可回溯的位置
 const getNextArray = (match) => {
@@ -50,4 +50,7 @@ const getNextArray = (match) => {
 // 1. i-1 位置之前，最长相等前后缀的长度
 // 也代表当前是哪个字符在跟 i-1 字符比较
 
-// 2022.06.06 morning review...
+const str1 = 'asdfghjkl'
+const match1 = 'fgh'
+
+console.log(getIndexOf(str1, match1))
