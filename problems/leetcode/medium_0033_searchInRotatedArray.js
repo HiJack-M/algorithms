@@ -10,63 +10,73 @@
  * @return {number}
  */
 var search = function(nums, target) {
-  if (!nums || !target) return -1
+  if (!nums) return -1
 
   let k = findRotatePoint(nums)
-  if (target < nums[k]) {
-    return binarySearch(nums, 0, k, target)
-  } else {
+  if (target <= nums[nums.length - 1]) {
     return binarySearch(nums, k + 1, nums.length - 1, target)
+  } else {
+    return binarySearch(nums, 0, k, target)
   }
 };
 
+// 返回最大值所在的下标
 const findRotatePoint = (nums) => {
   if (!nums || nums.length < 2 || nums[0] < nums[nums.length - 1]) return -1
 
+  // 构建左右两侧的淘汰逻辑
   let l = 0
   let r = nums.length - 1
   let mid
   while (l <= r) {
     mid = l + ((r - l) >> 1)
+    // l > mid && r > mid   k 在左侧
     if (nums[l] > nums[mid] && nums[r] > nums[mid]) {
       r = mid
+    // l < mid && r < mid   k 在右侧
     } else if (nums[l] < nums[mid] && nums[r] < nums[mid]) {
       l = mid
+    // k 不在其中，或不成立的情况
     } else {
       break
     }
   }
   return l
 }
-
-const binarySearch = (nums, left, right, target) => {
-  let l = left
-  let r = right
-  let mid
-  while (l < r) {
-    mid = l + ((r - 1) >> 1)
-    if (nums[mid] > target) {
-      r = mid
-    } else if (nums[mid] < target) {
-      l = mid
-    } else {
-      break
-    }
-  }
-  return l
-}
-
-const arr1 = [5,6,7,0.1,2,4]
-const arr2 = [4,5,6,7,0,1,2]
-const arr3 = [0,1,2,3]
-const arr4 = [7,0,1,2,4,5,6]
-const arr5 = [1,2,4,5,6,7,0]
 
 console.log(findRotatePoint(arr1))
 console.log(findRotatePoint(arr2))
 console.log(findRotatePoint(arr3))
 console.log(findRotatePoint(arr4))
 console.log(findRotatePoint(arr5))
+
+const binarySearch = (nums, left, right, target) => {
+  if (left > right) return -1
+  if (left == right) {
+    if (target == nums[left]) return left
+    else return -1
+  }
+  let l = left
+  let r = right
+  let mid
+  while (l < r) {
+    mid = l + ((r - l) >> 1)
+    if (nums[mid] > target) {
+      r = mid - 1
+    } else if (nums[mid] < target) {
+      l = mid + 1
+    } else {
+      return mid
+    }
+  }
+  return nums[l] == target ? l : -1
+}
+
+const arr1 = [5,6,7,0,1,2,4]
+const arr2 = [4,5,6,7,0,1,2]
+const arr3 = [0,1,2,3]
+const arr4 = [7,0,1,2,4,5,6]
+const arr5 = [1,2,4,5,6,7,0]
 
 console.log('------')
 
