@@ -4,6 +4,12 @@
 //
 // 给你 旋转后 的数组 nums 和一个整数 target ，如果 nums 中存在这个目标值 target ，则返回它的下标，否则返回 -1 。
 
+const arr1 = [5,6,7,0,1,2,4]
+const arr2 = [4,5,6,7,0,1,2]
+const arr3 = [0,1,2,3]
+const arr4 = [7,0,1,2,4,5,6]
+const arr5 = [1,2,4,5,6,7,0]
+
 /**
  * @param {number[]} nums
  * @param {number} target
@@ -72,13 +78,41 @@ const binarySearch = (nums, left, right, target) => {
   return nums[l] == target ? l : -1
 }
 
-const arr1 = [5,6,7,0,1,2,4]
-const arr2 = [4,5,6,7,0,1,2]
-const arr3 = [0,1,2,3]
-const arr4 = [7,0,1,2,4,5,6]
-const arr5 = [1,2,4,5,6,7,0]
-
 console.log('------')
 
 console.log(search(arr1, 0))
 console.log(search(arr2, 3))
+
+var searchPer = function(nums, target) {
+  if (!nums || nums.length == 0) return -1
+  let len = nums.length
+  if (len == 1) return nums[0] == target ? 0 : -1
+
+  let l = 0
+  let r = len - 1
+  let m
+  while (l <= r) {
+    m = l + ((r - l) >> 1)
+    if (nums[m] == target) return m
+    // 每次循环都判断左右哪部分有序
+    if (nums[l] <= nums[m]) { // 左边有序
+      if (nums[l] <= target && target < nums[m]) { // 先在有序的部分判断
+        r = m - 1 // 缩小到有序部分
+      } else {
+        l = m + 1 // 缩小到另一部分
+      }
+    } else { // 右边有序
+      if (nums[m] < target && target <= nums[r]) { // 先在有序的部分判断
+        l = m + 1
+      } else {
+        r = m - 1
+      }
+    }
+  }
+  return -1
+}
+
+console.log('------')
+
+console.log(searchPer(arr1, 0))
+console.log(searchPer(arr2, 3))
