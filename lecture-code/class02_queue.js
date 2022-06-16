@@ -25,7 +25,7 @@ class MyQueue {
     constructor(length) {
         this.pushi = 0;
         this.polli = 0;
-        this.size = 0;
+      this.size = 0; // 用一个变量使 pushi 和 pulli 解耦
         this.limit = length;
         this.queue = new Array(length);
     }
@@ -34,6 +34,7 @@ class MyQueue {
         return this.queue;
     }
 
+    // 下一个放入或倒出的位置
     nextIndex(i) {
         return i < this.limit - 1 ? i + 1 : 0;
     }
@@ -48,17 +49,17 @@ class MyQueue {
         }
         let result = this.queue[this.polli];
         this.size--;
-        this.polli = this.nextIndex(this.polli);
+      this.polli = this.nextIndex(this.polli); // 每次先更新要操作的位置
         return result;
-    } 
+    }
 
     push(x) {
         if (this.size === this.limit) {
             throw Error('栈满了，不能再加了');
         }
-        this.queue[this.pushi] = x; 
+        this.queue[this.pushi] = x;
         this.size++;
-        this.pushi = this.nextIndex(this.pushi); 
+        this.pushi = this.nextIndex(this.pushi); // 每次先更新要操作的位置
     }
 }
 
