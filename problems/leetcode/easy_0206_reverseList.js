@@ -25,3 +25,18 @@ var reverseList = function(head) {
   }
   return head
 };
+
+var reverseListStandard = function(head) {
+  let pre = null
+  let next = null
+  while (head) {
+    next = head.next
+    head.next = pre
+    pre = head
+    head = next
+  }
+  return pre
+}
+
+// pre: 抓住新头部
+// next: 每次先去找下一个需要处理的节点
