@@ -52,7 +52,7 @@ const mergeSort1 = (arr) => {
             let M = L + mergeSize - 1;
             if (M >= N) {
                 break;
-            } 
+            }
             // M+1..R 右组 （mergeSize）
             let R = Math.min(M + mergeSize, N - 1);
             merge(arr, L, M, R);
@@ -95,3 +95,13 @@ const mergeSortNoRecursion = (arr) => {
 const arr1 = [2, 9, 3, 8, 5, 4, 7, 1, 6];
 mergeSortNoRecursion(arr1);
 console.log(arr1);
+
+// 归并排序复杂度：
+//
+// T(N) = 2*T(N/2) + O(N^1)*
+//
+// *根据master可知时间复杂度为O(N*logN)
+//
+// merge过程需要辅助数组，所以额外空间复杂度为O(N)
+//
+// 归并排序的实质是 把比较行为变成了有序信息并传递，比O(N^2)的排序快
