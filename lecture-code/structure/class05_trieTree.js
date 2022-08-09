@@ -25,8 +25,10 @@ class TrieTree {
         let node = this.root;
         node.pass++;
         let index = 0;
+        // 沿着 str 一路找前缀树的枝叶
         for (let i = 0; i < str.length; i++) {
             index = str.charCodeAt(i) - 'a'.charCodeAt();
+            // 当前枝叶字母路径不存在，则新建
             if (node.nexts[index] == null) {
                 node.nexts[index] = new TrieNode();
             }
@@ -56,7 +58,7 @@ class TrieTree {
     delete(str) {
         if (str === null) {
             return;
-        } 
+        }
         if (this.search(str) > 0) {
             let node = this.root;
             root.pass--;
