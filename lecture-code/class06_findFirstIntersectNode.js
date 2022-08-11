@@ -13,7 +13,7 @@ class LinkedList {
             this.head = null;
         }
     }
-    
+
     getHead() {
         return this.head;
     }
@@ -21,7 +21,7 @@ class LinkedList {
     /**
      * @description 插入元素
      * @param {要插入的元素} newItem
-     * @param {插入到该元素之后} beforeItem 
+     * @param {插入到该元素之后} beforeItem
      */
     insert(newItem, beforeItem) {
         let newNode = new Node(newItem);
@@ -97,7 +97,7 @@ class LinkedList {
         }
         return currNode;
     }
-    
+
     /* 查找列表最后一个元素 */
     findLastNode() {
         let currNode = this.head;
@@ -119,7 +119,7 @@ class LinkedList {
         }
         return currNode;
     }
-    
+
     /**
      * @description 打印链表元素
      */
@@ -185,14 +185,15 @@ const displaySet = (head) => {
     console.log(listSet);
 }
 
-
-
+// 找出第一个入环节点（追及问题）
 const getLoopNode = (head) => {
     if (head == null || head.next == null || head.next.next == null) {
         return null;
     }
-    let s = head.next;
-    let f = head.next.next;
+    // let s = head.next;
+    // let f = head.next.next;
+    let s = head;
+    let f = head;
 
     while (f != s) {
         if (f.next == null || f.next.next == null) {
@@ -217,6 +218,7 @@ const noLoopIntersect = (head1, head2) => {
     }
     let cur1 = head1;
     let cur2 = head2;
+    // 记录两条链表长度的差值
     let n = 0;
     while (cur1.next != null) {
         n++;
@@ -244,10 +246,12 @@ const noLoopIntersect = (head1, head2) => {
 }
 
 const bothLoopIntersect = (head1, loop1, head2, loop2) => {
+    // loop1, loop2 入环节点
     if (loop1 == loop2) {
         let cur1 = head1;
         let cur2 = head2;
         let n = 0;
+        // 只用管入环前的那一段
         while (cur1.next != loop1) {
             n++;
             cur1 = cur1.next;
@@ -270,6 +274,7 @@ const bothLoopIntersect = (head1, loop1, head2, loop2) => {
         }
         return cur1;
     } else {
+        // 入环节点不同
         cur1 = loop1.next;
         while (cur1 != loop1) {
             if (cur1 == loop2) {
@@ -288,7 +293,7 @@ const findFirstIntersectNode = (head1, head2) => {
     let loop1 = getLoopNode(head1);
     let loop2 = getLoopNode(head2);
     if (loop1 && loop2) {
-        return bothLoopIntersect(head1, loop1, head2, loop2); 
+        return bothLoopIntersect(head1, loop1, head2, loop2);
     }
     if (!loop1 && !loop2) {
         return noLoopIntersect(head1, head2);
