@@ -35,7 +35,7 @@ const preS = (head, ans) => {
         ans.push(head.value);
         preS(head.left, ans);
         preS(head.right, ans);
-    } 
+    }
 }
 
 /* console.log(preSerial(head)); */
@@ -60,7 +60,7 @@ const preB = (prelist) => {
 
 const arrPre = [1, null, 2, 3, null, null, null];
 
-/* console.log(buildByPreQueue(arrPre)); */
+console.log(buildByPreQueue(arrPre));
 
 
 
