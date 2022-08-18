@@ -58,6 +58,7 @@ let treeLee = buildByPreQueue(testArr)
 const widthOfBinaryTree = function(root) {
   if (!root) return 0
   const rangeArr = []
+  const widthArr = []
 
   const dfs = (node, level, index) => {
     if (!node) return
@@ -68,13 +69,14 @@ const widthOfBinaryTree = function(root) {
     } else if (index > rangeArr[level][1]) {
       rangeArr[level][1] = index
     }
+    widthArr[level] = Number(rangeArr[level][1] - rangeArr[level][0]) + 1
+
     dfs(node.left, level + 1, index * 2n + 1n)
     dfs(node.right, level + 1, index * 2n + 2n)
   }
   dfs(root, 0, 0n)
 
-  let widthArr = rangeArr.map((item) => Number(item[1] - item[0]))
-  return Math.max(...widthArr) + 1
+  return Math.max(...widthArr)
 };
 
 console.log(widthOfBinaryTree(treeLee))
