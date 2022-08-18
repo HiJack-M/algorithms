@@ -42,3 +42,25 @@ var levelOrder = function(root) {
   return result
 };
 
+// 以上为最基础的方法，用 map 记录[层级，节点]键值对
+
+const levelOrderUseSize = (root) => {
+  const res = []
+  if (!root) return res
+  let q = []
+  let curSize = 0
+  let curNode = null
+  q.push(root)
+  while (q.length > 0) {
+    curSize = q.length // 拿到当前层级的节点数
+    res.push([])
+    while (curSize > 0) { // 一次循环完取出整一层的节点
+      curNode = q.shift()
+      res[res.length - 1].push(curNode.val)
+      if (curNode.left) q.push(curNode.left)
+      if (curNode.right) q.push(curNode.right)
+      curSize--
+    }
+  }
+  return res
+}
