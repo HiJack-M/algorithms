@@ -1,116 +1,134 @@
 class Node {
     constructor(data) {
-        this.value = data;
+        this.val = data;
         this.left = null;
         this.right = null;
     }
 }
 
-/* let head = new Node(1);
- * head.left = new Node(2);
- * head.right = new Node(3);
- * head.left.left = new Node(4);
- * head.left.right = new Node(5);
- * head.right.left = new Node(6);
- * head.right.right = new Node(7); */
-
 let head = new Node(1);
-// head.left = new Node(2);
 head.right = new Node(2);
-// head.left.left = new Node(4);
-// head.left.right = new Node(3);
 head.right.left = new Node(3);
-// head.right.right = new Node(7);
 
+const arrPre = [1, null, 2, 3, null, null, null]
+const arrInfix = [null, 1, null, 3, null, 2, null]
+const arrLevel = [1, null, 2, 3, null, null, null]
+
+// 前序序列化与反序列化
 const preSerial = (head) => {
-    const ans = [];
-    preS(head, ans);
-    return ans;
+  const res = []
+  if (head) {
+    const preSerialProcess = (node, res) => {
+      if (!node) {
+        res.push(null)
+      } else {
+        res.push(node.val)
+        preSerialProcess(node.left, res)
+        preSerialProcess(node.right, res)
+      }
+    }
+    preSerialProcess(head, res)
+  }
+  return res
 }
+// console.log(preSerial(head))
 
-const preS = (head, ans) => {
-    if (head == null) {
-        ans.push(null);
+const preBuild = (arr) => {
+  if (!arr || arr.length == 0) return null
+  const preBuildProcess = (arr) => {
+    let curVal = arr.shift()
+    if (!curVal) {
+      return null
     } else {
-        ans.push(head.value);
-        preS(head.left, ans);
-        preS(head.right, ans);
+      let curNode = new Node(curVal)
+      curNode.left = preBuildProcess(arr)
+      curNode.right = preBuildProcess(arr)
+      return curNode
     }
+  }
+  return preBuildProcess(arr)
 }
+// console.log(preBuild(arrPre))
 
-/* console.log(preSerial(head)); */
-
-const buildByPreQueue = (prelist) => {
-    if (prelist == null || prelist.length == 0) {
-        return null;
-    }
-    return preB(prelist);
-}
-
-const preB = (prelist) => {
-    let value = prelist.shift();
-    if (value == null) {
-        return null;
-    }
-    let head = new Node(value);
-    head.left = preB(prelist);
-    head.right = preB(prelist);
-    return head;
-}
-
-const arrPre = [1, null, 2, 3, null, null, null];
-
-console.log(buildByPreQueue(arrPre));
-
-
-
-
-
-
-
-
-
+// 中序序列化与反序列化
 const infixSerial = (head) => {
-    const ans = [];
-    infixS(head, ans);
-    return ans;
-}
-
-const infixS = (head, ans) => {
-    if (head == null) {
-        ans.push(null);
-    } else {
-        infixS(head.left, ans);
-        ans.push(head);
-        infixS(head.right, ans);
+  const res = []
+  if (head) {
+    const infixSerialProcess = (node, res) => {
+      if (!node) {
+        res.push(null)
+      } else {
+        infixSerialProcess(node.left, res)
+        res.push(node.val)
+        infixSerialProcess(node.right, res)
+      }
     }
+    infixSerialProcess(head, res)
+  }
+  return res
+}
+// console.log('infix serial: ', infixSerial(head))
+
+// !!! 中序无法反序列化，因为无法确定 root 节点
+const infixBuild = (arr) => {
 }
 
-/* console.log(infixSerial(head)); */
+// 后序序列化
+// 递归序一样的套路
 
-/* // 以下不对
- * const buildByInfixQueue = (infixlist) => {
- *     if (infixlist == null || infixlist.length == 0) {
- *         return null;
- *     }
- *     return infixB(infixlist);
- * }
- *
- * const infixB = (infixlist) => {
- *     if (infixlist.length != 0) {
- *         let value = infixlist.shift();
- *         let head = {};
- *         if (value == null) {
- *             head.left = null;
- *         } else {
- *             head.left = new Node(value);
- *         }
- *         head = infixB(infixlist);
- *         head.right = infixB(infixlist);
- *         return head;
- *     }
- * }
- *
- * const arr2 = [null, 1, null, 3, null, 2, null];
- *
- * console.log(buildByInfixQueue(arr2)); */
+// 后序反序列化
+// 将数组逆序，然后用前序的思维进行【根右左】序列化
+
+
+// 层序序列化与反序列化
+// 层序序列化
+const levelSerial = (head) => {
+  const res = []
+  if (head) {
+    let queue = []
+    queue.push(head)
+    res.push(head.val) // 入栈时推入结果
+    while (queue.length > 0) {
+      let curNode = queue.shift()
+      if (curNode.left) {
+        queue.push(curNode.left)
+        res.push(curNode.left.val)
+      } else {
+        res.push(null)
+      }
+      if (curNode.right) {
+        queue.push(curNode.right)
+        res.push(curNode.right.val)
+      } else {
+        res.push(null)
+      }
+    }
+  }
+  return res
+}
+// console.log('levelSerial: ', levelSerial(head))
+
+// 层序反序列化
+const levelBuild = (arr) => {
+  if (!arr || arr.length == 0) return null
+  let head = new Node(arr.shift())
+  let queue = []
+  queue.push(head)
+  let curNode
+  const generateNode = (val) => {
+    return val ? new Node(val) : null
+  }
+  while (queue.length > 0) {
+    curNode = queue.shift()
+    curNode.left = generateNode(arr.shift())
+    if (curNode.left) {
+      queue.push(curNode.left)
+    }
+    curNode.right = generateNode(arr.shift())
+    if (curNode.right) {
+      queue.push(curNode.right)
+    }
+  }
+  return head
+}
+console.log('levelBuild: ', levelBuild(arrLevel))
