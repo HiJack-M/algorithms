@@ -21,7 +21,7 @@ const isCBT = (head) => {
     if (head == null) return true;
 
     const queue = [];
-    let partial = false;  // 遇到第一个左右孩子不双全的节点
+    let partial = false;  // 遇到第一个缺失孩子的节点
     let l = null;
     let r = null;
     queue.push(head);
@@ -107,7 +107,7 @@ const testMachine = (maxLevel, maxValue, maxTime) => {
     for (let i = 1; i < maxTime; i++) {
         let head = generateRandomBT(maxLevel, maxValue);
         if (isCBT(head) != isCBT2(head)) {
-            console.log('Oops!'); 
+            console.log('Oops!');
         }
     }
     console.log('Finished!');
