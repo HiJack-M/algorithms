@@ -15,8 +15,8 @@ const maxHappy = (boss) => {
 
 class Info {
     constructor(yes, no) {
-        this.yes = yes;
-        this.no = no;
+      this.yes = yes; // 取当前节点的情况
+      this.no = no; // 不取当前节点的情况
     }
 }
 
