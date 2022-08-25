@@ -4,9 +4,7 @@
 
 // 暴力递归出结果
 const lowestString1 = (strs) => {
-    if (strs == null || strs.length == 0) {
-        return null;
-    }
+    if (strs == null || strs.length == 0) return null;
     const all = [];
     let use = new Set();
     process(strs, use, '', all);
@@ -16,7 +14,6 @@ const lowestString1 = (strs) => {
             lowest = all[i];
         }
     }
-
     return lowest;
 }
 
@@ -66,7 +63,7 @@ const generateRandomString = (len) => {
     let strArr = new Array(parseInt(len * Math.random()) + 1);
     for (let i = 0; i < strArr.length; i++) {
         let val = parseInt(Math.random() * 26);
-        strArr[i] = String.fromCharCode(97 + val); 
+        strArr[i] = String.fromCharCode(97 + val);
     }
     return strArr.join('');
 }

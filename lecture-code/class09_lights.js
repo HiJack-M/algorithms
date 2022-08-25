@@ -17,14 +17,15 @@ const lights1 = (road) => {
 // 要求选出能照亮所有 . 的方案，并且在这些有效的方案中，返回最少需要几个灯
 const process = (str, index, lights) => {
     if (index == str.length) {   // 结束的时候
+        if (lights.size == 0 && str.indexOf('.') != -1) return Infinity // 全都不放灯的 base case 不能漏
         for (let i = 0; i < str.length; i++) {
-            if (str[i] == '.') {     // 如果当前位置是 . 要看其和前后是否有至少一盏灯
-                if (!lights.has(i - 1) && !lights.has(i) && !lights.has(i + 1)) {
-                    return Infinity;
-                }
+        if (str[i] == '.') {
+            if (!lights.has(i) && !lights.has(i - 1) && !lights.has(i + 1)) { // 超过两边界也没关系，反正 set 里面没有
+            return Infinity
             }
         }
-        return lights.size;
+        }
+        return lights.size
     } else {    // 还没结束
         let no = process(str, index + 1, lights);    // X 和 . 都可选择不放灯
         let yes = Infinity;
