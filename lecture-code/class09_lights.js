@@ -17,7 +17,6 @@ const lights1 = (road) => {
 // 要求选出能照亮所有 . 的方案，并且在这些有效的方案中，返回最少需要几个灯
 const process = (str, index, lights) => {
     if (index == str.length) {   // 结束的时候
-        if (lights.size == 0 && str.indexOf('.') != -1) return Infinity // 全都不放灯的 base case 不能漏
         for (let i = 0; i < str.length; i++) {
         if (str[i] == '.') {
             if (!lights.has(i) && !lights.has(i - 1) && !lights.has(i + 1)) { // 超过两边界也没关系，反正 set 里面没有
