@@ -38,9 +38,11 @@ const heapSort = (arr) => {
     if (arr == null || arr.length < 2) {
         return;
     }
+    // 构建大根堆
     for (let i = 0; i < arr.length; i++) {
         heapInsert(arr, i);
     }
+    // 每次取堆顶，交换到数组最后，交换到下标 0 处的点做 heapify
     for (let i = arr.length - 1; i > 0; i--) {
         swap(arr, 0, i);
         heapify(arr, 0, i - 1);

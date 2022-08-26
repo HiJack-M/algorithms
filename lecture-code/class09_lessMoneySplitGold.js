@@ -21,32 +21,31 @@ const process = (arr, pre)  => {
     if (arr.length == 1) {
         return pre;
     }
-    let ans = Infinity;
+    let cost = Infinity;
     for (let i = 0; i < arr.length; i++) {
         for (let j = i + 1; j < arr.length; j++) {
-            ans = Math.min(ans, process(copyAndMerge(arr, i, j), pre + arr[i] + arr[j]));
+            cost = Math.min(cost, process(copyAndMerge(arr, i, j), pre + arr[i] + arr[j]));
         }
     }
-    return ans;
+    return cost;
 }
 
+// 除下标 i 和 j 之外的数，全部直接拷入新数组，i + j 合并再放入新数组
 const copyAndMerge = (arr, i, j) => {
-    let ansArr = [];
-    let ansi = 0;
-    for (let arri = 0; arri < arr.length; arri++) {
-        if (arri != i && arri != j) {
-            ansArr[ansi++] = arr[arri];
+    let ans = []
+    for (let a = 0; a < arr.length; a++) {
+        if (a != i && a != j) {
+        ans.push(arr[a])
         }
     }
-    ansArr[ansi] = arr[i] + arr[j];
-    return ansArr;
+    ans.push(arr[i] + arr[j])
+    return ans
 }
 
 /* const arr1 = [ 26, 40, 33, 34, 45, 45, 41, 29, 40 ];
  * console.log(lessMoney1(arr1)); */
 
 // 建立一个小顶堆
-
 class PriorityQueue {
     constructor() {
         this.queue = [];
@@ -116,6 +115,7 @@ const lessMoney2 = (arr) => {
     return sum;
 }
 
+
 /* const arr2 = [ 26, 40, 33, 34, 45, 45, 41, 29, 40 ];
  * console.log(lessMoney2(arr2)); */
 
@@ -132,6 +132,7 @@ const testMachine = (maxLen, maxValue, maxTime) => {
         let arr = generateRandomArr(maxLen, maxValue);
         let arrCopy = [...arr];
         if (lessMoney1(arr) != lessMoney2(arrCopy)) {
+            console.log('arr error: ', arr)
             console.log(i);
             console.log('Oops!');
             return;
