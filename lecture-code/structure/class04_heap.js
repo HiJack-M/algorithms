@@ -98,6 +98,7 @@ class PriorityQueue {
         this.queue[j] = temp;
     }
 
+    // 默认从下标 0 开始
     heapify() {
         if (this.queue.length <= 1) {
             return;
