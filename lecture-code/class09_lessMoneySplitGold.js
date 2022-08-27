@@ -52,7 +52,7 @@ class PriorityQueue {
     }
 
     add(value) {
-        this.queue.unshift(value);
+        this.queue.unshift(value); // 如果只用 heapify 操作，那加入的时候，就一定要从下标 0 开始！！！
         this.heapify();
     }
 

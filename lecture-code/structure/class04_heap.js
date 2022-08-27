@@ -79,4 +79,52 @@ console.log(myHeap.pop());
 console.log(myHeap.getHeap());
 
 
+// 简化版小根堆
+
+// 建立一个小顶堆
+class PriorityQueue {
+    constructor() {
+        this.queue = [];
+    }
+
+    add(value) {
+        this.queue.unshift(value); // 如果只用 heapify 操作，那加入的时候，就一定要从下标 0 开始！！！
+        this.heapify();
+    }
+
+    swap(i, j) {
+        let temp = this.queue[i];
+        this.queue[i] = this.queue[j];
+        this.queue[j] = temp;
+    }
+
+    heapify() {
+        if (this.queue.length <= 1) {
+            return;
+        }
+        let index = 0;
+        let left = index * 2 + 1;
+        while (left < this.queue.length) {
+            let smallest = left + 1 < this.queue.length && this.queue[left + 1] < this.queue[left] ? left + 1 : left;
+            smallest = this.queue[smallest] < this.queue[index] ? smallest : index;
+            if (smallest == index) {
+                break;
+            }
+            this.swap(index, smallest);
+            index = smallest;
+            left = index * 2 + 1;
+        }
+    }
+
+    poll() {
+        if (this.queue.length == 0) {
+            throw Error('queue is empty!');
+        }
+        let value = this.queue.shift();
+        if (this.queue.length > 1) {
+            this.heapify();
+        }
+        return value; 
+    }
+}
 
