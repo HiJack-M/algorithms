@@ -10,7 +10,7 @@ class UnionSet {
         this.nodes = new Map();
         // 某 node 所在集的代表点 
         this.parents = new Map();
-        // 只有一个点，它是代表点，才会有记录(只会记录代表点和 size)
+        // 当一个点是代表点时，才会有记录(只会记录代表点和 size)
         this.sizeMap = new Map();
 
         for (let i = 0; i < arr.length; i++) {
@@ -104,7 +104,6 @@ const mergeUsers = (arr) => {
             usersSet.union(arr[index], arr[i]);
         }
     }
-
     return usersSet.sizeMap.size;
 }
 
