@@ -1,116 +1,57 @@
-// 堆排序复习
-const swap = (arr, i, j) => {
-  let temp = arr[i]
-  arr[i] = arr[j]
-  arr[j] = temp
+const hanoi = (n) => {
+  if (n == 0) return
+  process(n, 'left', 'right', 'middle')
 }
 
-const heapInsert = (arr, i) => {
-  while (arr[i] > arr[Math.floor(((i - 1) / 2))]) {
-    swap(arr, i, Math.floor((i - 1) / 2))
-    i = Math.floor((i - 1) / 2)
+const process = (n, from, to, other) => {
+  // base case
+  if (n == 1) {
+    console.log(`Move 1 from ${from} to ${to}`)
+    return
   }
+
+  process(n - 1, from, other, to)
+  console.log(`Move ${n} from ${from} to ${to}`)
+  process(n - 1, other, to, from)
 }
 
-const heapify = (arr, i, end) => {
-  let left = i * 2 + 1
-  while (left <= end) {
-    let biggest = (left + 1 <= end) && arr[left + 1] > arr[left] ? left + 1 : left
-    biggest = arr[biggest] > arr[i] ? biggest : i
-    if (biggest == i) break
-    swap(arr, biggest, i)
-    i = biggest
-    left = i * 2 + 1
-  }
+// hanoi(5)
+
+const printAllSubsequences = (str) => {
+  let ans = []
+  if (str) processSub(str, 0, '', ans)
+  return ans
 }
 
-const heapSort = (arr) => {
-  if (!arr || arr.length < 2) return
-
-  for (let i = 0; i < arr.length; i++) {
-    heapInsert(arr, i)
+const processSub = (str, index, path, ans) => {
+  if (index == str.length) {
+    ans.push(path)
+    return
   }
 
-  for (let i = arr.length - 1; i > 0; i--) {
-    swap(arr, 0, i)
-    heapify(arr, 0, i - 1)
-  }
+  let yes = path + str[index]
+  let no = path
+  processSub(str, index + 1, yes, ans)
+  processSub(str, index + 1, no, ans)
 }
 
-const arr1 = [5, 3, 0, 3, 1, 7, 5, 9, 8, 2, 7, 9, 6, 4, 1];
-heapSort(arr1);
-console.log(arr1);
+console.log('printAllSubsequences: ', printAllSubsequences('abc'))
 
 
-// 堆结构复习
-// class PriorityQueue {
-//   constructor() {
-//     this.queue = []
+// const printAllPermutation = (str) => {
+//   let ans = []
+//   if (!str) return ans
+  
+//   for (let i = 0; i < str.length; i++) {
+//     let base = str[i]
+//     ans.push(base)
+//     for (let j = i + 1; j < str.length; j++) {
+//       base += str[j]
+//       ans.push(base)
+//     }
 //   }
-
-//   // API
+//   return ans
 // }
 
-class PriorityQueue {
-  constructor() {
-      this.queue = [];
-  }
-
-  add(value) {
-      this.queue.unshift(value);  // 如果只用 heapify 操作，那加入的时候，就一定要从下标 0 开始！！！
-      this.heapify();
-  }
-
-  swap(i, j) {
-      let temp = this.queue[i];
-      this.queue[i] = this.queue[j];
-      this.queue[j] = temp;
-  }
-
-  heapify() {
-      if (this.queue.length <= 1) {
-          return;
-      }
-      let index = 0;
-      let left = index * 2 + 1;
-      while (left < this.queue.length) {
-          let smallest = left + 1 < this.queue.length && this.queue[left + 1] < this.queue[left] ? left + 1 : left;
-          smallest = this.queue[smallest] < this.queue[index] ? smallest : index;
-          if (smallest == index) {
-              break;
-          }
-          this.swap(index, smallest);
-          index = smallest;
-          left = index * 2 + 1;
-      }
-  }
-
-  poll() {
-      if (this.queue.length == 0) {
-          throw Error('queue is empty!');
-      }
-      let value = this.queue.shift();
-      if (this.queue.length > 1) {
-          this.heapify();
-      }
-      return value; 
-  }
-}
-
-const test = (arr) => {
-  console.log('arr: ', arr)
-  let queue = new PriorityQueue();
-  for (let i = 0; i < arr.length; i++) {
-      queue.add(arr[i]);
-  }
-  console.log('queue: ', queue.queue)
-  let poll1 = queue.poll()
-  console.log('poll1 : ', poll1)
-  console.log('queue middle: ', queue.queue)
-  let poll2 = queue.poll()
-  console.log('poll1 : ', poll1, ', poll2: ', poll2)
-  console.log('queue after: ', queue.queue)
-}
-
-const arr11 = [0, 1, 5, 2, 8, 7, 6, 7]
-test(arr11)
+// console.log(printAllPermutation('abc'))
+// console.log(printAllPermutation('aaa'))

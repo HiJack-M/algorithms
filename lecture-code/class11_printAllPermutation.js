@@ -64,6 +64,7 @@ console.log(ans1);
 console.log('============');
 
 /* 分支限界 */
+/* 其实也就是卷王们说的剪枝 */
 const printAllPermutationNoRepeat = (str) => {
     let ans = [];
     if (str == null || str.length == 0) {
