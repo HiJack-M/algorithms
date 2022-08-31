@@ -10,7 +10,7 @@ const convertToLetterString = (numStr) => {
 }
 
 // i 之前的位置已经做过转化了，不用再关心
-// i... 有多少种转化的结果
+// i...到最后，有多少种转化的结果
 const process = (str, i) => {
     // base case
     if (i == str.length) {
@@ -36,12 +36,14 @@ const process = (str, i) => {
         if (i + 1 < str.length && (str[i + 1] >= '0' && str[i + 1] <= '6')) {
             res += process(str, i + 2);
         }
+        return res;
     }
     // i 位置是 3 ~ 9，只有一种情况，i 位置单独转化
     return process(str, i + 1);
 }
 
-let numStr = '01111';
+// let numStr = '01111';
+let numStr = '462026125961';
 let ans = convertToLetterString(numStr);
 console.log(ans);
 
