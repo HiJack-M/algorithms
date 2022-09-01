@@ -1,19 +1,36 @@
-// 给定一个整型数组arr，代表数值不同的纸牌排成一条线，玩家A和玩家B依次拿走每张纸牌，规定玩家A先拿，玩家B后拿，但是每个玩家每次只能拿走最左或最右的纸牌，玩家A和玩家B都绝顶聪明。请返回最后获胜者的分数。
+// N皇后问题是指在 N*N 的棋盘上要摆 N 个皇后，要求任何两个皇后不同行、不同列， 也不在同一条斜线上。给定一个整数 n，返回 n 皇后的摆法有多少种。
 
-const cardsGame = (arr) => {
-	if (!arr || arr.length == 0) return 0
-	return Math.max(first(arr, 0, arr.length - 1), second(arr, 0, arr.length - 1))
+const NQueens = (N) =>{
+	if (!N || N <= 0) return 0
+	const arrPut = [] // 缓存已经放好的点
+	return process(N, 0, arrPut)
 }
 
-const first = (arr, l, r) => {
-	if (l == r) return arr[l]
-	return Math.max(arr[l] + second(arr, l + 1, r), arr[r] + second(arr, l, r - 1))	
+// 在第 i 行做决定
+const process = (n, i, arrPut) => {
+	// base case
+	if (i == n) return 1
+
+	let result = 0
+	for (let j = 0; j < n; j++) {
+		if (isOkToPutHere(i, j, arrPut)) {
+			arrPut.push(j)
+			result += process(n, i + 1, arrPut)
+			arrPut.pop()
+		}
+	}
+	return result
 }
 
-const second = (arr, l, r) => {
-	if (l == r) return 0
-	return Math.min(first(arr, l + 1, r), first(arr, l, r - 1))
+// 第 i 行摆在第 j 位置行不行
+const isOkToPutHere = (i, j, arrPut) => {
+	// arrPut.length 已经摆了多少行
+	// arrPut[i] -> j: 第 i 行摆在第 j 个位置
+	for (let k = 0; k < arrPut.length; k++) {
+		if (arrPut[k] == j) return false // 同列
+		if (Math.abs(k - i) == Math.abs(arrPut[k] - j)) return false
+	}
+	return true
 }
 
-const arr1 = [4, 7, 9, 5]
-console.log(cardsGame(arr1))
+console.log(NQueens(7))
