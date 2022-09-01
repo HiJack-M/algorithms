@@ -88,3 +88,20 @@ const getMaxValueDp = (weights, values, bag) => {
 
 let maxValue3 = getMaxValueDp(weights1, values1, bag1);
 console.log(maxValue3);
+
+
+/** 2022.08.31 复习经典思路前，自己的解题思路 */
+
+const knapsack = (weights, values, bag) => {
+	if (!weights || !values || bag <= 0) return 0
+	return process(weights, values, bag, 0, 0, 0)
+}
+
+// aw: already weight已经装了多重
+const process = (w, v, b, i, aw, av) => {
+	if (aw + w[i] > b || i == w.length) return av
+	
+	let yes = process(w, v, b, i + 1, aw + w[i], av + v[i])
+	let no = process(w, v, b, i + 1, aw, av)
+	return Math.max(yes, no)
+}

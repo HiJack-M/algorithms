@@ -1,44 +1,46 @@
-// 规定 1 和 A 对应、2 和 B 对应、3 和 C 对应…
+// 给定两个长度都为 N 的数组 weights 和 values，weights[i] 和 values[i] 分别代表 i 号物品的重量和价值。
 
-// 那么一个数字字符串比如 "111” 就可以转化为: "AAA"、"KA" 和 ”AK"
+// 给定一个正数 bag，表示一个载重 bag 的袋子，你装的物品不能超过这个重量。
 
-// 给定一个只有数字字符组成的字符串 str，返回有多少种转化结果
+// 返回你能装下最多的价值是多少?
 
-const convertNumberLetterToString = (letters) => {
-	let res = 0
-	if (letters) {
-		res = process(letters, 0)
-	}
-
-	return res
-
-	// if (!letters) return 0
-	// return process(letters, 0)
+const knapsack = (weights, values, bag) => {
+	if (!weights || !values || bag <= 0) return 0
+	return process(weights, values, bag, 0, 0, 0)
 }
 
-const process = (str, i) => {
-	if (i == str.length) {
-		return 1
-	}
-	if (str[i] == '0') {
-		return 0
-	}
-	if (str[i] == '1') {
-		let res = process(str, i + 1)
-		if (i + 1 < str.length) {
-			res += process(str, i + 2)
-		}
-		return res
-	}
-	if (str[i] == '2') {
-		let res = process(str, i + 1)
-		if (i + 1 < str.length && str[i + 1] >= '0' && str[i + 1] <= '6') {
-			res += process(str, i + 2)
-		}
-		return res
-	}
-	return process(str, i + 1)
+// aw: already weight已经装了多重
+const process = (w, v, b, i, aw, av) => {
+	if (aw + w[i] > b || i == w.length) return av
+	
+	let yes = process(w, v, b, i + 1, aw + w[i], av + v[i])
+	let no = process(w, v, b, i + 1, aw, av)
+	return Math.max(yes, no)
 }
 
-console.log(convertNumberLetterToString('111'))
-console.log(convertNumberLetterToString('462026125961'))
+const weights1 = [3, 2, 4, 7];
+const values1 = [5, 6, 3, 19];
+let bag1 = 11;
+
+console.log(knapsack(weights1, values1, bag1))
+
+const knapsackClassic = (weights, values, bag) => {
+	if (!weights || !values || bag <= 0) return 0
+	return processClassic(weights, values, bag, 0)
+}
+
+// r: rest 剩下能装多重
+const processClassic = (w, v, r, i) => {
+	if (w[i] > r) return -1 // 此方案行不通，-1 为状态
+	if (i == w.length) return 0
+
+	let yes = -1 // 先假设当前方案行不通
+	let yesNext = processClassic(w, v, r - w[i], i + 1)
+	if (yesNext != -1) yes = v[i] + yesNext // 若装当前货物，后面的决策都不是 -1，说明行得通
+	
+	let no = processClassic(w, v, r, i + 1)
+
+	return Math.max(yes, no)
+}
+
+console.log(knapsackClassic(weights1, values1, bag1))
