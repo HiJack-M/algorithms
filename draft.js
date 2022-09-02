@@ -33,4 +33,32 @@ const isOkToPutHere = (i, j, arrPut) => {
 	return true
 }
 
-console.log(NQueens(7))
+console.log('normal: ', NQueens(5))
+
+// test git reset
+
+// 优化常数项
+const NQueensBit = (N) => {
+	if (!N || N < 1) return 0
+	// limit 不变，最终摆满皇后，N 个 1（玩二进制数）
+	let limit = N > 32 ? -1 : (1 << N) - 1
+	return processBit(limit, 0, 0, 0)
+}
+
+const processBit = (limit, colLim,leftLim, rightLim) => {
+	// base case
+	if (colLim == limit) return 1
+
+	let res = 0
+	// 所有位置中，还不是 1 的位置
+	let pos = limit & ~(colLim | leftLim | rightLim)
+	// 每次拿最右侧的 1 位置尝试，尝试完去掉，最终尝试完所有的 1，pos 为 0
+	while (pos != 0) {
+		let mostRightOne = pos & (~pos + 1)
+		pos = pos - mostRightOne
+		res += processBit(limit, colLim + mostRightOne, (leftLim + mostRightOne) << 1, (rightLim + mostRightOne) >> 1)
+	}
+	return res
+}
+
+console.log('bit: ', NQueensBit(5))
