@@ -25,3 +25,37 @@ const processRecursion = (N, cur, rest, P) => {
 }
 
 console.log('recursion: ', robotWalkRecursion(7, 3, 3, 2))
+console.log('recursion: ', robotWalkRecursion(5, 3, 5, 4))
+
+const robotWalkDP = (N, M, K, P) => {
+	if (N < 2 || M < 1 || M > N || K < 0 || P < 1 || P > N) return 0
+
+	let DP  = new Array(N + 1)
+	for (let i = 0; i <= N; i++) {
+		DP[i] = new Array(K + 1)
+		DP[i].fill(-1)
+	}
+	return processDP1(N, M, K, P, DP)
+}
+
+const processDP1 = (N, cur, rest, P, DP) => {
+	if (DP[cur][rest] != -1) {
+		return DP[cur][rest]
+	}
+	if (rest == 0) {
+		DP[cur][rest] = cur == P ? 1 : 0
+		return DP[cur][rest]
+	}
+	if (cur == 1) {
+		DP[cur][rest] = processDP1(N, cur + 1, rest - 1, P, DP)
+		return DP[cur][rest]
+	}
+	if (cur == N) {
+		DP[cur][rest] = processDP1(N, cur - 1, rest - 1, P, DP)
+		return DP[cur][rest]
+	}
+	DP[cur][rest] =  processDP1(N, cur - 1, rest - 1, P, DP) + processDP1(N, cur + 1, rest - 1, P, DP)
+	return DP[cur][rest]
+}
+console.log('DP: ', robotWalkDP(7, 3, 3, 2))
+console.log('DP: ', robotWalkDP(5, 3, 5, 4))
