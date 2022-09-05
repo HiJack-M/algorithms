@@ -43,7 +43,8 @@ const process = (str, i) => {
 }
 
 // let numStr = '01111';
-let numStr = '462026125961';
+// let numStr = '462026125961';
+let numStr = '1244253457'
 let ans = convertToLetterString(numStr);
 console.log(ans);
 
@@ -59,15 +60,16 @@ const convertToLetterStringDp = (numStr) => {
             dp[i] = 0;
         } else if (numStr[i] == '1') {
             let res = dp[i + 1];
-            if (i + 1 < numStr.length) {
+            if (i + 1 < N) {
                 res += dp[i + 2];
             }
             dp[i] = res;
         } else if (numStr[i] == '2') {
             let res = dp[i + 1];
-            if (i + 1 < numStr.length && (numStr[i + 1] >= '0' && numStr[i + 1] <= '6')) {
+            if (i + 1 < N && (numStr[i + 1] >= '0' && numStr[i + 1] <= '6')) {
                 res += dp[i + 2];
             }
+            dp[i] = res;
         } else {
             dp[i] = dp[i + 1];
         }

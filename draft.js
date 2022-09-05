@@ -1,52 +1,58 @@
-/* 给定两个长度都为N的数组 weights 和 values，
- * weights[i] 和 values[i] 分别代表 i 号物品的重量和价值。
- * 给定一个正数 bag，表示一个载重 bag 的袋子，你装的物品不能超过这个重量。
- * 返回你能装下最多的价值是多少? */
+/* 规定 1 和 A 对应、2 和 B 对应、3 和 C 对应…
+ * 那么一个数字字符串比如 "111” 就可以转化为: "AAA"、"KA" 和 ”AK"
+ * 给定一个只有数字字符组成的字符串 str，返回有多少种转化结果 */
 
-const getMaxValueRecursion = (weights, values, bag) => {
-	if (!weights || !values || bag <= 0) return 0
-	return processRecursion(weights, values, 0, bag)
+const convertNumberStrToLetterStr = (str) => {
+	if (!/^[0-9]*$/.test(parseInt(str))) return 0
+	return process1(str, 0)
 }
 
-const processRecursion = (w, v, i, rest) => {
-	// base case
-	if (rest <= 0) return 0
-	if (i == w.length) return 0
+const process1 = (str, i) => {
+	if (i == str.length) return 1
 
-	let no = processRecursion(w, v, i + 1, rest)
-	let yes = -1
-	if (rest >= w[i]) {
-		yes = v[i] +  processRecursion(w, v, i + 1, rest - w[i])
-	}
-	return Math.max(yes, no)
-}
-
-const weights1 = [3, 2, 4, 7];
-const values1 = [5, 6, 3, 19];
-let bag1 = 11;
-
-console.log(getMaxValueRecursion(weights1, values1, bag1))
-
-
-const getMaxValueDP = (weights, values, bag) => {
-	if (!weights || !values || bag <= 0) return 0
-	let DP = new Array(weights.length + 1)
-	for (let i = 0; i < DP.length; i++) {
-		DP[i] = new Array(bag + 1)
-		DP[i].fill(0)
-	}
-	for (let i = DP.length - 2; i >= 0; i--) {
-		for (let r = 0; r <= bag; r++) {
-			let no = DP[i + 1][r]
-			let yes = -1
-			if (r >= weights[i]) {
-				yes = values[i] + DP[i + 1][r - weights[i]]
-			}
-			DP[i][r] = Math.max(no, yes)
+	if (str[i] == '0') return 0
+	if (str[i] == '1') {
+		let res = process1(str, i + 1)
+		if (i < str.length - 1) {
+			res += process1(str, i + 2)
 		}
+		return res
 	}
-	console.log(DP)
-	return DP[0][bag]
+	if (str[i] == '2') {
+		let res = process1(str, i + 1)
+		if (i < str.length - 1 && str[i + 1] >= '0' && str[i + 1] <= '6') {
+			res += process1(str, i + 2)
+		}
+		return res
+	}
+	return process1(str, i + 1)
 }
 
-console.log(getMaxValueDP(weights1, values1, bag1))
+console.log(convertNumberStrToLetterStr('1244253457'))
+
+const convertNumberToLetterDP = (str) => {
+	if (!/^[0-9]*$/.test(parseInt(str))) return 0
+	let N = str.length
+	let DP = new Array(N + 1)
+	DP[N] = 1
+	for (let i = N - 1; i >= 0; i--) {
+		let res = 0
+		if (str[i] == '1') {
+			res = res + DP[i + 1]
+			if (i < N - 1) {
+				res += DP[i + 2]
+			}
+		} else if (str[i] == '2') {
+			res += DP[i + 1]
+			if (i < N - 1 && str[i + 1] >= '0' && str[i + 1] <= '6') {
+				res += DP[i + 2]
+			}
+		} else if (str[i] != '0') {
+			res += DP[i + 1]
+		}
+		DP[i] = res
+	}
+	return DP[0]
+}
+
+console.log(convertNumberToLetterDP('1244253457'))
