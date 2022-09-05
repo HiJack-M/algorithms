@@ -1,61 +1,52 @@
-// 假设有排成一行的 N 个位置，记为 1~N ，N 一定大于或等于 2
-// 开始时机器人在其中的 M 位置上(M 一定是 1~N 中的一个)
-// 如果机器人来到 1 位置，那么下一步只能往右来到 2 位置；
-// 如果机器人来到 N 位置，那么下一步只能往左来到 N-1 位置；
-// 如果机器人来到中间位置，那么下一步可以往左走或者往右走；
-// 规定机器人必须走 K 步，最终能来到 P 位置(P 也是 1~N 中的一个)的方法有多少种
-// 给定四个参数 N、M、K、P，返回方法数。
+/* 给定两个长度都为N的数组 weights 和 values，
+ * weights[i] 和 values[i] 分别代表 i 号物品的重量和价值。
+ * 给定一个正数 bag，表示一个载重 bag 的袋子，你装的物品不能超过这个重量。
+ * 返回你能装下最多的价值是多少? */
 
-const robotWalkRecursion = (N, M, K, P) => {
-	if (N < 2 || M < 1 || M > N || K < 0 || P < 1 || P > N) return 0
-	return processRecursion(N, M, K, P)
+const getMaxValueRecursion = (weights, values, bag) => {
+	if (!weights || !values || bag <= 0) return 0
+	return processRecursion(weights, values, 0, bag)
 }
 
-const processRecursion = (N, cur, rest, P) => {
-	if (rest == 0) {
-		return cur == P ? 1 : 0
+const processRecursion = (w, v, i, rest) => {
+	// base case
+	if (rest <= 0) return 0
+	if (i == w.length) return 0
+
+	let no = processRecursion(w, v, i + 1, rest)
+	let yes = -1
+	if (rest >= w[i]) {
+		yes = v[i] +  processRecursion(w, v, i + 1, rest - w[i])
 	}
-	if (cur == 1) {
-		return processRecursion(N, cur + 1, rest - 1, P)
-	}
-	if (cur == N) {
-		return processRecursion(N, cur - 1, rest - 1, P)
-	}
-	return processRecursion(N, cur - 1, rest - 1, P) + processRecursion(N, cur + 1, rest - 1, P)
+	return Math.max(yes, no)
 }
 
-console.log('recursion: ', robotWalkRecursion(7, 3, 3, 2))
-console.log('recursion: ', robotWalkRecursion(5, 3, 5, 4))
+const weights1 = [3, 2, 4, 7];
+const values1 = [5, 6, 3, 19];
+let bag1 = 11;
 
-const robotWalkDP = (N, M, K, P) => {
-	if (N < 2 || M < 1 || M > N || K < 0 || P < 1 || P > N) return 0
+console.log(getMaxValueRecursion(weights1, values1, bag1))
 
-	let DP  = new Array(N + 1)
-	for (let i = 0; i <= N; i++) {
-		DP[i] = new Array(K + 1)
-		DP[i].fill(-1)
+
+const getMaxValueDP = (weights, values, bag) => {
+	if (!weights || !values || bag <= 0) return 0
+	let DP = new Array(weights.length + 1)
+	for (let i = 0; i < DP.length; i++) {
+		DP[i] = new Array(bag + 1)
+		DP[i].fill(0)
 	}
-	return processDP1(N, M, K, P, DP)
+	for (let i = DP.length - 2; i >= 0; i--) {
+		for (let r = 0; r <= bag; r++) {
+			let no = DP[i + 1][r]
+			let yes = -1
+			if (r >= weights[i]) {
+				yes = values[i] + DP[i + 1][r - weights[i]]
+			}
+			DP[i][r] = Math.max(no, yes)
+		}
+	}
+	console.log(DP)
+	return DP[0][bag]
 }
 
-const processDP1 = (N, cur, rest, P, DP) => {
-	if (DP[cur][rest] != -1) {
-		return DP[cur][rest]
-	}
-	if (rest == 0) {
-		DP[cur][rest] = cur == P ? 1 : 0
-		return DP[cur][rest]
-	}
-	if (cur == 1) {
-		DP[cur][rest] = processDP1(N, cur + 1, rest - 1, P, DP)
-		return DP[cur][rest]
-	}
-	if (cur == N) {
-		DP[cur][rest] = processDP1(N, cur - 1, rest - 1, P, DP)
-		return DP[cur][rest]
-	}
-	DP[cur][rest] =  processDP1(N, cur - 1, rest - 1, P, DP) + processDP1(N, cur + 1, rest - 1, P, DP)
-	return DP[cur][rest]
-}
-console.log('DP: ', robotWalkDP(7, 3, 3, 2))
-console.log('DP: ', robotWalkDP(5, 3, 5, 4))
+console.log(getMaxValueDP(weights1, values1, bag1))
