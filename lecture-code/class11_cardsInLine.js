@@ -53,7 +53,7 @@ const winCardsDp = (arr) => {
     for (let i = 0; i < N; i++) {
         f[i][i] = arr[i];
     }
-    // 填对角线的各个值，不懂看印象笔记
+    // 填对角线的各个值，不懂看[笔记](https://www.notion.so/13-e9b341ea12174f6295f38f91c3e460c2)
     for (let i = 1; i < N; i++) {
         L = 0;
         R = i;
