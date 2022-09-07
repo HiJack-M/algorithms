@@ -1,58 +1,42 @@
-/* 规定 1 和 A 对应、2 和 B 对应、3 和 C 对应…
- * 那么一个数字字符串比如 "111” 就可以转化为: "AAA"、"KA" 和 ”AK"
- * 给定一个只有数字字符组成的字符串 str，返回有多少种转化结果 */
+// 给定数组arr，arr中所有的值都为正数且不重复，每个值代表一种面值的货币，每种面值的货币可以使用任意张。
+// 再给定一个整数 aim，代表要找的钱数。
+// 求组成 aim 的方法数。
 
-const convertNumberStrToLetterStr = (str) => {
-	if (!/^[0-9]*$/.test(parseInt(str))) return 0
-	return process1(str, 0)
+const coinsWay1 = (arr, aim) => {
+	if (!arr || aim < 0) return 0
+	return process1(arr, 0, aim)
 }
 
-const process1 = (str, i) => {
-	if (i == str.length) return 1
+// 从 i 开始，i的下一面值可选：i 或 i 之后的面值
+// 还需要凑的钱
+const process1 = (arr, i, rest) => {
+	// base case
+	if (rest < 0) return 0
+	if (rest == 0) return 1
 
-	if (str[i] == '0') return 0
-	if (str[i] == '1') {
-		let res = process1(str, i + 1)
-		if (i < str.length - 1) {
-			res += process1(str, i + 2)
-		}
-		return res
+	let res = 0
+	for (let j = i; j < arr.length; j++) {
+		res += process1(arr, j, rest - arr[j])
 	}
-	if (str[i] == '2') {
-		let res = process1(str, i + 1)
-		if (i < str.length - 1 && str[i + 1] >= '0' && str[i + 1] <= '6') {
-			res += process1(str, i + 2)
-		}
-		return res
-	}
-	return process1(str, i + 1)
+	return res	
 }
 
-console.log(convertNumberStrToLetterStr('1244253457'))
+const arr1 = [10, 50, 25];
+const aim1 = 100;
 
-const convertNumberToLetterDP = (str) => {
-	if (!/^[0-9]*$/.test(parseInt(str))) return 0
-	let N = str.length
-	let DP = new Array(N + 1)
-	DP[N] = 1
-	for (let i = N - 1; i >= 0; i--) {
-		let res = 0
-		if (str[i] == '1') {
-			res = res + DP[i + 1]
-			if (i < N - 1) {
-				res += DP[i + 2]
-			}
-		} else if (str[i] == '2') {
-			res += DP[i + 1]
-			if (i < N - 1 && str[i + 1] >= '0' && str[i + 1] <= '6') {
-				res += DP[i + 2]
-			}
-		} else if (str[i] != '0') {
-			res += DP[i + 1]
-		}
-		DP[i] = res
-	}
-	return DP[0]
-}
+console.log(coinsWay1(arr1, aim1))
 
-console.log(convertNumberToLetterDP('1244253457'))
+// const coinsWayDp = (arr, aim) => {
+// 	if (!arr || !aim) return 0
+
+// 	let N = arr.length
+// 	let Dp = new Array(N)
+// 	for (let i = 0; i < N; i++) {
+// 		Dp[i] = new Array(aim + 1)
+// 		Dp[i].fill(0)
+// 	}
+
+
+// }
+
+// 2022.09.07 上面的方法改不了动态规划

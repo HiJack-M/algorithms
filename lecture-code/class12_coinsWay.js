@@ -13,7 +13,7 @@ const coinsWay1 = (arr, aim) => {
 // 如果自由使用arr[index...]的面值，组成rest这么多钱，返回方法数
 // 可以自由使用 arr[index] 所有的面值，每一种面值都可以使用任意张
 const process1 = (arr, index, rest) => {
-    // 其实这里单独判断 rest 是否为 0 也不会错，但没有包含底层返回的所有 basecase，要判断走到最后 index 的时候
+    // 其实这里单独判断 rest 是否为 0 也不会错，但没有包含底层返回的所有 base case，要判断走到最后 index 的时候
     if (index == arr.length) {  // 没有货币可以选择了
         return rest == 0 ? 1 : 0;
     }
@@ -114,3 +114,46 @@ console.log(coinsWay1(arr1, aim1));
 console.log(coinsWay2(arr1, aim1));
 console.log(coinsWayDp(arr1, aim1));
 console.log(coinsWayDpPro(arr1, aim1));
+
+
+
+/** 2022.09.07 */
+
+const coinsWay1 = (arr, aim) => {
+	if (!arr || aim < 0) return 0
+	return process1(arr, 0, aim)
+}
+
+// 从 i 开始，i的下一面值可选：i 或 i 之后的面值
+// 还需要凑的钱
+const process1 = (arr, i, rest) => {
+	// base case
+	if (rest < 0) return 0
+	if (rest == 0) return 1
+
+	let res = 0
+	for (let j = i; j < arr.length; j++) {
+		res += process1(arr, j, rest - arr[j])
+	}
+	return res	
+}
+
+const arr1 = [10, 50, 25];
+const aim1 = 100;
+
+console.log(coinsWay1(arr1, aim1))
+
+// const coinsWayDp = (arr, aim) => {
+// 	if (!arr || !aim) return 0
+
+// 	let N = arr.length
+// 	let Dp = new Array(N)
+// 	for (let i = 0; i < N; i++) {
+// 		Dp[i] = new Array(aim + 1)
+// 		Dp[i].fill(0)
+// 	}
+
+
+// }
+
+// 2022.09.07 上面的方法改不了动态规划
