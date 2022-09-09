@@ -21,22 +21,40 @@ const process1 = (arr, i, rest) => {
 	return res	
 }
 
-const arr1 = [10, 50, 25];
-const aim1 = 100;
+// const arr1 = [10, 50, 25];
+// const aim1 = 100;
+
+const arr1 = [2, 3, 1];
+const aim1 = 5;
 
 console.log(coinsWay1(arr1, aim1))
 
-// const coinsWayDp = (arr, aim) => {
-// 	if (!arr || !aim) return 0
+const coinsWayDp = (arr, aim) => {
+	if (!arr || !aim) return 0
 
-// 	let N = arr.length
-// 	let Dp = new Array(N)
-// 	for (let i = 0; i < N; i++) {
-// 		Dp[i] = new Array(aim + 1)
-// 		Dp[i].fill(0)
-// 	}
+	let N = arr.length
+	let Dp = new Array(N)
+	for (let i = 0; i < N; i++) {
+		Dp[i] = new Array(aim + 1)
+		Dp[i].fill(-1)
+	}
+	for (let i = 0; i < N; i++) {
+		Dp[i][0] = 1
+	}
+	return processDp(arr, 0, aim, Dp)
+}
 
+const processDp = (arr, i, rest, Dp) => {
+	if (rest < 0) return 0
+	if (Dp[i][rest] != -1) return Dp[i][rest]
 
-// }
+	let res = 0
+	for (let j = i; j < arr.length; j++) {
+		res += processDp(arr, j, rest - arr[j], Dp)
+	}
+	Dp[i][rest] = res
+	return res
+}
 
-// 2022.09.07 上面的方法改不了动态规划
+console.log(coinsWayDp(arr1, aim1))
+

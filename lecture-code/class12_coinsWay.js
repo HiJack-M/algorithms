@@ -103,13 +103,13 @@ const coinsWayDpPro = (arr, aim) => {
     return dp[0][aim];
 }
 
-/* const arr1 = [2, 3, 1];
- * const aim1 = 5; */
+const arr1 = [2, 3, 1];
+const aim1 = 5;
 
 /* const arr1 = [7, 100, 3, 50];
  * const aim1 = 1000; */
-const arr1 = [10, 50, 25];
-const aim1 = 100;
+// const arr1 = [10, 50, 25];
+// const aim1 = 100;
 console.log(coinsWay1(arr1, aim1));
 console.log(coinsWay2(arr1, aim1));
 console.log(coinsWayDp(arr1, aim1));
@@ -119,41 +119,50 @@ console.log(coinsWayDpPro(arr1, aim1));
 
 /** 2022.09.07 */
 
-const coinsWay1 = (arr, aim) => {
+const coinsWay0907 = (arr, aim) => {
 	if (!arr || aim < 0) return 0
-	return process1(arr, 0, aim)
+	return process0907(arr, 0, aim)
 }
 
 // 从 i 开始，i的下一面值可选：i 或 i 之后的面值
 // 还需要凑的钱
-const process1 = (arr, i, rest) => {
+const process0907 = (arr, i, rest) => {
 	// base case
 	if (rest < 0) return 0
 	if (rest == 0) return 1
 
 	let res = 0
 	for (let j = i; j < arr.length; j++) {
-		res += process1(arr, j, rest - arr[j])
+		res += process0907(arr, j, rest - arr[j])
 	}
 	return res	
 }
 
-const arr1 = [10, 50, 25];
-const aim1 = 100;
+console.log(coinsWay0907(arr1, aim1))
 
-console.log(coinsWay1(arr1, aim1))
+const coinsWayDp0907 = (arr, aim) => {
+	if (!arr || !aim) return 0
 
-// const coinsWayDp = (arr, aim) => {
-// 	if (!arr || !aim) return 0
+	let N = arr.length
+	let Dp = new Array(N)
+	for (let i = 0; i < N; i++) {
+		Dp[i] = new Array(aim + 1)
+		Dp[i].fill(-1)
+	}
+	for (let i = 0; i < N; i++) {
+		Dp[i][0] = 1
+	}
+	return processDp0907(arr, 0, aim, Dp)
+}
 
-// 	let N = arr.length
-// 	let Dp = new Array(N)
-// 	for (let i = 0; i < N; i++) {
-// 		Dp[i] = new Array(aim + 1)
-// 		Dp[i].fill(0)
-// 	}
+const processDp0907 = (arr, i, rest, Dp) => {
+	if (rest < 0) return 0
+	if (Dp[i][rest] != -1) return Dp[i][rest]
 
-
-// }
-
-// 2022.09.07 上面的方法改不了动态规划
+	let res = 0
+	for (let j = i; j < arr.length; j++) {
+		res += processDp0907(arr, j, rest - arr[j], Dp)
+	}
+	Dp[i][rest] = res
+	return res
+}
