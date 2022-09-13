@@ -2,59 +2,102 @@
 // 再给定一个整数 aim，代表要找的钱数。
 // 求组成 aim 的方法数。
 
-const coinsWay1 = (arr, aim) => {
-	if (!arr || aim < 0) return 0
-	return process1(arr, 0, aim)
+const coinsWay = (arr, aim) => {
+	if (!arr || !aim) return 0
+	return process(arr, 0, aim)
 }
 
-// 从 i 开始，i的下一面值可选：i 或 i 之后的面值
-// 还需要凑的钱
-const process1 = (arr, i, rest) => {
-	// base case
-	if (rest < 0) return 0
-	if (rest == 0) return 1
-
-	let res = 0
-	for (let j = i; j < arr.length; j++) {
-		res += process1(arr, j, rest - arr[j])
+const process = (arr, index, rest) => {
+	if (index == arr.length) {
+		return rest == 0 ? 1 : 0
 	}
-	return res	
-}
 
-// const arr1 = [10, 50, 25];
-// const aim1 = 100;
+	let ways = 0
+	for (let count = 0; arr[index] * count <= rest; count++) {
+		ways += process(arr, index + 1, rest - arr[index] * count)
+	}
+	return ways
+}
 
 const arr1 = [2, 3, 1];
 const aim1 = 5;
 
-console.log(coinsWay1(arr1, aim1))
+console.log(coinsWay(arr1, aim1));
 
-const coinsWayDp = (arr, aim) => {
+const coinsWayCache = (arr, aim) => {
 	if (!arr || !aim) return 0
-
-	let N = arr.length
-	let Dp = new Array(N)
-	for (let i = 0; i < N; i++) {
+	
+	let Dp = new Array(arr.length + 1)
+	for (let i = 0; i < Dp.length; i++) {
 		Dp[i] = new Array(aim + 1)
 		Dp[i].fill(-1)
 	}
-	for (let i = 0; i < N; i++) {
-		Dp[i][0] = 1
-	}
-	return processDp(arr, 0, aim, Dp)
+	return processCache(arr, 0, aim, Dp)
 }
 
-const processDp = (arr, i, rest, Dp) => {
-	if (rest < 0) return 0
-	if (Dp[i][rest] != -1) return Dp[i][rest]
+const processCache = (arr, index, rest, Dp) => {
+	if (Dp[index][rest] != -1) return Dp[index][rest]
 
-	let res = 0
-	for (let j = i; j < arr.length; j++) {
-		res += processDp(arr, j, rest - arr[j], Dp)
+	if (index == arr.length) {
+		Dp[index][rest] = rest == 0 ? 1 : 0
+		return Dp[index][rest]
 	}
-	Dp[i][rest] = res
-	return res
+
+	let ways = 0
+	for (let count = 0; arr[index] * count <= rest; count++) {
+		ways += processCache(arr, index + 1, rest - arr[index] * count, Dp)
+	}
+	Dp[index][rest] = ways
+	return ways
 }
 
-console.log(coinsWayDp(arr1, aim1))
+console.log(coinsWayCache(arr1, aim1));
 
+const coinsWayDp = (arr, aim) => {
+	if (!arr || !aim) return 0
+	
+	let N = arr.length
+	let Dp = new Array(N + 1)  
+	for (let i = 0; i < Dp.length; i++) {
+		Dp[i] = new Array(aim + 1)
+		Dp[i].fill(0)
+	}
+	Dp[N][0] = 1
+
+	for (let index = N - 1; index >= 0; index--) {
+		for (let rest = 0; rest <= aim; rest++) {
+			let ways = 0
+			for (let count = 0; arr[index] * count <= rest; count++) {
+				ways += Dp[index + 1][rest - arr[index] * count]
+			}
+			Dp[index][rest] = ways
+		}
+	}
+	return Dp[0][aim]
+}
+
+console.log(coinsWayDp(arr1, aim1));
+
+const coinsWayDpPro = (arr, aim) => {
+	if (!arr || !aim) return 0
+	
+	let N = arr.length
+	let Dp = new Array(N + 1)  
+	for (let i = 0; i < Dp.length; i++) {
+		Dp[i] = new Array(aim + 1)
+		Dp[i].fill(0)
+	}
+	Dp[N][0] = 1
+
+	for (let index = N - 1; index >= 0; index--) {
+		for (let rest = 0; rest <= aim; rest++) {
+			Dp[index][rest] = Dp[index + 1][rest]
+			if (rest >= arr[index]) {
+				Dp[index][rest] += Dp[index][rest - arr[index]]
+			}
+		}
+	}
+	return Dp[0][aim]
+}
+
+console.log(coinsWayDpPro(arr1, aim1));

@@ -10,7 +10,7 @@ const coinsWay1 = (arr, aim) => {
     return process1(arr, 0, aim);
 }
 
-// 如果自由使用arr[index...]的面值，组成rest这么多钱，返回方法数
+// 如果自由使用 arr[index...] 的面值，组成rest这么多钱，返回方法数
 // 可以自由使用 arr[index] 所有的面值，每一种面值都可以使用任意张
 const process1 = (arr, index, rest) => {
     // 其实这里单独判断 rest 是否为 0 也不会错，但没有包含底层返回的所有 base case，要判断走到最后 index 的时候
@@ -57,6 +57,7 @@ const process2 = (arr, index, rest, dp) => {
     dp[index][rest] = ways;
     return ways;
 }
+// 记忆化搜索每次还是去跑递归，只是把重复解的值存起来直接取用，不再进行重复计算
 
 const coinsWayDp = (arr, aim) => {
     let N = arr.length;
@@ -140,7 +141,7 @@ const process0907 = (arr, i, rest) => {
 
 console.log(coinsWay0907(arr1, aim1))
 
-const coinsWayDp0907 = (arr, aim) => {
+const coinsWayCache0907 = (arr, aim) => {
 	if (!arr || !aim) return 0
 
 	let N = arr.length
@@ -152,17 +153,18 @@ const coinsWayDp0907 = (arr, aim) => {
 	for (let i = 0; i < N; i++) {
 		Dp[i][0] = 1
 	}
-	return processDp0907(arr, 0, aim, Dp)
+	return processCache0907(arr, 0, aim, Dp)
 }
 
-const processDp0907 = (arr, i, rest, Dp) => {
+const processCache0907 = (arr, i, rest, Dp) => {
 	if (rest < 0) return 0
 	if (Dp[i][rest] != -1) return Dp[i][rest]
 
 	let res = 0
 	for (let j = i; j < arr.length; j++) {
-		res += processDp0907(arr, j, rest - arr[j], Dp)
+		res += processCache0907(arr, j, rest - arr[j], Dp)
 	}
 	Dp[i][rest] = res
 	return res
 }
+// 这个思路不适用于改成动态规划，Dp 表中可变参数的先后依赖关系不明朗
