@@ -108,14 +108,18 @@ const process2 = (arrCounts, rest, dpMap) => {
 	let ans = Infinity
 	for (let i = 0; i < arrCounts.length; i++) {
 		// 若某张贴纸不包含剩下目标的第一个字母，那就跳过【防止死循环】（反正顺序不重要）
-		let containFirst = false
-		for (let e in restStrCount) {
-			if (restStrCount[e] != 0 && arrCounts[i][e] != 0) {
-				containFirst = true
-				break
-			}
-		}
-		if (!containFirst) continue
+		// let containFirst = false
+		// for (let e in restStrCount) {
+		// 	if (restStrCount[e] != 0 && arrCounts[i][e] != 0) {
+		// 		containFirst = true
+		// 		break
+		// 	}
+		// }
+		// if (!containFirst) continue
+		// 既然都带上 rest 字符串玩了，就不用上面的判断方法了，直接拿 rest 第一个字母（重组过后是按照字典序排列的）
+		// 为何带上 rest 字符串，因为 Dp 需要用作 key
+		let firstLetterIndex = rest[0].charCodeAt() - 97
+		if (arrCounts[i][firstLetterIndex] == 0) continue
 
 		let restOfRest = new Array(26)
 		for (let j = 0; j < 26; j++ ) {
@@ -136,3 +140,5 @@ const process2 = (arrCounts, rest, dpMap) => {
 	dpMap.set(rest, ans == Infinity ? -1 : ans)
 	return ans == Infinity ? -1 : ans
 }
+
+console.log(minStickers220914(arr1, str1));

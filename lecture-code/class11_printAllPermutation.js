@@ -6,6 +6,7 @@ const swap = (arr, i, j) => {
     arr[j] = temp;
 }
 
+// 错误示例
 const printAllPermutation = (str) => {
     let ans = [];
     if (!str || str.length == 0) return ans; 
