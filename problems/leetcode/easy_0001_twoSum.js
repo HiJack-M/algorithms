@@ -12,7 +12,7 @@
  * @return {number[]}
  */
 var twoSum = function(nums, target) {
-  let prevNumsMap = {} // 用对象充当 map，key 为对应数字，value 为对应数字的值
+  let prevNumsMap = {} // 用对象充当 map，key 为对应数字，value 为对应数字的值（JS 也可直接尝试用 Map 结构）
   for (let i = 0; i < nums.length; i++) {
     let matchNum = target - nums[i]
     if (prevNumsMap[matchNum] != undefined) {
