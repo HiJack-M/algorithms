@@ -12,7 +12,7 @@ const lengthOfLongestSubstring = function(s) {
   if (s.length === 1) return 1
 
   let maxLen = 0
-  let map = new Map()
+  let map = new Map() // 记录从 i 开始的无重复子串
   let rp = 0
 
   for (let i = 0; i < s.length; i++) {
@@ -37,3 +37,25 @@ console.log(lengthOfLongestSubstring(str3))
 
 // 用 map 记录无重复集合
 // 用 rp 下标来记录每次检测过的字符，不用重复放入
+
+/**
+ * @param {string} s
+ * @return {number}
+ */
+ var lengthOfLongestSubstring220920 = function(s) {
+	if (!s) return 0
+	const checkArr = [] // 记录到 i 结尾的无重复子串
+	let max = 0
+
+	for (let i = 0; i < s.length; i++) {
+		let index = checkArr.indexOf(s[i])
+		if (index == -1) {
+			checkArr.push(s[i])
+		} else {
+			checkArr.splice(0, index + 1)
+			checkArr.push(s[i])
+		}
+		max = Math.max(max, checkArr.length)
+	}
+	return max
+};
