@@ -1,59 +1,17 @@
-const longestCommonSubsequenceLength = (str1, str2) => {
-	if (!str1 || !str2) return 0
+// 给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出和为目标值 target  的那 两个 整数，并返回它们的【数组下标】。
+// 你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。
+// 你可以按任意顺序返回答案。
 
-	const Dp = new Array(str1.length)
-	for (let i = 0; i < Dp.length; i++) {
-		Dp[i] = new Array(str2.length)
-		Dp[i].fill(0)
-	}
-
-	Dp[0][0] = str1[0] == str2[0] ? 1 : 0
-	for (let i = 1; i < str1.length; i++) {
-		Dp[i][0] = Math.max(Dp[i - 1][0], str1[i] == str2[0] ? 1 : 0)
-	}
-	for (let j = 1; j < str2.length; j++) {
-		Dp[0][j] = Math.max(Dp[0][j - 1], str1[0] == str2[j] ? 1 : 0)
-	}
-	for (let i = 1; i < str1.length; i++) {
-		for (let j = 1; j < str2.length; j++) {
-			Dp[i][j] = Math.max(Dp[i - 1][j], Dp[i][j - 1])
-			if (str1[i] == str2[j]) {
-				Dp[i][j] = Math.max(Dp[i][j], Dp[i - 1][j - 1] + 1)
-			}
+var twoSum = function(nums, target) {
+	if (!nums || !target) return null
+	let map = {}
+	for (let i = 0; i < nums.length; i++) {
+		let matchNum = target - nums[i]
+		if (map[matchNum] != undefined) {
+			return [i, map[matchNum]]
+		} else {
+			map[nums[i]] = i
 		}
 	}
-
-	return Dp[str1.length - 1][str2.length - 1]
+	return null
 }
-
-let str1 = 'ab1cabc3d';
-let str2 = '1abdddddc';
-console.log(longestCommonSubsequenceLength(str1, str2));
-
-const longestCommonSubArrayLength = (arr1, arr2) => {
-	if (!arr1 || !arr2) return 0
-
-	const Dp = new Array(arr1.length)
-	for (let i = 0; i < arr1.length; i++) {
-		Dp[i] = new Array(arr2.length)
-		Dp[i].fill(0)
-	}
-
-	let max = 0
-	for (let i = 0; i < arr1.length; i++) {
-		for (let j = 0; j < arr2.length; j++) {
-			if (arr1[i] == arr2[j]) {
-				Dp[i][j] =  Dp[i - 1] && Dp[i - 1][j - 1] ? Dp[i - 1][j - 1] + 1 : 1
-			} else {
-				Dp[i][j] = 0
-			}
-			max = Math.max(max, Dp[i][j])
-		}
-	}
-	console.log(Dp)
-	return max
-}
-
-let arr1 = [1, 2, 3, 'd']
-let arr2 = [2, 3, 'd', 1, 2]
-console.log(longestCommonSubArrayLength(arr1, arr2))
