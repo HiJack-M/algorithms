@@ -1,22 +1,36 @@
-// 给定一个大小为 n 的数组 nums ，返回其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。
-// 你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+// 将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
 
 /**
- * @param {number[]} nums
- * @return {number}
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
  */
- var majorityElement = function(nums) {
-	if (!nums) return null
-	let map = {}
+/**
+ * @param {ListNode} list1
+ * @param {ListNode} list2
+ * @return {ListNode}
+ */
+ var mergeTwoLists = function(list1, list2) {
+	if (!list1 || !list2) return list1 || list2 || null
 
-	for (let i = 0; i< nums.length; i++) {
-		if (!map[nums[i]]) {
-			map[nums[i]] = 1
+	let dummyHead = new ListNode(0)
+	let p0 = dummyHead
+	let p1 = list1
+	let p2 = list2
+
+	while (p1 || p2) {
+		let v1 = p1 ? p1.val : Infinity
+		let v2 = p2 ? p2.val : Infinity
+		if (v1 <= v2) {
+			p0.next = new ListNode(v1)
+			p1 = p1.next
 		} else {
-			map[nums[i]]++
+			p0.next = new ListNode(v2)
+			p2 = p2.next
 		}
-		if (map[nums[i]] > nums.length / 2) {
-			return nums[i]
-		}
+		p0 = p0.next
 	}
-};
+	return dummyHead.next
+ }
