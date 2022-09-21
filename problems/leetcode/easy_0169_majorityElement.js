@@ -23,3 +23,23 @@
 	}
 };
 
+// Divide & Conquer 方法
+// 时间复杂度：O(n) 空间复杂度：O(1)
+var majorityElementDQ = function(nums) {
+    if (!nums || nums.length == 0) return null
+    let winner = nums[0]
+    let count = 1
+    for (let i = 1; i < nums.length; i++) {
+        if (nums[i] == winner) {
+            count++
+        } else {
+            if (count == 0) {
+                winner = nums[i]
+                count++
+            } else {
+                count--
+            }
+        }
+    }
+    return winner
+}
