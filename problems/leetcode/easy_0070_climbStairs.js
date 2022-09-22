@@ -52,3 +52,22 @@ var climbStairsDp = function (n) {
 
   return Dp[n]
 }
+
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var climbStairsFibonacci = function (n) {
+  if (n == 0 || n == 1) return n
+
+  let first = 1
+  let second = 2
+
+  for (let i = 3; i <= n; i++) {
+    let third = first + second
+    first = second
+    second = third
+  }
+
+  return second
+}

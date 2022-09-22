@@ -10,30 +10,16 @@
 var climbStairs = function (n) {
   if (n == 0 || n == 1) return n
 
-  let Dp = new Array(n + 1)
-  Dp.fill(-1)
-  Dp[0] = 1
-  Dp[1] = 1
+  let first = 1
+  let second = 2
 
-  for (let i = 2; i <= n; i++) {
-    Dp[i] = Dp[i - 1] + Dp[i - 2]
+  for (let i = 3; i <= n; i++) {
+    let third = first + second
+    first = second
+    second = third
   }
 
-  return Dp[n]
+  return second
 }
-
-// const process = (rest, Dp) => {
-// 	if (Dp[rest] != undefined && Dp[rest] != -1) return Dp[rest]
-
-// 	// base case
-// 	if (rest == 0) return 1
-// 	if (rest < 0) return 0
-
-// 	let ways = process(rest - 1, Dp)
-// 	ways += process(rest - 2, Dp)
-
-// 	Dp[rest] = ways
-// 	return ways
-// }
 
 console.log(climbStairs(40))
