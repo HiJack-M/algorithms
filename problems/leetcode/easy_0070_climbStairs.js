@@ -7,15 +7,16 @@
  * @param {number} n
  * @return {number}
  */
- var climbStairs = function(n) {
-    if (n == 0 || n == 1) return n
+var climbStairs = function (n) {
+  if (n == 0 || n == 1) return n
 
-    let Dp = new Array(n + 1)
-    Dp.fill(-1)
+  let Dp = new Array(n + 1)
+  Dp.fill(-1)
   Dp[0] = 1
+  Dp[1] = 1
 
-    return process(n, Dp)
-};
+  return process(n, Dp)
+}
 
 const process = (rest, Dp) => {
   if (Dp[rest] != undefined && Dp[rest] != -1) return Dp[rest]
@@ -26,9 +27,28 @@ const process = (rest, Dp) => {
 
   let ways = process(rest - 1, Dp)
   ways += process(rest - 2, Dp)
-  
+
   Dp[rest] = ways
   return ways
 }
 
 console.log(climbStairs(4))
+
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var climbStairsDp = function (n) {
+  if (n == 0 || n == 1) return n
+
+  let Dp = new Array(n + 1)
+  Dp.fill(-1)
+  Dp[0] = 1
+  Dp[1] = 1
+
+  for (let i = 2; i <= n; i++) {
+    Dp[i] = Dp[i - 1] + Dp[i - 2]
+  }
+
+  return Dp[n]
+}
