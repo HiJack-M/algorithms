@@ -1,42 +1,34 @@
-// Given a string s, return the longest palindromic substring in s.
-// A string is called a palindrome string if the reverse of that string is the same as the original string.
+// 70. Climbing Stairs
+
+// You are climbing a staircase. It takes n steps to reach the top.
+// Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
 
 /**
- * @param {string} s
- * @return {string}
+ * @param {number} n
+ * @return {number}
  */
- var longestPalindrome = function(s) {
-	let ans = ''
-    if (!s) return ans
+ var climbStairs = function(n) {
+  	if (n == 0 || n == 1) return n
 
-	ans = s[0]
-	let N = s.length
-	let Dp = new Array(N)
-	for (let i = 0; i < N; i++) {
-		Dp[i] = new Array(N)
-		Dp[i].fill(false)
-		Dp[i][i] = true // 单个字符为回文
-	}
+  	let Dp = new Array(n + 1)
+  	Dp.fill(-1)
+	Dp[0] = 1
 
-	// Dp 表的左下半部分没用
-	for (let i = 1; i < N; i++) {
-		let a = 0
-		let b = i
-		while (a < N && b < N) {
-			if (s[a] == s[b]) {
-				Dp[a][b] = Dp[Math.min(a + 1, b - 1)][b - 1] ? true : false
-				if (Dp[a][b] && b - a + 1 > ans.length) {
-					ans = s.substring(a, b + 1)
-				}
-			} else {
-				Dp[a][b] = false
-			}
-			a++
-			b++
-		}
-	}
-	return ans
+  	return process(n, Dp)
 };
 
-console.log(longestPalindrome('aacabdkacaa'))
-console.log(longestPalindrome('bbbb'))
+const process = (rest, Dp) => {
+	if (Dp[rest] != undefined && Dp[rest] != -1) return Dp[rest]
+
+	// base case
+	if (rest == 0) return 1
+	if (rest < 0) return 0
+
+	let ways = process(rest - 1, Dp)
+	ways += process(rest - 2, Dp)
+	
+	Dp[rest] = ways
+	return ways
+}
+
+console.log(climbStairs(4))
