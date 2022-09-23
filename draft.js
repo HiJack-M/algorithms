@@ -18,16 +18,20 @@ var inorderTraversal = function (root) {
   let ans = []
   if (!root) return ans
 
-  inorderProcess(root, ans)
-  return ans
-}
+  let stack = [] // push pop
+  let p = root
+  stack.push(p)
+  p = p.left
+  while (p || stack.length > 0) {
+    if (p) {
+      stack.push(p)
+      p = p.left
+    } else {
+      let cur = stack.pop()
+      ans.push(cur.val)
+      p = cur.right
+    }
+  }
 
-const inorderProcess = (node, arr) => {
-  if (node.left) {
-    inorderProcess(node.left, arr)
-  }
-  arr.push(node.val)
-  if (node.right) {
-    inorderProcess(node.right, arr)
-  }
+  return ans
 }
