@@ -10,7 +10,7 @@
  * @param {number[]} height
  * @return {number}
  */
-var maxArea = function (height) {
+var maxAreaWrongAnwser = function (height) {
   if (!height || height.length < 2) return 0
 
   let max = 0
@@ -18,6 +18,31 @@ var maxArea = function (height) {
     for (let j = i + 1; j < height.length; j++) {
       max = Math.max(max, (j - i) * Math.min(height[i], height[j]))
     }
+  }
+
+  return max
+}
+
+const height = [1, 8, 6, 2, 5, 4, 8, 3, 7]
+
+console.log(maxArea(height))
+
+// Two Points
+/**
+ * @param {number[]} height
+ * @return {number}
+ */
+var maxArea = function (height) {
+  if (!height || height.length < 2) return 0
+
+  let max = 0
+  let li = 0
+  let ri = height.length - 1
+
+  while (li < ri) {
+    max = Math.max(max, (ri - li) * Math.min(height[li], height[ri]))
+    if (height[li] > height[ri]) ri--
+    else li++
   }
 
   return max
