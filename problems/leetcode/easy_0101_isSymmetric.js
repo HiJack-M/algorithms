@@ -2,6 +2,7 @@
 
 // Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
 
+// 方法一：递归
 /**
  * Definition for a binary tree node.
  * function TreeNode(val, left, right) {
