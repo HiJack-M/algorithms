@@ -25,6 +25,9 @@ var maxArea = function (height) {
   return max
 }
 
+// 双指针方法：
+// 面积受限于短边，短边限制了面积变大的可能性，就算另一边无敌大，也没办法
+
 const height = [1, 8, 6, 2, 5, 4, 8, 3, 7]
 
 console.log(maxArea(height))
