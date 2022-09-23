@@ -32,3 +32,44 @@ const checkProcess = (left, right) => {
     else return false
   }
 }
+
+// 方法二：遍历，自己实现队列
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+var isSymmetric = function (root) {
+  if (!root) return false
+
+  let helpQueue = [] // push shift
+  let curSize = 0
+  let curNode = null
+
+  let checkArr = [] // 用来验证两边是否对称
+
+  helpQueue.push(root)
+  while (helpQueue.length > 0) {
+    curSize = helpQueue.length
+
+    while (curSize > 0) {
+      curNode = helpQueue.shift()
+      checkArr.push(curNode ? curNode.val : null)
+      if (curNode) {
+        helpQueue.push(curNode.left || null)
+        helpQueue.push(curNode.right || null)
+      }
+
+      curSize--
+    }
+    while (checkArr.length > 0) {
+      console.log('checkArr: ', checkArr)
+      if (checkArr.length == 1) checkArr.pop()
+      else {
+        let left = checkArr.shift()
+        let right = checkArr.pop()
+        if (left != right) return false
+      }
+    }
+  }
+  return true
+}
