@@ -17,30 +17,20 @@
 var removeNthFromEnd = function (head, n) {
   if (!head || n <= 0) return head
 
-  let length = 0 // 总长度
+  let dummyHead = new ListNode(0)
+  dummyHead.next = head
   let fast = head
-  while (fast) {
-    length++
+  let slow = dummyHead
+
+  for (let i = 0; i < n; i++) {
     fast = fast.next
   }
-  toDel = length - n
 
-  // 删除的是头节点
-  if (toDel <= 0) {
-    if (length == 1) return null
-    else {
-      let dummyHead = head.next
-      head.next = null
-      return dummyHead
-    }
-  }
-
-  let count = 0
-  let slow = head
-  while (count < toDel - 1) {
+  while (fast) {
+    fast = fast.next
     slow = slow.next
-    count++
   }
-  slow.next = slow.next ? slow.next.next : null
-  return head
+  slow.next = slow.next.next
+
+  return dummyHead.next
 }

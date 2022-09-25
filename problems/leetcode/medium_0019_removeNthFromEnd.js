@@ -44,3 +44,30 @@ var removeNthFromEnd = function (head, n) {
   slow.next = slow.next ? slow.next.next : null
   return head
 }
+
+// 双指针版本
+/**
+ * @param {ListNode} head
+ * @param {number} n
+ * @return {ListNode}
+ */
+var removeNthFromEndTwoPoints = function (head, n) {
+  if (!head || n <= 0) return head
+
+  let dummyHead = new ListNode(0)
+  dummyHead.next = head
+  let fast = head
+  let slow = dummyHead
+
+  for (let i = 0; i < n; i++) {
+    fast = fast.next
+  }
+
+  while (fast) {
+    fast = fast.next
+    slow = slow.next
+  }
+  slow.next = slow.next.next
+
+  return dummyHead.next
+}
