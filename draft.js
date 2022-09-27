@@ -8,28 +8,27 @@
  */
 var generateParenthesis = function (n) {
   if (n == 0) return []
-  let ans = new Set()
-  process(n, 0, '', 0, ans)
-  return [...ans]
+  let ans = []
+  process(n, n, '', ans)
+  return ans
 }
 
-const process = (n, index, path, unUseRight, ans) => {
-  if (index == n) {
-    while (unUseRight > 0) {
-      path += ')'
-      unUseRight--
-    }
-    ans.add(path)
+// 用剩余量来控制递归
+const process = (restLeft, restRight, path, ans) => {
+  if (restLeft == 0 && restRight == 0) {
+    ans.push(path)
     return
   }
 
-  let curPath = path + '('
-  let curUnUseRight = unUseRight + 1
-  let usingRight = ''
-  process(n, index + 1, curPath, curUnUseRight, ans)
-  for (let i = 1; i <= curUnUseRight; i++) {
-    usingRight += ')'
-    process(n, index + 1, curPath + usingRight, curUnUseRight - i, ans)
+  if (restLeft > 0) {
+    let curPath = path + '('
+    process(restLeft - 1, restRight, curPath, ans)
+  }
+
+  // 以确保括号是有效的
+  if (restRight > restLeft) {
+    let curPath = path + ')'
+    process(restLeft, restRight - 1, curPath, ans)
   }
 }
 
