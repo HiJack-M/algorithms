@@ -32,24 +32,39 @@ var nextPermutation = function (nums) {
   if (!nums || nums.length == 0) return nums
 
   // 找到第一组顺序对，取到小值 (较小值尽量靠右)
-  let small = -1
-  for (let i = nums.length - 2; i >= 0; i--) {
-    if (nums[i] < nums[i + 1]) {
-      small = i
-      break
-    }
+  let small = nums.length - 2
+  while (small >= 0 && nums[small] > nums[small + 1]) {
+    small--
   }
+
   // 找到逆序中的刚好比较小值大的最小的那个值
-  let big = -1
-  for (let i = nums.length - 1; i > small; i--) {
-    if (nums[i] > nums[small]) {
-      big = i
-      break
+  if (small >= 0) {
+    let big = nums.length - 1
+    while (big > small && nums[big] <= nums[small]) {
+      big--
     }
-  }
-  if (small != -1 && big != -1) {
     swap(nums, small, big)
   }
+
   // 从下标为 small + 1 出开始顺序排序
   reverse(nums, small + 1, nums.length - 1)
 }
+
+// 思路：
+
+// 前提知道的规律：
+// 1. 从右到左的某一部分，降序，代表已经是这部分最大的序列
+
+// 要得到一个方法：
+// 1. 得到一个大与当前序列的新序列
+// 2. 变大的幅度尽可能小
+
+// 具体一点的原则：
+// 1. 将一个左边的「较小数」与一个右边的「较大数」交换，再将交换之后「较大数」位置右边的数字按照升序排列（本是降序）
+// 2. 「较小数」尽量靠右，「较大数」尽量较小
+
+// 具体方法：
+// 1. 从右至左，找到第一个顺序对 nums[i] 和 nums[i + 1]，得到「较小数」
+// 2. 在 nums[i + 1] 到最右中，从右至左，找到第一个比 nums[i] 大的「较大数」
+// 3. 交换两数
+// 4. 将「较大数」右侧的数升序排列
