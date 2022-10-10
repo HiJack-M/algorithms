@@ -18,7 +18,6 @@ let head5 = new ListNode(3)
 let arr1 = [head1, head2, head3, head4, head5]
 
 // 小顶堆
-
 class HeapForLists {
   constructor(lists) {
     this.heap = [] // 装排成堆序列的链表表头
