@@ -42,9 +42,10 @@ console.log(generateParenthesis(3))
  * @return {string[]}
  */
 var generateParenthesis = function (n) {
-  if (n == 0) return []
   let ans = []
-  process(n, n, '', ans)
+  if (n != 0) {
+    process(n, n, '', ans)
+  }
   return ans
 }
 
@@ -56,14 +57,12 @@ const process = (restLeft, restRight, path, ans) => {
   }
 
   if (restLeft > 0) {
-    let curPath = path + '('
-    process(restLeft - 1, restRight, curPath, ans)
+    process(restLeft - 1, restRight, path + '(', ans)
   }
 
   // 以确保括号是有效的
   if (restRight > restLeft) {
-    let curPath = path + ')'
-    process(restLeft, restRight - 1, curPath, ans)
+    process(restLeft, restRight - 1, path + ')', ans)
   }
 }
 
