@@ -35,7 +35,6 @@ class HeapForLists {
 
   poll() {
     let top = this.heap.shift()
-    console.log(top)
     let newTop = null
     if (top.next != null) {
       newTop = top.next
@@ -87,7 +86,6 @@ const swap = (arr, i, j) => {
 var mergeKLists = function (lists) {
   if (!lists || lists.length == 0) return null
   let heapList = new HeapForLists(lists)
-  console.log('list: ', heapList.heap)
   let dummyHead = new ListNode(0)
   let p = dummyHead
   while (heapList.heap.length > 0) {
