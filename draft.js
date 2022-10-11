@@ -1,98 +1,59 @@
-// 23. Merge k Sorted Lists
+// 33. Search in Rotated Sorted Array
 
-// You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
-// Merge all the linked-lists into one sorted linked-list and return it.
+// There is an integer array nums sorted in ascending order (with distinct values).
 
-// Definition for singly-linked list.
-function ListNode(val, next) {
-  this.val = val === undefined ? 0 : val
-  this.next = next === undefined ? null : next
-}
+// Prior to being passed to your function, nums is possibly rotated at an unknown pivot index k (1 <= k < nums.length) such that the resulting array is [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]] (0-indexed). For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3 and become [4,5,6,7,0,1,2].
 
-let head1 = new ListNode(0)
-let head2 = new ListNode(1)
-let head3 = new ListNode(4)
-let head4 = new ListNode(2)
-let head5 = new ListNode(3)
+// Given the array nums after the possible rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.
 
-let arr1 = [head1, head2, head3, head4, head5]
-
-// 小顶堆
-
-class HeapForLists {
-  constructor(lists) {
-    this.heap = [] // 装排成堆序列的链表表头
-    for (let i = 0; i < lists.length; i++) {
-      if (lists[i]) {
-        // ⚠️ 一开始用 heapify 会有问题………………！！！
-        // this.heap.unshift(lists[i])
-        // this.heapify(0)
-        this.heap.push(lists[i])
-        this.heapInsert(this.heap.length - 1)
-      }
-    }
-  }
-
-  poll() {
-    let top = this.heap.shift()
-    let newTop = null
-    if (top.next != null) {
-      newTop = top.next
-    } else if (this.heap.length > 0) {
-      newTop = this.heap.pop() // 若当下节点无后续，则从 heap 最尾端取一个来填补 top
-    } // else 就是彻底没了
-
-    top.next = null
-    if (newTop != null) {
-      this.heap.unshift(newTop)
-      this.heapify(0)
-    }
-    return top
-  }
-
-  // 从最后子节点开始往上爬
-  heapInsert(index) {
-    while (index > 0 && this.heap[index].val < this.heap[parseInt((index - 1) / 2)].val) {
-      swap(this.heap, index, parseInt((index - 1) / 2))
-      index = parseInt((index - 1) / 2)
-    }
-  }
-
-  // 从某节点开始往下沉
-  heapify(index) {
-    while (index < this.heap.length - 1 && index * 2 + 1 < this.heap.length) {
-      let left = index * 2 + 1
-      let small = this.heap[index].val < this.heap[left].val ? index : left
-      if (left + 1 < this.heap.length) {
-        small = this.heap[small].val < this.heap[left + 1].val ? small : left + 1
-      }
-      if (small == index) break
-      swap(this.heap, index, small)
-      index = small
-    }
-  }
-}
-
-const swap = (arr, i, j) => {
-  let temp = arr[i]
-  arr[i] = arr[j]
-  arr[j] = temp
-}
+// You must write an algorithm with O(log n) runtime complexity.
 
 /**
- * @param {ListNode[]} lists
- * @return {ListNode}
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
  */
-var mergeKLists = function (lists) {
-  if (!lists || lists.length == 0) return null
-  let heapList = new HeapForLists(lists)
-  let dummyHead = new ListNode(0)
-  let p = dummyHead
-  while (heapList.heap.length > 0) {
-    p.next = heapList.poll()
-    p = p.next
+var search = function (nums, target) {
+  // 找到第一个降序对，找到 pivot，分为两部分
+  // 确定 target 所在范围处于哪个部分
+  // 在锁定的部分使用二分法
+  if (!nums || nums.length == 0) return -1
+  if (nums.length == 1) return nums[0] == target ? 0 : -1
+
+  let pivot = -1
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] > nums[i + 1]) {
+      pivot = i + 1
+      break
+    }
   }
-  return dummyHead.next
+
+  if (pivot == -1) {
+    // 整体升序
+    return divideAndFind(nums, 0, nums.length - 1, target)
+  } else {
+    // 以 pivot 断层
+    if (nums[0] > target) {
+      return divideAndFind(nums, pivot, nums.length - 1, target)
+    } else {
+      return divideAndFind(nums, 0, pivot - 1, target)
+    }
+  }
 }
 
-mergeKLists(arr1)
+const divideAndFind = (arr, i, j, target) => {
+  while (i <= j) {
+    let mid = i + ((j - i) >> 1)
+    if (arr[mid] == target) {
+      return mid
+    } else if (arr[mid] > target) {
+      j = mid - 1
+    } else {
+      i = mid + 1
+    }
+  }
+  return -1
+}
+
+const arr2 = [4, 5, 6, 7, 0, 1, 2]
+console.log(search(arr2, 3))
