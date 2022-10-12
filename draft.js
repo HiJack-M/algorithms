@@ -40,3 +40,34 @@ const process = (leftM, leftN, DP) => {
 }
 
 console.log(uniquePaths(3, 7))
+
+/**
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var uniquePathsDp = function (m, n) {
+  const DP = new Array(m)
+  for (let i = 0; i < m; i++) {
+    DP[i] = new Array(n)
+    DP[i].fill(-1)
+  }
+
+  DP[0][0] = 1
+
+  for (let i = 1; i < m; i++) {
+    DP[i][0] = DP[0][0]
+  }
+  for (let i = 1; i < n; i++) {
+    DP[0][i] = DP[0][0]
+  }
+
+  for (let i = 1; i < m; i++) {
+    for (let j = 1; j < n; j++) {
+      DP[i][j] = DP[i - 1][j] + DP[i][j - 1]
+    }
+  }
+  return DP[m - 1][n - 1]
+}
+
+console.log(uniquePathsDp(3, 7))
