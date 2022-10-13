@@ -21,7 +21,7 @@ var permute = function (nums) {
 
 const process = (nums, index, ans) => {
   if (index == nums.length) {
-    ans.push([...nums]) // 稍后尝试不复制新数组
+    ans.push([...nums])
   }
 
   for (let i = index; i < nums.length; i++) {
