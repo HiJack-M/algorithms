@@ -19,6 +19,8 @@ var combinationSum = function (candidates, target) {
 }
 
 const process = (candidates, restAim, index, path, ans) => {
+  if (index > candidates.length) return
+
   if (restAim == 0) {
     ans.push([...path])
     return
