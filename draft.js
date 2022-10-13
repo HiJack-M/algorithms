@@ -47,3 +47,36 @@ console.log(
     [4, 2, 1],
   ])
 )
+
+// DP way
+/**
+ * @param {number[][]} grid
+ * @return {number}
+ */
+var minPathSum = function (grid) {
+  if (!grid || grid.length == 0) return 0
+
+  let m = grid.length
+  let n = grid[0].length
+  const Dp = new Array(m)
+  for (let i = 0; i < m; i++) {
+    Dp[i] = new Array(n)
+    Dp[i].fill(-1)
+  }
+
+  Dp[m - 1][n - 1] = grid[m - 1][n - 1]
+  for (let i = m - 2; i >= 0; i--) {
+    Dp[i][n - 1] = grid[i][n - 1] + Dp[i + 1][n - 1]
+  }
+  for (let i = n - 2; i >= 0; i--) {
+    Dp[m - 1][i] = grid[m - 1][i] + Dp[m - 1][i + 1]
+  }
+
+  for (let i = m - 2; i >= 0; i--) {
+    for (let j = n - 2; j >= 0; j--) {
+      Dp[i][j] = grid[i][j] + Math.min(Dp[i + 1][j], Dp[i][j + 1])
+    }
+  }
+
+  return Dp[0][0]
+}
