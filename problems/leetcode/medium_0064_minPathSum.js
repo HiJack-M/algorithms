@@ -4,6 +4,7 @@
 
 // Note: You can only move either down or right at any point in time.
 
+// 记忆化搜索方法
 /**
  * @param {number[][]} grid
  * @return {number}
@@ -39,11 +40,3 @@ const process = (m, n, grid, Dp) => {
   Dp[m][n] = min
   return min
 }
-
-console.log(
-  minPathSum([
-    [1, 3, 1],
-    [1, 5, 1],
-    [4, 2, 1],
-  ])
-)

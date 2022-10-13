@@ -33,4 +33,4 @@ const process = (nums, index, ans) => {
 
 console.log(permute([1, 2, 3]))
 
-// 时间复杂度：O(n×n!)，其中 nnn 为序列的长度。
+// 时间复杂度：O(n×n!)，其中 n 为序列的长度。
