@@ -46,3 +46,39 @@ const candidates1 = [2, 3, 6, 7]
 let target1 = 7
 
 console.log(combinationSum(candidates1, target1))
+
+/**
+ * @param {number[]} candidates
+ * @param {number} target
+ * @return {number[][]}
+ */
+var combinationSumBackTracking = function (candidates, target) {
+  let ans = []
+  if (!candidates || candidates.length == 0) return ans
+  processBackTracking(candidates, target, 0, [], ans)
+  return ans
+}
+
+const processBackTracking = (candidates, restAim, index, combine, ans) => {
+  if (index > candidates.length) return
+
+  if (restAim == 0) {
+    ans.push([...combine])
+    return
+  }
+  if (restAim < 0) return
+
+  processBackTracking(candidates, restAim, index + 1, [...combine], ans)
+
+  if (restAim >= candidates[index]) {
+    processBackTracking(
+      candidates,
+      restAim - candidates[index],
+      index,
+      [...combine, candidates[index]],
+      ans
+    )
+  }
+}
+
+console.log(combinationSumBackTracking(candidates1, target1))
