@@ -31,6 +31,3 @@ const swap = (arr, i, j) => {
   arr[i] = arr[j]
   arr[j] = temp
 }
-
-const nums1 = [2, 0, 2, 1, 1, 0]
-sortColors(nums1)
