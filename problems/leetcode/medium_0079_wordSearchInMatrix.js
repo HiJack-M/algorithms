@@ -23,8 +23,6 @@ var exist = function (board, word) {
   }
   if (headIndex.length == 0) return false
 
-  console.log(headIndex)
-
   let exist = false
   for (let i = 0; i < headIndex.length; i++) {
     let curExist = process(board, word, 1, headIndex[i].x, headIndex[i].y, [
@@ -41,9 +39,6 @@ var exist = function (board, word) {
 const process = (board, word, index, x, y, usedPoint) => {
   if (index == word.length) return true
 
-  console.log('x: ', x, ', y: ', y)
-  console.log('usedPoint: ', usedPoint)
-
   let exist = false
   // 向上
   // 上方坐标没用过；上面还有行；上方字母与 word 相应 index 字母相同
@@ -52,7 +47,6 @@ const process = (board, word, index, x, y, usedPoint) => {
     x - 1 >= 0 &&
     word[index] == board[x - 1][y]
   ) {
-    console.log('index: ', index, ', x: ', x, ', y: ', y, ', 1')
     exist = process(board, word, index + 1, x - 1, y, [...usedPoint, [x - 1, y].join('-')])
   }
   // 向下
@@ -62,7 +56,6 @@ const process = (board, word, index, x, y, usedPoint) => {
     x + 1 < board.length &&
     word[index] == board[x + 1][y]
   ) {
-    console.log('index: ', index, ', x: ', x, ', y: ', y, ', 2')
     exist = process(board, word, index + 1, x + 1, y, [...usedPoint, [x + 1, y].join('-')])
   }
   // 向左
@@ -72,7 +65,6 @@ const process = (board, word, index, x, y, usedPoint) => {
     y - 1 >= 0 &&
     word[index] == board[x][y - 1]
   ) {
-    console.log('index: ', index, ', x: ', x, ', y: ', y, ', 3')
     exist = process(board, word, index + 1, x, y - 1, [...usedPoint, [x, y - 1].join('-')])
   }
   // 向右
@@ -82,7 +74,6 @@ const process = (board, word, index, x, y, usedPoint) => {
     y + 1 < board[0].length &&
     word[index] == board[x][y + 1]
   ) {
-    console.log('index: ', index, ', x: ', x, ', y: ', y, ', 4')
     exist = process(board, word, index + 1, x, y + 1, [...usedPoint, [x, y + 1].join('-')])
   }
 
