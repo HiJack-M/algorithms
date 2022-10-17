@@ -1,24 +1,39 @@
-// 96. Unique Binary Search Trees
+// 102. Binary Tree Level Order Traversal
 
-// Given an integer n, return the number of structurally unique BST's (binary search trees) which has exactly n nodes of unique values from 1 to n.
+// Given the root of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level).
 
 /**
- * @param {number} n
- * @return {number}
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
  */
-var numTrees = function (n) {
-  const G = new Array(n + 1).fill(0)
+/**
+ * @param {TreeNode} root
+ * @return {number[][]}
+ */
+var levelOrder = function (root) {
+  const ans = []
+  if (!root) return ans
 
-  G[0] = 1
-  G[1] = 1
-
-  for (let i = 2; i <= n; i++) {
-    for (let j = 1; j <= i; j++) {
-      G[i] += G[j - 1] * G[i - j]
+  const queue = []
+  queue.push(root)
+  while (queue.length > 0) {
+    let curLevelLen = queue.length
+    ans.push([])
+    while (curLevelLen > 0) {
+      let cur = queue.shift()
+      ans[ans.length - 1].push(cur.val)
+      if (cur.left) {
+        queue.push(cur.left)
+      }
+      if (cur.right) {
+        queue.push(cur.right)
+      }
+      curLevelLen--
     }
   }
-
-  return G[n]
+  return ans
 }
-
-console.log(numTrees(3))
