@@ -20,3 +20,5 @@ var numTrees = function (n) {
 
   return G[n]
 }
+
+// 题解推导笔记：https://www.notion.so/Hot-100-8efe93595048478ea289453c75ea3540
