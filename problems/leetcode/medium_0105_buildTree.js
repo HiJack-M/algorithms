@@ -42,3 +42,5 @@ const makeTree = (preorder, inorder) => {
 
   return head
 }
+
+// 也可改成下标，但操纵两个数组的下标比分割数组要麻烦很多
