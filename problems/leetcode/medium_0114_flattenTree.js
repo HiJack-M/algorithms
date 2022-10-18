@@ -40,3 +40,29 @@ var flatten = function (root) {
 
   dummyHead.right = null
 }
+
+// 寻找前驱节点方法
+/**
+ * @param {TreeNode} root
+ * @return {void} Do not return anything, modify root in-place instead.
+ */
+var flattenPredecessor = function (root) {
+  if (!root) return
+
+  let node = root
+  while (node) {
+    if (node.left) {
+      let next = node.left
+      let p = next
+      while (p.right) {
+        p = p.right
+      }
+      p.right = node.right
+      node.left = null
+      node.right = next
+    }
+    node = node.right
+  }
+}
+
+// 如果一个节点的左子节点不为空，则该节点的左子树中的最后一个节点被访问之后，该节点的右子节点被访问。该节点的左子树中最后一个被访问的节点是左子树中的最右边的节点，也是该节点的前驱节点。

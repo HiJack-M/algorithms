@@ -19,24 +19,18 @@ function TreeNode(val, left, right) {
 var flatten = function (root) {
   if (!root) return
 
-  let dummyHead = new TreeNode(0)
-  let p = dummyHead
-
-  let stack = []
-  stack.push(root)
-  while (stack.length > 0) {
-    let cur = stack.pop()
-    if (cur.right) {
-      stack.push(cur.right)
-      cur.right = null
+  let node = root
+  while (node) {
+    if (node.left) {
+      let next = node.left
+      let p = next
+      while (p.right) {
+        p = p.right
+      }
+      p.right = node.right
+      node.left = null
+      node.right = next
     }
-    if (cur.left) {
-      stack.push(cur.left)
-      cur.left = null
-    }
-    p.right = cur
-    p = p.right
+    node = node.right
   }
-
-  dummyHead.right = null
 }
