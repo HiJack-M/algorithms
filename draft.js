@@ -19,18 +19,18 @@ function TreeNode(val, left, right) {
 var flatten = function (root) {
   if (!root) return
 
-  let node = root
-  while (node) {
-    if (node.left) {
-      let next = node.left
-      let p = next
+  let cur = root
+  while (cur) {
+    if (cur.left) {
+      let next = cur.left
+      let p = cur.left
       while (p.right) {
         p = p.right
       }
-      p.right = node.right
-      node.left = null
-      node.right = next
+      p.right = cur.right
+      cur.left = null
+      cur.right = next
     }
-    node = node.right
+    cur = cur.right
   }
 }
