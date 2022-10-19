@@ -14,14 +14,12 @@ var maxProfit = function (prices) {
   let max = 0
   if (!prices || prices.length < 2) return max
 
-  // 每天的卖出交易，都看交易日 i 前的最低价，如果在那一天 minPriceDay 买入就是 i 日卖出能获取最大收益的 minPriceDay
-  let minPrice = Infinity
-  for (let i = 0; i < prices.length; i++) {
-    if (prices[i] < minPrice) {
-      minPrice = prices[i]
-    } else if (prices[i] - minPrice > max) {
-      max = prices[i] - minPrice
-    }
+  // 考虑每次如何获取最大收益？第i天的最大收益只需要知道前i天的最低点就可以算出来了。而第i天以前（包括第i天）的最低点和i-1天的最低点有关，至此动态方程就出来了。
+  let Dp = new Array(prices.length)
+  Dp[0] = prices[0]
+  for (let i = 1; i < prices.length; i++) {
+    Dp[i] = Dp[i - 1] < prices[i] ? Dp[i - 1] : prices[i]
+    max = prices[i] - Dp[i] > max ? prices[i] - Dp[i] : max
   }
 
   return max

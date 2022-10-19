@@ -46,3 +46,19 @@ var maxProfit = function (prices) {
 
   return max
 }
+
+// 动态规划思想
+var maxProfitDp = function (prices) {
+  let max = 0
+  if (!prices || prices.length < 2) return max
+
+  // 考虑每次如何获取最大收益？第i天的最大收益只需要知道前i天的最低点就可以算出来了。而第i天以前（包括第i天）的最低点和i-1天的最低点有关，至此动态方程就出来了。
+  let Dp = new Array(prices.length)
+  Dp[0] = prices[0]
+  for (let i = 1; i < prices.length; i++) {
+    Dp[i] = Dp[i - 1] < prices[i] ? Dp[i - 1] : prices[i]
+    max = prices[i] - Dp[i] > max ? prices[i] - Dp[i] : max
+  }
+
+  return max
+}
