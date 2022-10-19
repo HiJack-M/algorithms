@@ -6,10 +6,30 @@
 
 // Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
 
+// ⚠️ 暴力解法，ac 失败
 /**
  * @param {number[]} prices
  * @return {number}
  */
+var maxProfitFailAC = function (prices) {
+  let max = 0
+  if (!prices || prices.length == 0) return max
+
+  // 找 i 之后比 i 大的最大值，相减得 profit
+  for (let i = 0; i < prices.length - 1; i++) {
+    let curMaxBiggerThanI = prices[i]
+    for (let j = i + 1; j < prices.length; j++) {
+      if (prices[j] > curMaxBiggerThanI) {
+        curMaxBiggerThanI = prices[j]
+      }
+    }
+    max = Math.max(max, curMaxBiggerThanI - prices[i])
+  }
+
+  return max
+}
+
+// 贪心算法
 var maxProfit = function (prices) {
   let max = 0
   if (!prices || prices.length < 2) return max
@@ -26,6 +46,3 @@ var maxProfit = function (prices) {
 
   return max
 }
-
-const prices1 = [7, 1, 5, 3, 6, 4]
-console.log(maxProfit(prices1))
