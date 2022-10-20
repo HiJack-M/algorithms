@@ -34,3 +34,24 @@ var hasCycle = function (head) {
 
   return fast ? true : false
 }
+
+/** 更标准写法 */
+/**
+ * @param {ListNode} head
+ * @return {boolean}
+ */
+var hasCyclePref = function (head) {
+  if (!head || !head.next) {
+    return false
+  }
+  let slow = head.next
+  let fast = head.next.next
+  while (slow != fast) {
+    if (!fast || !fast.next) {
+      return false
+    }
+    slow = slow.next
+    fast = fast.next.next
+  }
+  return true
+}
