@@ -101,3 +101,35 @@ const nums1 = [100, 4, 200, 1, 3, 2]
 // console.log(union.sizeMap)
 
 console.log(longestConsecutive(nums1))
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var longestConsecutivePref = function (nums) {
+  if (!nums || nums.length == 0) return 0
+
+  let numsSet = new Set(nums)
+
+  let longest = 0
+  for (let num of numsSet) {
+    // 找到某串子序列的最小值
+    if (!numsSet.has(num - 1)) {
+      let curNum = num
+      let curLength = 1
+
+      while (numsSet.has(curNum + 1)) {
+        curNum = curNum + 1
+        curLength++
+      }
+
+      longest = Math.max(longest, curLength)
+    }
+  }
+
+  return longest
+}
+
+const nums1 = [100, 4, 200, 1, 3, 2]
+
+console.log(longestConsecutivePref(nums1))
