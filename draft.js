@@ -16,17 +16,25 @@
  */
 var invertTree = function (root) {
   if (!root) return null
-  reverseSub(root)
+  let stack = []
+  stack.push(root)
+  while (stack.length > 0) {
+    let item = stack.shift()
+    if (item.left) {
+      stack.push(item.left)
+    }
+    if (item.right) {
+      stack.push(item.right)
+    }
+    switchChildren(item)
+  }
   return root
 }
 
-const reverseSub = (node) => {
-  // base case
-  if (!node) return
-
-  reverseSub(node.left)
-  reverseSub(node.right)
-  let temp = node.left
-  node.left = node.right
-  node.right = temp
+const switchChildren = (node) => {
+  if (node.left || node.right) {
+    let temp = node.left
+    node.left = node.right
+    node.right = temp
+  }
 }

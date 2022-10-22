@@ -30,3 +30,29 @@ const reverseSub = (node) => {
   node.left = node.right
   node.right = temp
 }
+
+/** 下面是迭代法 */
+var invertTreeIteration = function (root) {
+  if (!root) return null
+  let stack = []
+  stack.push(root)
+  while (stack.length > 0) {
+    let item = stack.shift()
+    if (item.left) {
+      stack.push(item.left)
+    }
+    if (item.right) {
+      stack.push(item.right)
+    }
+    switchChildren(item)
+  }
+  return root
+}
+
+const switchChildren = (node) => {
+  if (node.left || node.right) {
+    let temp = node.left
+    node.left = node.right
+    node.right = temp
+  }
+}
