@@ -16,19 +16,28 @@
 var isPalindrome = function (head) {
   if (!head || head.length < 2) return true
 
-  let help = []
   let p = head
+  let tail = null
   while (p) {
-    help.push(p.val)
+    if (p.next) {
+      p.next.prev = p
+    } else {
+      tail = p
+    }
     p = p.next
   }
 
-  while (help.length > 0) {
-    if (help.length == 1) return true
-    let left = help.shift()
-    let right = help.pop()
-    if (left != right) {
-      return false
-    } else if (help.length == 0) return true
+  p = head
+  while (p != tail && p.next != tail) {
+    if (p.val != tail.val) return false
+    else {
+      p = p.next
+      tail = tail.prev
+    }
+  }
+  if (p == tail) return true
+  if (p.next == tail) {
+    if (p.val == tail.val) return true
+    else return false
   }
 }
