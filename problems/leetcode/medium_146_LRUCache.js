@@ -69,3 +69,49 @@ LRUCache.prototype.put = function (key, value) {
  * var param_1 = obj.get(key)
  * obj.put(key,value)
  */
+
+/** 借助 JS 的 Map 特性 */
+/**
+ * @param {number} capacity
+ */
+var LRUCacheUseMap = function (capacity) {
+  this.limit = capacity
+  this.cache = new Map()
+}
+
+/**
+ * @param {number} key
+ * @return {number}
+ */
+LRUCacheUseMap.prototype.get = function (key) {
+  if (!this.cache.has(key)) return -1
+
+  const val = this.cache.get(key)
+  this.cache.delete(key)
+  this.cache.set(key, val)
+  return val
+}
+
+/**
+ * @param {number} key
+ * @param {number} value
+ * @return {void}
+ */
+LRUCacheUseMap.prototype.put = function (key, value) {
+  if (this.cache.has(key)) this.cache.delete(key)
+  else if (this.cache.size >= this.limit) {
+    /*  注意这里 keys() 返回一个 MapIterator 
+    其中 next() 方法 调用第一次时返回的 value 
+    就是 cache 的第一对键值对的 key
+    */
+    this.cache.delete(this.cache.keys().next().value)
+  }
+  this.cache.set(key, value)
+}
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * var obj = new LRUCache(capacity)
+ * var param_1 = obj.get(key)
+ * obj.put(key,value)
+ */

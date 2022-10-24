@@ -14,8 +14,7 @@
  * @param {number} capacity
  */
 var LRUCache = function (capacity) {
-  this.capacity = capacity
-  this.usedRecord = []
+  this.limit = capacity
   this.cache = new Map()
 }
 
@@ -24,20 +23,12 @@ var LRUCache = function (capacity) {
  * @return {number}
  */
 LRUCache.prototype.get = function (key) {
-  let index = this.usedRecord.indexOf(key)
-  if (index == -1) {
-    this.usedRecord.push(key) // 最新使用的放最后面
-    return -1
-  } else {
-    this.usedRecord.splice(index, 1)
-    this.usedRecord.push(key) // 最新使用的放最后面
+  if (!this.cache.has(key)) return -1
 
-    if (this.cache.has(key)) {
-      return this.cache.get(key)
-    } else {
-      return -1
-    }
-  }
+  const val = this.cache.get(key)
+  this.cache.delete(key)
+  this.cache.set(key, val)
+  return val
 }
 
 /**
@@ -46,21 +37,15 @@ LRUCache.prototype.get = function (key) {
  * @return {void}
  */
 LRUCache.prototype.put = function (key, value) {
-  let index = this.usedRecord.indexOf(key)
-  if (index != -1) {
-    this.usedRecord.splice(index, 1)
+  if (this.cache.has(key)) this.cache.delete(key)
+  else if (this.cache.size >= this.limit) {
+    /*  注意这里 keys() 返回一个 MapIterator 
+    其中 next() 方法 调用第一次时返回的 value 
+    就是 cache 的第一对键值对的 key
+    */
+    this.cache.delete(this.cache.keys().next().value)
   }
-  this.usedRecord.push(key) // 最新使用的放最后面
-
   this.cache.set(key, value)
-
-  if (this.cache.size > this.capacity) {
-    let tobeDelete
-    while (!this.cache.has(tobeDelete) && this.usedRecord.length > 0) {
-      tobeDelete = this.usedRecord.shift()
-    }
-    this.cache.delete(tobeDelete)
-  }
 }
 
 /**
