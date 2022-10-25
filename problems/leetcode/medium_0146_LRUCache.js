@@ -13,7 +13,7 @@
 /**
  * @param {number} capacity
  */
-var LRUCache = function (capacity) {
+var LRUCacheUseArr = function (capacity) {
   this.capacity = capacity
   this.usedRecord = []
   this.cache = new Map()
@@ -23,7 +23,7 @@ var LRUCache = function (capacity) {
  * @param {number} key
  * @return {number}
  */
-LRUCache.prototype.get = function (key) {
+LRUCacheUseArr.prototype.get = function (key) {
   let index = this.usedRecord.indexOf(key)
   if (index == -1) {
     this.usedRecord.push(key) // 最新使用的放最后面
@@ -45,7 +45,7 @@ LRUCache.prototype.get = function (key) {
  * @param {number} value
  * @return {void}
  */
-LRUCache.prototype.put = function (key, value) {
+LRUCacheUseArr.prototype.put = function (key, value) {
   let index = this.usedRecord.indexOf(key)
   if (index != -1) {
     this.usedRecord.splice(index, 1)
@@ -115,3 +115,107 @@ LRUCacheUseMap.prototype.put = function (key, value) {
  * var param_1 = obj.get(key)
  * obj.put(key,value)
  */
+
+/** ⚠️ LRU 内存替换算法！！！ */
+/**
+ * @param {number} capacity
+ */
+var LRUCache = function (capacity) {
+  this.capacity = capacity
+  this.keyNodeMap = new Map()
+  this.nodeList = new DoubleLinkedList()
+}
+
+/**
+ * @param {number} key
+ * @return {number}
+ */
+LRUCache.prototype.get = function (key) {
+  if (!this.keyNodeMap.has(key)) return -1
+
+  let res = this.keyNodeMap.get(key)
+  this.nodeList.moveNodeToTail(res)
+  return res.value
+}
+
+/**
+ * @param {number} key
+ * @param {number} value
+ * @return {void}
+ */
+LRUCache.prototype.put = function (key, value) {
+  if (this.keyNodeMap.has(key)) {
+    let node = this.keyNodeMap.get(key)
+    node.value = value
+    this.nodeList.moveNodeToTail(node)
+  } else {
+    let newNode = new Node(key, value)
+    this.keyNodeMap.set(key, newNode)
+    this.nodeList.addNode(newNode)
+
+    if (this.keyNodeMap.size > this.capacity) {
+      let node = this.nodeList.removeHead()
+      this.keyNodeMap.delete(node.key)
+    }
+  }
+}
+
+class Node {
+  constructor(key, value, prev, next) {
+    this.key = key
+    this.value = value
+    this.prev = prev || null
+    this.next = next || null
+  }
+}
+
+class DoubleLinkedList {
+  constructor() {
+    this.head = null
+    this.tail = null
+  }
+
+  addNode = (newNode) => {
+    if (newNode == null) return
+    if (this.head == null) {
+      // 链表为空
+      this.head = newNode
+      this.tail = newNode
+    } else {
+      this.tail.next = newNode
+      newNode.prev = this.tail
+      this.tail = newNode
+    }
+  }
+
+  moveNodeToTail = (node) => {
+    // 保证 node 一定存在于链表中
+    if (node == this.tail) return
+    if (node == this.head) {
+      this.head = node.next
+      this.head.prev = null
+    } else {
+      node.next.prev = node.prev
+      node.prev.next = node.next
+    }
+    this.tail.next = node
+    node.prev = this.tail
+    node.next = null
+    this.tail = node
+  }
+
+  removeHead = () => {
+    // 删除最远古节点，并返回
+    if (this.head == null) return null
+    let res = this.head
+    if (this.head == this.tail) {
+      this.head = null
+      this.tail = null
+    } else {
+      this.head = res.next
+      res.next = null
+      this.head.prev = null
+    }
+    return res
+  }
+}

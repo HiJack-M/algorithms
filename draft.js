@@ -14,8 +14,9 @@
  * @param {number} capacity
  */
 var LRUCache = function (capacity) {
-  this.limit = capacity
-  this.cache = new Map()
+  this.capacity = capacity
+  this.keyNodeMap = new Map()
+  this.nodeList = new DoubleLinkedList()
 }
 
 /**
@@ -23,12 +24,11 @@ var LRUCache = function (capacity) {
  * @return {number}
  */
 LRUCache.prototype.get = function (key) {
-  if (!this.cache.has(key)) return -1
+  if (!this.keyNodeMap.has(key)) return -1
 
-  const val = this.cache.get(key)
-  this.cache.delete(key)
-  this.cache.set(key, val)
-  return val
+  let res = this.keyNodeMap.get(key)
+  this.nodeList.moveNodeToTail(res)
+  return res.value
 }
 
 /**
@@ -37,15 +37,20 @@ LRUCache.prototype.get = function (key) {
  * @return {void}
  */
 LRUCache.prototype.put = function (key, value) {
-  if (this.cache.has(key)) this.cache.delete(key)
-  else if (this.cache.size >= this.limit) {
-    /*  注意这里 keys() 返回一个 MapIterator 
-    其中 next() 方法 调用第一次时返回的 value 
-    就是 cache 的第一对键值对的 key
-    */
-    this.cache.delete(this.cache.keys().next().value)
+  if (this.keyNodeMap.has(key)) {
+    let node = this.keyNodeMap.get(key)
+    node.value = value
+    this.nodeList.moveNodeToTail(node)
+  } else {
+    let newNode = new Node(key, value)
+    this.keyNodeMap.set(key, newNode)
+    this.nodeList.addNode(newNode)
+
+    if (this.keyNodeMap.size > this.capacity) {
+      let node = this.nodeList.removeHead()
+      this.keyNodeMap.delete(node.key)
+    }
   }
-  this.cache.set(key, value)
 }
 
 /**
@@ -54,3 +59,63 @@ LRUCache.prototype.put = function (key, value) {
  * var param_1 = obj.get(key)
  * obj.put(key,value)
  */
+
+class Node {
+  constructor(key, value, prev, next) {
+    this.key = key
+    this.value = value
+    this.prev = prev || null
+    this.next = next || null
+  }
+}
+
+class DoubleLinkedList {
+  constructor() {
+    this.head = null
+    this.tail = null
+  }
+
+  addNode = (newNode) => {
+    if (newNode == null) return
+    if (this.head == null) {
+      // 链表为空
+      this.head = newNode
+      this.tail = newNode
+    } else {
+      this.tail.next = newNode
+      newNode.prev = this.tail
+      this.tail = newNode
+    }
+  }
+
+  moveNodeToTail = (node) => {
+    // 保证 node 一定存在于链表中
+    if (node == this.tail) return
+    if (node == this.head) {
+      this.head = node.next
+      this.head.prev = null
+    } else {
+      node.next.prev = node.prev
+      node.prev.next = node.next
+    }
+    this.tail.next = node
+    node.prev = this.tail
+    node.next = null
+    this.tail = node
+  }
+
+  removeHead = () => {
+    // 删除最远古节点，并返回
+    if (this.head == null) return null
+    let res = this.head
+    if (this.head == this.tail) {
+      this.head = null
+      this.tail = null
+    } else {
+      this.head = res.next
+      res.next = null
+      this.head.prev = null
+    }
+    return res
+  }
+}
