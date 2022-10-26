@@ -4,6 +4,7 @@
 
 // Note that the same word in the dictionary may be reused multiple times in the segmentation.
 
+/** Brute Force 版本，Time Limited Exceed */
 // /**
 //  * @param {string} s
 //  * @param {string[]} wordDict
