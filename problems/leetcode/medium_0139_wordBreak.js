@@ -5,28 +5,34 @@
 // Note that the same word in the dictionary may be reused multiple times in the segmentation.
 
 /** Brute Force 版本，Time Limited Exceed */
-// /**
-//  * @param {string} s
-//  * @param {string[]} wordDict
-//  * @return {boolean}
-//  */
-// var wordBreak = function (s, wordDict) {
-//   if (!s || !wordDict || wordDict.length == 0) return false
-//   return process(s, wordDict, 0)
-// }
+/**
+ * @param {string} s
+ * @param {string[]} wordDict
+ * @return {boolean}
+ */
+var wordBreakBruteForce = function (s, wordDict) {
+  if (!s || !wordDict || wordDict.length == 0) return false
+  return process(s, wordDict, 0)
+}
 
-// const process = (s, wordDict, index) => {
-//   if (index == s.length) return true
+// 从 index 开始，拿出 substring
+// index...index
+// index...index + 1
+// index...index + 2
+// ...看从 index 开始的前缀，有哪些能被 wordDict 分解（命中），前缀！前缀！
+// 从前缀开始看，就不会有单词从中途分裂的情况，命中，就看该单词后面剩余的子串的前缀。。。
+const process = (s, wordDict, index) => {
+  if (index == s.length) return true
 
-//   for (let i = index; i < s.length; i++) {
-//     let curWord = s.substring(index, i + 1)
-//     if (wordDict.indexOf(curWord) != -1) {
-//       let curAns = process(s, wordDict, i + 1)
-//       if (curAns) return true
-//     }
-//   }
-//   return false
-// }
+  for (let i = index; i < s.length; i++) {
+    let curWord = s.substring(index, i + 1)
+    if (wordDict.indexOf(curWord) != -1) {
+      let curAns = process(s, wordDict, i + 1)
+      if (curAns) return true
+    }
+  }
+  return false
+}
 
 var wordBreak = function (s, wordDict) {
   if (!s || !wordDict || wordDict.length == 0) return false
