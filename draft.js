@@ -1,62 +1,28 @@
-// 155. Min Stack
+// 206. Reverse Linked List
 
-var MinStack = function () {
-  this.stack = []
-  this.minStack = []
-  this.size = 0
-}
+// Given the head of a singly linked list, reverse the list, and return the reversed list.
 
 /**
- * @param {number} val
- * @return {void}
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.next = (next===undefined ? null : next)
+ * }
  */
-MinStack.prototype.push = function (val) {
-  this.stack.push(val)
-  let min = this.size > 0 ? Math.min(this.minStack[this.size - 1], val) : val
-  this.minStack.push(min)
-  this.size++
-}
-
 /**
- * @return {void}
+ * @param {ListNode} head
+ * @return {ListNode}
  */
-MinStack.prototype.pop = function () {
-  if (this.size > 0) {
-    this.stack.pop()
-    this.minStack.pop()
-    this.size--
+var reverseList = function (head) {
+  if (!head) return null
+  let p = head
+  let prev, next
+  while (p) {
+    next = p.next
+    p.next = prev
+    prev = p
+    p = next
   }
+
+  return prev
 }
-
-/**
- * @return {number}
- */
-MinStack.prototype.top = function () {
-  return this.stack[this.size - 1]
-}
-
-/**
- * @return {number}
- */
-MinStack.prototype.getMin = function () {
-  console.log(this.minStack)
-  return this.minStack[this.size - 1]
-}
-
-/**
- * Your MinStack object will be instantiated and called as such:
- * var obj = new MinStack()
- * obj.push(val)
- * obj.pop()
- * var param_3 = obj.top()
- * var param_4 = obj.getMin()
- */
-
-const myStack = new MinStack()
-myStack.push(-2)
-myStack.push(0)
-myStack.push(-3)
-console.log(myStack.getMin()) //   --> 返回 -3.
-myStack.pop()
-console.log(myStack.top()) //     --> 返回 0.
-console.log(myStack.getMin()) //  --> 返回 -2.
