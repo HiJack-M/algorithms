@@ -29,6 +29,8 @@ const process = (nums, index) => {
   return Math.max(yes, no)
 }
 
+/** 上面的方法会 Time Limited Exceed */
+
 var robDp = function (nums) {
   if (!nums || nums.length == 0) return 0
 
