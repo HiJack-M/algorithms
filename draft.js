@@ -1,54 +1,68 @@
+// 207. Course Schedule
+
+// There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
+
+// For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1.
+// Return true if you can finish all courses. Otherwise, return false.
+
 class Node {
   constructor(value) {
     this.value = value
     this.in = 0
-    this.out = 0
     this.nexts = []
-    this.edges = []
-  }
-}
-
-class Edge {
-  constructor(weight, from, to) {
-    this.weight = weight
-    this.from = from
-    this.to = to
   }
 }
 
 class Graph {
   constructor() {
-    this.nodes = new Map() // (int, node) 键值对：value, node
-    this.edges = new Set()
+    this.nodes = new Map() // key: node.value, value: node
   }
 }
 
-// 给到的题中的结构，自己写接口转成自己熟悉的图结构
+/**
+ * @param {number} numCourses
+ * @param {number[][]} prerequisites
+ * @return {boolean}
+ */
+var canFinish = function (numCourses, prerequisites) {
+  if (!prerequisites || prerequisites.length == 0) return true
 
-const topology = (graph) => {
-  if (!graph) return null
-  let result = []
+  let courseGraph = new Graph()
+  for (let [to, from] of prerequisites) {
+    if (!courseGraph.nodes.has(to)) {
+      courseGraph.nodes.set(to, new Node(to))
+    }
+    if (!courseGraph.nodes.has(from)) {
+      courseGraph.nodes.set(from, new Node(from))
+    }
+    let fromN = courseGraph.nodes.get(from)
+    let toN = courseGraph.nodes.get(to)
+    fromN.nexts.push(toN)
+    toN.in++
+  }
 
-  let inMap = new Map() // key: node, value: 该节点剩余入度
+  let needPrerequisites = courseGraph.nodes.size
+
   let zeroInQueue = []
-  for (let node of graph.nodes.values()) {
-    inMap.set(node, node.in)
+  for (let node of courseGraph.nodes.values()) {
     if (node.in == 0) {
       zeroInQueue.push(node)
     }
   }
 
+  let count = 0
+
   while (zeroInQueue.length > 0) {
     let cur = zeroInQueue.shift()
-    result.push(cur)
+    count++
     for (let i = 0; i < cur.nexts.length; i++) {
-      let newIn = inMap.get(cur.nexts[i]) - 1
-      inMap.set(cur.nexts[i], newIn)
-      if (newIn == 0) {
-        zeroInQueue.push(cur.nexts[i])
+      let curNext = cur.nexts[i]
+      curNext.in--
+      if (curNext.in == 0) {
+        zeroInQueue.push(curNext)
       }
     }
   }
 
-  return result
+  return count == needPrerequisites
 }

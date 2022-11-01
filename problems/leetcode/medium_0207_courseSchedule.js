@@ -5,9 +5,64 @@
 // For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1.
 // Return true if you can finish all courses. Otherwise, return false.
 
+class Node {
+  constructor(value) {
+    this.value = value
+    this.in = 0
+    this.nexts = []
+  }
+}
+
+class Graph {
+  constructor() {
+    this.nodes = new Map() // key: node.value, value: node
+  }
+}
+
 /**
  * @param {number} numCourses
  * @param {number[][]} prerequisites
  * @return {boolean}
  */
-var canFinish = function (numCourses, prerequisites) {}
+var canFinish = function (numCourses, prerequisites) {
+  if (!prerequisites || prerequisites.length == 0) return true
+
+  let courseGraph = new Graph()
+  for (let [to, from] of prerequisites) {
+    if (!courseGraph.nodes.has(to)) {
+      courseGraph.nodes.set(to, new Node(to))
+    }
+    if (!courseGraph.nodes.has(from)) {
+      courseGraph.nodes.set(from, new Node(from))
+    }
+    let fromN = courseGraph.nodes.get(from)
+    let toN = courseGraph.nodes.get(to)
+    fromN.nexts.push(toN)
+    toN.in++
+  }
+
+  let needPrerequisites = courseGraph.nodes.size
+
+  let zeroInQueue = []
+  for (let node of courseGraph.nodes.values()) {
+    if (node.in == 0) {
+      zeroInQueue.push(node)
+    }
+  }
+
+  let count = 0
+
+  while (zeroInQueue.length > 0) {
+    let cur = zeroInQueue.shift()
+    count++
+    for (let i = 0; i < cur.nexts.length; i++) {
+      let curNext = cur.nexts[i]
+      curNext.in--
+      if (curNext.in == 0) {
+        zeroInQueue.push(curNext)
+      }
+    }
+  }
+
+  return count == needPrerequisites
+}
