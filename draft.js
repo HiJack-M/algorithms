@@ -1,88 +1,54 @@
-// 200. Number of Islands
+class Node {
+  constructor(value) {
+    this.value = value
+    this.in = 0
+    this.out = 0
+    this.nexts = []
+    this.edges = []
+  }
+}
 
-// Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
+class Edge {
+  constructor(weight, from, to) {
+    this.weight = weight
+    this.from = from
+    this.to = to
+  }
+}
 
-// An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+class Graph {
+  constructor() {
+    this.nodes = new Map() // (int, node) 键值对：value, node
+    this.edges = new Set()
+  }
+}
 
-/**
- * @param {character[][]} grid
- * @return {number}
- */
-var numIslands = function (grid) {
-  if (!grid || grid.length == 0 || grid[0].length == 0) return 0
+// 给到的题中的结构，自己写接口转成自己熟悉的图结构
 
-  let m = grid.length
-  let n = grid[0].length
+const topology = (graph) => {
+  if (!graph) return null
+  let result = []
 
-  let visited = []
-  for (let i = 0; i < m; i++) {
-    visited[i] = new Array(n)
-    visited[i].fill(false)
+  let inMap = new Map() // key: node, value: 该节点剩余入度
+  let zeroInQueue = []
+  for (let node of graph.nodes.values()) {
+    inMap.set(node, node.in)
+    if (node.in == 0) {
+      zeroInQueue.push(node)
+    }
   }
 
-  let islands = 0
-  for (let i = 0; i < m; i++) {
-    for (let j = 0; j < n; j++) {
-      if (grid[i][j] == '1' && !visited[i][j]) {
-        islands++
-        markAndCheck(grid, visited, i, j)
+  while (zeroInQueue.length > 0) {
+    let cur = zeroInQueue.shift()
+    result.push(cur)
+    for (let i = 0; i < cur.nexts.length; i++) {
+      let newIn = inMap.get(cur.nexts[i]) - 1
+      inMap.set(cur.nexts[i], newIn)
+      if (newIn == 0) {
+        zeroInQueue.push(cur.nexts[i])
       }
     }
   }
 
-  return islands
+  return result
 }
-
-const markAndCheck = (grid, visited, i, j) => {
-  if (visited[i][j]) return 0
-
-  visited[i][j] = true
-
-  let direction = [
-    [1, 0],
-    [-1, 0],
-    [0, 1],
-    [0, -1],
-  ]
-
-  for (const [x, y] of direction) {
-    let newI = i + x
-    let newJ = j + y
-    if (
-      newI >= 0 &&
-      newI < grid.length &&
-      newJ >= 0 &&
-      newJ < grid[0].length &&
-      grid[newI][newJ] == '1' &&
-      !visited[newI][newJ]
-    ) {
-      markAndCheck(grid, visited, newI, newJ)
-    }
-  }
-}
-
-const grid1 = [
-  ['1', '1', '1', '1', '0'],
-  ['1', '1', '0', '1', '0'],
-  ['1', '1', '0', '0', '0'],
-  ['0', '0', '0', '0', '0'],
-]
-
-console.log(numIslands(grid1))
-
-const grid2 = [
-  ['1', '1', '0', '0', '0'],
-  ['1', '1', '0', '0', '0'],
-  ['0', '0', '1', '0', '0'],
-  ['0', '0', '0', '1', '1'],
-]
-
-console.log(numIslands(grid2))
-
-const grid3 = [
-  ['1', '0', '1', '1', '1'],
-  ['1', '0', '1', '0', '1'],
-  ['1', '1', '1', '0', '1'],
-]
-
-console.log(numIslands(grid3))
