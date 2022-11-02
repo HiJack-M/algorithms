@@ -13,21 +13,18 @@
 var productExceptSelf = function (nums) {
   if (!nums || nums.length == 0) return []
 
-  let L = [] // 存放每个数的左侧乘积
-  L[0] = 1
+  let ans = [] // 先存放每个数的左侧乘积
+  ans[0] = 1
   for (let i = 1; i < nums.length; i++) {
-    L[i] = L[i - 1] * nums[i - 1]
+    ans[i] = ans[i - 1] * nums[i - 1]
   }
 
-  let R = []
-  R[nums.length - 1] = 1
-  for (let i = nums.length - 2; i >= 0; i--) {
-    R[i] = R[i + 1] * nums[i + 1]
-  }
-
-  let ans = []
-  for (let i = 0; i < nums.length; i++) {
-    ans[i] = L[i] * R[i]
+  // R 为右侧所有元素的乘积
+  // 刚开始右边没有元素，所以 R = 1
+  let R = 1
+  for (let i = nums.length - 1; i >= 0; i--) {
+    ans[i] = ans[i] * R
+    R *= nums[i]
   }
 
   return ans
