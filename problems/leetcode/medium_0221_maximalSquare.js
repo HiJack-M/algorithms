@@ -1,3 +1,11 @@
+/*
+ * @Author: HiJack hijack.sherlock@live.com
+ * @Date: 2022-11-02 19:19:59
+ * @LastEditors: HiJack hijack.sherlock@live.com
+ * @LastEditTime: 2022-11-02 19:20:03
+ * @FilePath: /algorithms/problems/leetcode/medium_0221_maximalSquare.js
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
 // 221. Maximal Square
 
 // Given an m x n binary matrix filled with 0's and 1's, find the largest square containing only 1's and return its area.
