@@ -6,12 +6,17 @@
 
 // You must solve the problem without modifying the array nums and uses only constant extra space.
 
+import { Node, Edge, Graph } from './lecture-code/structure/graph.js'
+
 /**
  * @param {number[]} nums
  * @return {number}
  */
 var findDuplicate = function (nums) {
   if (!nums || nums.length < 2) return -1
+
+  let haha = new Node(1)
+  console.log(haha)
 
   // 都是下标，变量找下标存起来，所以本该从 0 开始
   // slow 走一步相当于去找 nums[0] 指向的下标，fast 走两步相当于 nums[nums[0]]
@@ -30,3 +35,5 @@ var findDuplicate = function (nums) {
 
   return slow
 }
+
+findDuplicate([0, 1, 2, 3, 4, 4])

@@ -1,0 +1,24 @@
+{
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "type": "module",
+  "dependencies": {
+    "babel-loader": "^9.1.0"
+  },
+  "name": "algorithms",
+  "version": "1.0.0",
+  "description": "algorithms learning playground",
+  "main": "draft.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/HiJack-M/algorithms.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HiJack-M/algorithms/issues"
+  },
+  "homepage": "https://github.com/HiJack-M/algorithms#readme"
+}

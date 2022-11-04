@@ -55,3 +55,5 @@ const generateGraph = (matrix) => {
   }
   return graph
 }
+
+export { Node, Edge, Graph }

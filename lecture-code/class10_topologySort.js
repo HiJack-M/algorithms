@@ -1,28 +1,30 @@
-class Node {
-  constructor(value) {
-    this.value = value // 该点的值
-    this.in = 0 // 指向该点的边数
-    this.out = 0 // 从该点出发的边数
-    this.nexts = [] // 从该点连出去的点, node 数组
-    this.edges = [] // 从该点连出去的边, edge 数组
-  }
-}
+import { Node, Edge, Graph } from './structure/graph'
 
-class Edge {
-  constructor(weight, from, to) {
-    // 权重，出发点，到达点
-    this.weight = weight
-    this.from = from
-    this.to = to
-  }
-}
+// class Node {
+//   constructor(value) {
+//     this.value = value // 该点的值
+//     this.in = 0 // 指向该点的边数
+//     this.out = 0 // 从该点出发的边数
+//     this.nexts = [] // 从该点连出去的点, node 数组
+//     this.edges = [] // 从该点连出去的边, edge 数组
+//   }
+// }
 
-class Graph {
-  constructor() {
-    this.nodes = new Map() // (int, node) 键值对：value, node
-    this.edges = new Set() // 图包含的边
-  }
-}
+// class Edge {
+//   constructor(weight, from, to) {
+//     // 权重，出发点，到达点
+//     this.weight = weight
+//     this.from = from
+//     this.to = to
+//   }
+// }
+
+// class Graph {
+//   constructor() {
+//     this.nodes = new Map() // (int, node) 键值对：value, node
+//     this.edges = new Set() // 图包含的边
+//   }
+// }
 
 // 给到的题中的结构，自己写接口转成自己熟悉的图结构
 
