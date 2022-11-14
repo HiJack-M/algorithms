@@ -1,30 +1,40 @@
-// 11. Container With Most Water
+// 15. 3Sum
 
-// You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
+// Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
 
-// Find two lines that together with the x-axis form a container, such that the container contains the most water.
+// Notice that the solution set must not contain duplicate triplets.
 
-// Return the maximum amount of water a container can store.
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var threeSum = function (nums) {
+  let ans = []
+  if (!nums || nums.length < 3) return ans
 
-// Notice that you may not slant the container.
+  nums.sort((a, b) => a - b)
 
-var maxArea = function (height) {
-  let max = 0
-  if (!height || height.length < 2) return max
+  for (let i = 0; i < nums.length - 2; i++) {
+    if (nums[i] > 0) break
+    if (i > 0 && nums[i] == nums[i - 1]) continue
 
-  let l = 0
-  let r = height.length - 1
-  let area = 0
-  while (l < r) {
-    area = (r - l) * Math.min(height[l], height[r])
-    if (area > max) {
-      max = area
-    }
-    if (height[l] > height[r]) {
-      r--
-    } else {
-      l++
+    let l = i + 1
+    let r = nums.length - 1
+    while (l < r) {
+      let res = nums[i] + nums[l] + nums[r]
+      if (res == 0) {
+        ans.push([nums[i], nums[l], nums[r]])
+        while (nums[l] == nums[l + 1]) l++
+        while (nums[r] == nums[r - 1]) r--
+        l++
+        r--
+      } else if (res < 0) {
+        l++
+      } else {
+        r--
+      }
     }
   }
-  return max
+
+  return ans
 }
