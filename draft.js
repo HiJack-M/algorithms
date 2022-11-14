@@ -1,40 +1,28 @@
-// 15. 3Sum
+// 22. Generate Parentheses
 
-// Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
-
-// Notice that the solution set must not contain duplicate triplets.
+// Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
 
 /**
- * @param {number[]} nums
- * @return {number[][]}
+ * @param {number} n
+ * @return {string[]}
  */
-var threeSum = function (nums) {
+var generateParenthesis = function (n) {
   let ans = []
-  if (!nums || nums.length < 3) return ans
+  if (!n) return ans
+  process(n, n, '', ans)
+  return ans
+}
 
-  nums.sort((a, b) => a - b)
-
-  for (let i = 0; i < nums.length - 2; i++) {
-    if (nums[i] > 0) break
-    if (i > 0 && nums[i] == nums[i - 1]) continue
-
-    let l = i + 1
-    let r = nums.length - 1
-    while (l < r) {
-      let res = nums[i] + nums[l] + nums[r]
-      if (res == 0) {
-        ans.push([nums[i], nums[l], nums[r]])
-        while (nums[l] == nums[l + 1]) l++
-        while (nums[r] == nums[r - 1]) r--
-        l++
-        r--
-      } else if (res < 0) {
-        l++
-      } else {
-        r--
-      }
-    }
+const process = (restL, restR, path, ans) => {
+  if (restL == 0 && restR == 0) {
+    ans.push(path)
+    return
   }
 
-  return ans
+  if (restL > 0) {
+    process(restL - 1, restR, path + '(', ans)
+  }
+  if (restR > restL) {
+    process(restL, restR - 1, path + ')', ans)
+  }
 }
