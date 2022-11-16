@@ -53,7 +53,7 @@ var maxProfitDp = function (prices) {
   if (!prices || prices.length < 2) return max
 
   // 考虑每次如何获取最大收益？第i天的最大收益只需要知道前i天的最低点就可以算出来了。而第i天以前（包括第i天）的最低点和i-1天的最低点有关，至此动态方程就出来了。
-  let Dp = new Array(prices.length)
+  let Dp = new Array(prices.length) // Dp 表用来存放每天看到的之前的最低价的点，其实用贪心的一个变量保存就可以了
   Dp[0] = prices[0]
   for (let i = 1; i < prices.length; i++) {
     Dp[i] = Dp[i - 1] < prices[i] ? Dp[i - 1] : prices[i]
