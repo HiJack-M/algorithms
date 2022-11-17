@@ -43,7 +43,7 @@ var lengthOfLISPerf = function (nums) {
   ends[0] = nums[0]
 
   let longest = 1
-  let right = 0 // ends 的有效区
+  let right = 0 // ends 的有效区（永远都在增加，为了确定二分法的右边界）
   // 在 ends 的有效区里找刚刚大于等于 nums[i] 的值
   // 有，该位置替换成 nums[i]（i + 1 长度的 LIS 最小结尾变得更小）
   // 无，扩充有效区，LIS 长度 + 1，以 nums[i] 结尾
