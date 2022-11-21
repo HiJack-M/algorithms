@@ -45,3 +45,23 @@ console.log(maxProfit(prices1))
 
 const prices2 = [1, 2, 3, 4, 5]
 console.log(maxProfit(prices2))
+
+/**
+ * @param {number[]} prices
+ * @return {number}
+ */
+
+// 只要 prices[i+1] - prices[i] > 0 则加到 profit 里，有收益的天就交易
+
+var maxProfitPerf = function (prices) {
+  if (!prices || prices.length < 2) return 0
+
+  let profit = 0
+  for (let i = 0; i < prices.length - 1; i++) {
+    if (prices[i + 1] - prices[i] > 0) {
+      profit += prices[i + 1] - prices[i]
+    }
+  }
+
+  return profit
+}

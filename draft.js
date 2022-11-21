@@ -1,37 +1,24 @@
-// 300. Longest Increasing Subsequence
+// 122. Best Time to Buy and Sell Stock II
 
-// Given an integer array nums, return the length of the longest strictly increasing subsequence.
+// You are given an integer array prices where prices[i] is the price of a given stock on the ith day.
+
+// On each day, you may decide to buy and/or sell the stock. You can only hold at most one share of the stock at any time. However, you can buy it then immediately sell it on the same day.
+
+// Find and return the maximum profit you can achieve.
 
 /**
- * @param {number[]} nums
+ * @param {number[]} prices
  * @return {number}
  */
-var lengthOfLIS = function (nums) {
-  if (!nums || nums.length == 0) return 0
+var maxProfit = function (prices) {
+  if (!prices || prices.length < 2) return 0
 
-  let ends = [] // ends[i]: i + 1 长度的 LIS 的最小结尾值
-  ends[0] = nums[0]
-  let right = 0 // LIS 的有效长度，ends 的有效区
-  let longest = 1
-
-  let l = 0
-  let r = 0
-  let mid = 0
-  for (let i = 1; i < nums.length; i++) {
-    l = 0
-    r = right
-    while (l <= r) {
-      m = l + ((r - l) >> 1)
-      if (nums[i] < ends[m]) {
-        r = m - 1
-      } else {
-        l = m + 1
-      }
+  let profit = 0
+  for (let i = 0; i < prices.length - 1; i++) {
+    if (prices[i + 1] - prices[i] > 0) {
+      profit += prices[i + 1] - prices[i]
     }
-    right = Math.max(right, l)
-    ends[l] = nums[i]
-    longest = Math.max(longest, l + 1)
   }
 
-  return longest
+  return profit
 }
