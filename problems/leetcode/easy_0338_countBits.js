@@ -26,3 +26,23 @@ var countBits = function (n) {
 }
 
 console.log(countBits(5))
+
+var countBitsDp = function (n) {
+  const bit = new Array(n + 1).fill(0)
+
+  // 对于正整数 x，如果可以知道最大的正整数 y，使得 y ≤ x 且 y 是 2 的整数次幂，则 y 的二进制表示中只有最高位是 1，其余都是 0，此时称 y 为 x 的「最高有效位」。
+  // 令 z = x − y，显然 0 ≤ z < x，则 bits[x] = bits[z] + 1。
+
+  let highBit = 0
+  for (let i = 1; i <= n; i++) {
+    // 如果正整数 y 是 2 的整数次幂，则 y 的二进制表示中只有最高位是 1，其余都是 0，因此 y & (y−1) = 0
+    if ((i & (i - 1)) == 0) {
+      highBit = i
+    }
+    bit[i] = bit[i - highBit] + 1
+  }
+
+  return bit
+}
+
+console.log(countBitsDp(5))

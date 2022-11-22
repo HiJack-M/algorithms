@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/HiJack-M/algorithms/issues"
   },
-  "homepage": "https://github.com/HiJack-M/algorithms#readme"
+  "homepage": "https://github.com/HiJack-M/algorithms#readme",
+  "devDependencies": {
+    "eslint": "^8.28.0"
+  }
 }
