@@ -50,13 +50,17 @@ var nextPermutation = function (nums) {
   reverse(nums, small + 1, nums.length - 1)
 }
 
+const nums1 = [1, 2, 3]
+nextPermutation(nums1)
+console.log(nums1) // output: [ 1, 3, 2 ]
+
 // 思路：
 
 // 前提知道的规律：
 // 1. 从右到左的某一部分，降序，代表已经是这部分最大的序列
 
 // 要得到一个方法：
-// 1. 得到一个大与当前序列的新序列
+// 1. 得到一个大于当前序列的新序列
 // 2. 变大的幅度尽可能小
 
 // 具体一点的原则：
