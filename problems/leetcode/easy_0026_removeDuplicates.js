@@ -10,23 +10,23 @@
  * @param {number[]} nums
  * @return {number}
  */
-var removeDuplicates = function(nums) {
+var removeDuplicates = function (nums) {
   if (!nums || nums.length == 0) return 0
 
-  let preI = 0 // 目前为止，最后一个有序的下标
-  let curValue = nums[0] // 目前为止，最后一个有序的数值
+  let curIndex = 0 // 目前为止最后一个有序的下标
+  let curValue = nums[0] // 目前为止最后一个有序的值
   for (let i = 1; i < nums.length; i++) {
     if (nums[i] > curValue) {
-      if (i == preI + 1) {
-        curValue = nums[++preI]
+      if (i == curIndex + 1) {
+        curValue = nums[++curIndex]
       } else {
         curValue = nums[i]
-        // swap(i, ++preI)
-        nums[++preI] = nums[i]
+        nums[++curIndex] = nums[i] // 把当前的下一个数替换成找到的比 curValue 大的数（没必要交换，直接覆盖即可，因为 k 之后的数不用在意）
       }
     }
   }
-  return preI + 1
+
+  return curIndex + 1
 }
 
 const arr1 = [0, 0, 1, 2, 2]
@@ -34,7 +34,8 @@ console.log(removeDuplicates(arr1))
 const arr2 = [0, 1, 2]
 console.log(removeDuplicates(arr2))
 
-var removeDuplicatesPref = function(nums) {
+// 双指针法
+var removeDuplicatesPref = function (nums) {
   if (!nums || nums.length == 0) return 0
 
   let slow = 1
