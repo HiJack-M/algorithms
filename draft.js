@@ -10,15 +10,21 @@ var findDisappearedNumbers = function (nums) {
   let ans = []
   if (!nums || nums.length === 0) return ans
 
-  let help = new Array(nums.length + 1).fill(false) // 下标 0 无用
+  let N = nums.length
 
-  for (let i = 0; i < nums.length; i++) {
-    help[nums[i]] = true
+  let index
+
+  for (let num of nums) {
+    index = (num - 1) % N
+    if (nums[index] <= N) {
+      nums[index] += N
+    }
   }
 
-  for (let i = 1; i < help.length; i++) {
-    if (help[i] == false) {
-      ans.push(i)
+  // 要用 .entries() 是因为前面的解构利用了 iterable 内部结构 [key, value]
+  for (let [i, num] of nums.entries()) {
+    if (num <= N) {
+      ans.push(i + 1)
     }
   }
 

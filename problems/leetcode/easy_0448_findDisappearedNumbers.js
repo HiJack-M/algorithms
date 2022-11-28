@@ -41,6 +41,8 @@ var findDisappearedNumbersSaveSpace = function (nums) {
     let x = (num - 1) % N // 先减一，再取模，可找到最后一个下标，若先取模，n % n 为 0，而后再减 1，就定位到 nums[-1] 去了
     nums[x] += N
   }
+
+  // 要用 .entries() 是因为前面的解构利用了 iterable 内部结构 [key, value]
   for (let [i, num] of nums.entries()) {
     if (num <= N) {
       ans.push(i + 1)
