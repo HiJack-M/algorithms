@@ -49,5 +49,10 @@ const timesStr = (times, str) => {
   return ans
 }
 
-const testStr1 = '3[a]2[bc]'
-console.log(decodeString(testStr1))
+let s1 = '3[a]2[bc]'
+let s2 = '3[a2[c]]'
+let s3 = '2[abc]3[cd]ef'
+
+console.log(decodeString(s1))
+console.log(decodeString(s2))
+console.log(decodeString(s3))
