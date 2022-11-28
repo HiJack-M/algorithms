@@ -1,32 +1,29 @@
-// 26. Remove Duplicates from Sorted Array
+// 448. Find All Numbers Disappeared in an Array
 
-// Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same.
-
-// Since it is impossible to change the length of the array in some languages, you must instead have the result be placed in the first part of the array nums. More formally, if there are k elements after removing the duplicates, then the first k elements of nums should hold the final result. It does not matter what you leave beyond the first k elements.
-
-// Return k after placing the final result in the first k slots of nums.
-
-// Do not allocate extra space for another array. You must do this by modifying the input array in-place with O(1) extra memory.
+// Given an array nums of n integers where nums[i] is in the range [1, n], return an array of all the integers in the range [1, n] that do not appear in nums.
 
 /**
  * @param {number[]} nums
- * @return {number}
+ * @return {number[]}
  */
-var removeDuplicates = function (nums) {
-  if (!nums || nums.length == 0) return 0
+var findDisappearedNumbers = function (nums) {
+  let ans = []
+  if (!nums || nums.length === 0) return ans
 
-  let slow = 1
-  let fast = 1
+  let help = new Array(nums.length + 1).fill(false) // 下标 0 无用
 
-  while (fast < nums.length) {
-    if (nums[fast] != nums[fast - 1]) {
-      nums[slow++] = nums[fast]
-    }
-    fast++
+  for (let i = 0; i < nums.length; i++) {
+    help[nums[i]] = true
   }
 
-  return slow
+  for (let i = 1; i < help.length; i++) {
+    if (help[i] == false) {
+      ans.push(i)
+    }
+  }
+
+  return ans
 }
 
-const nums1 = [0, 0, 1, 1, 1, 2, 2, 3, 3, 4]
-console.log(removeDuplicates(nums1))
+const nums1 = [4, 3, 2, 7, 8, 2, 3, 1]
+console.log(findDisappearedNumbers(nums1))
