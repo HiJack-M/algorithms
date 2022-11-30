@@ -7,6 +7,27 @@
 // For example, do not use pow(x, 0.5) in c++ or x ** 0.5 in python.
 
 /**
+ * 最简陋版
+ * @param {number} x
+ * @return {number}
+ */
+var mySqrtPoor = function (x) {
+  if (!x || x < 0) return null
+
+  let sqrt = 0
+  while (sqrt * sqrt <= x) {
+    sqrt++
+  }
+
+  return sqrt - 1
+}
+
+let x1 = 4
+let x2 = 8
+console.log(mySqrt(x1))
+console.log(mySqrt(x2))
+
+/**
  * @param {number} x
  * @return {number}
  */
@@ -28,8 +49,3 @@ var mySqrt = function (x) {
 
   return ans
 }
-
-let x1 = 4
-let x2 = 8
-console.log(mySqrt(x1))
-console.log(mySqrt(x2))
