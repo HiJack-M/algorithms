@@ -31,7 +31,8 @@ const process = (s, index) => {
     } else {
       // str[index] = '['
       let next = process(s, index + 1)
-      str += timesStr(times, next.str)
+      // str += timesStr(times, next.str)
+      str += next.str.repeat(times)
       index = next.end + 1
       times = 0
     }
@@ -40,14 +41,14 @@ const process = (s, index) => {
   return { str, end: index }
 }
 
-const timesStr = (times, str) => {
-  let ans = ''
-  while (times > 0) {
-    ans += str
-    times--
-  }
-  return ans
-}
+// const timesStr = (times, str) => {
+//   let ans = ''
+//   while (times > 0) {
+//     ans += str
+//     times--
+//   }
+//   return ans
+// }
 
 let s1 = '3[a]2[bc]'
 let s2 = '3[a2[c]]'

@@ -1,30 +1,59 @@
-// 53. Maximum Subarray
+// 394. Decode String
 
-// Given an integer array nums, find the subarray which has the largest sum and return its sum.
+// Given an encoded string, return its decoded string.
+
+// The encoding rule is: k[encoded_string], where the encoded_string inside the square brackets is being repeated exactly k times. Note that k is guaranteed to be a positive integer.
+
+// You may assume that the input string is always valid; there are no extra white spaces, square brackets are well-formed, etc. Furthermore, you may assume that the original data does not contain any digits and that digits are only for those repeat numbers, k. For example, there will not be input like 3a or 2[4].
+
+// The test cases are generated so that the length of the output will never exceed 105.
 
 /**
- * @param {number[]} nums
- * @return {number}
+ * @param {string} s
+ * @return {string}
  */
-var maxSubArray = function (nums) {
-  if (!nums || nums.length == 0) return 0
+var decodeString = function (s) {
+  let path = ''
+  if (!s) return path
 
-  let N = nums.length
-  let Dp = new Array(N) // 到 Dp[i] 为止的最大和
-  Dp[0] = nums[0]
-  let max = Dp[0]
-
-  for (let i = 1; i < N; i++) {
-    Dp[i] = Math.max(Dp[i - 1] + nums[i], nums[i])
-    max = Math.max(max, Dp[i])
-  }
-
-  return max
+  return process(s, 0).str
 }
 
-const nums1 = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
-const nums2 = [1]
-const nums3 = [5, 4, -1, 7, 8]
-console.log(maxSubArray(nums1))
-console.log(maxSubArray(nums2))
-console.log(maxSubArray(nums3))
+// 返回值 { str, end }
+const process = (s, index) => {
+  let str = ''
+  let times = 0
+  while (index < s.length && s[index] !== ']') {
+    if (/[a-zA-Z]/.test(s[index])) {
+      str += s[index++]
+    } else if (/[0-9]/.test(s[index])) {
+      times = times * 10 + +s[index++]
+    } else {
+      // str[index] = '['
+      let next = process(s, index + 1)
+      str += timesStr(times, next.str)
+      // str += next.str.repeat(times)
+      index = next.end + 1
+      times = 0
+    }
+  }
+
+  return { str, end: index }
+}
+
+const timesStr = (times, str) => {
+  let ans = ''
+  while (times > 0) {
+    ans += str
+    times--
+  }
+  return ans
+}
+
+let s1 = '3[a]2[bc]'
+let s2 = '3[a2[c]]'
+let s3 = '2[abc]3[cd]ef'
+
+console.log(decodeString(s1))
+console.log(decodeString(s2))
+console.log(decodeString(s3))
