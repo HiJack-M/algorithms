@@ -7,7 +7,7 @@
  * @param {string} needle
  * @return {number}
  */
-var strStr = function(haystack, needle) {
+var strStr = function (haystack, needle) {
   if (haystack == '') {
     if (needle == '') return 0
     else return -1
@@ -30,19 +30,22 @@ var strStr = function(haystack, needle) {
     }
   }
   return -1
-};
+}
 
-const haystack1 = "hello", needle1 = "ll"
+const haystack1 = 'hello',
+  needle1 = 'll'
 console.log(strStr(haystack1, needle1))
 
-const hay2 = 'aaaaa', nee2 = 'bba'
+const hay2 = 'aaaaa',
+  nee2 = 'bba'
 console.log(strStr(hay2, nee2))
 
 // KMP
+// 参考 methods/KMP/indexOf.js
 
-var strStrKMP = function(haystack, needle) {
+var strStrKMP = function (haystack, needle) {
   if (haystack == '') {
-  if (needle == '') return 0
+    if (needle == '') return 0
     else return -1
   }
 
@@ -55,21 +58,21 @@ var strStrKMP = function(haystack, needle) {
     let i = 2
     let cn = 0
     while (i < match.length) {
-        if (match[i - 1] == match[cn]) {
+      if (match[i - 1] == match[cn]) {
         next[i] = cn + 1
         cn++
         i++
-        } else if (cn > 0) {
+      } else if (cn > 0) {
         cn = next[cn]
-        } else {
+      } else {
         next[i] = 0
         i++
-        }
+      }
     }
     return next
   }
 
-    let x = 0
+  let x = 0
   let y = 0
   const next = getNextArray(needle)
   while (x < haystack.length && y < needle.length) {
@@ -84,7 +87,7 @@ var strStrKMP = function(haystack, needle) {
   }
 
   return y == needle.length ? x - y : -1
-};
+}
 
 console.log(strStrKMP(haystack1, needle1))
 console.log(strStrKMP(hay2, nee2))

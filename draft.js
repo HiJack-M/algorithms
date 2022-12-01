@@ -1,59 +1,63 @@
-// 394. Decode String
+// 28. Find the Index of the First Occurrence in a String
 
-// Given an encoded string, return its decoded string.
-
-// The encoding rule is: k[encoded_string], where the encoded_string inside the square brackets is being repeated exactly k times. Note that k is guaranteed to be a positive integer.
-
-// You may assume that the input string is always valid; there are no extra white spaces, square brackets are well-formed, etc. Furthermore, you may assume that the original data does not contain any digits and that digits are only for those repeat numbers, k. For example, there will not be input like 3a or 2[4].
-
-// The test cases are generated so that the length of the output will never exceed 105.
+// Given two strings needle and haystack, return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
 
 /**
- * @param {string} s
- * @return {string}
+ * @param {string} haystack
+ * @param {string} needle
+ * @return {number}
  */
-var decodeString = function (s) {
-  let path = ''
-  if (!s) return path
+var strStr = function (haystack, needle) {
+  if (!haystack || !needle || haystack.length < needle.length) return -1
 
-  return process(s, 0).str
-}
+  let next = getNextArray(needle)
+  let x = 0
+  let y = 0
 
-// 返回值 { str, end }
-const process = (s, index) => {
-  let str = ''
-  let times = 0
-  while (index < s.length && s[index] !== ']') {
-    if (/[a-zA-Z]/.test(s[index])) {
-      str += s[index++]
-    } else if (/[0-9]/.test(s[index])) {
-      times = times * 10 + +s[index++]
+  while (x < haystack.length && y < needle.length) {
+    if (haystack[x] == needle[y]) {
+      x++
+      y++
+    } else if (y == 0) {
+      x++
     } else {
-      // str[index] = '['
-      let next = process(s, index + 1)
-      str += timesStr(times, next.str)
-      // str += next.str.repeat(times)
-      index = next.end + 1
-      times = 0
+      y = next[y]
     }
   }
 
-  return { str, end: index }
-}
-
-const timesStr = (times, str) => {
-  let ans = ''
-  while (times > 0) {
-    ans += str
-    times--
+  if (y >= needle.length) {
+    return x - y
+  } else {
+    return -1
   }
-  return ans
 }
 
-let s1 = '3[a]2[bc]'
-let s2 = '3[a2[c]]'
-let s3 = '2[abc]3[cd]ef'
+const getNextArray = (str) => {
+  if (str.length == 1) return [-1]
+  let next = [-1, 0]
+  let i = 2
+  let cn = 0 // 对比的下标
+  while (i < str.length) {
+    if (str[i - 1] == str[cn]) {
+      next[i] = cn + 1
+      i++
+      cn++
+    } else if (cn == 0) {
+      next[i] = 0
+      i++
+    } else {
+      cn = next[cn]
+    }
+  }
 
-console.log(decodeString(s1))
-console.log(decodeString(s2))
-console.log(decodeString(s3))
+  return next
+}
+
+let haystack1 = 'sadbutsad'
+let needle1 = 'sad'
+let needle2 = 'but'
+console.log(strStr(haystack1, needle1))
+console.log(strStr(haystack1, needle2))
+
+// let match1 = 'abaabas'
+// console.log(getNextArray(match1))

@@ -1,5 +1,5 @@
 const indexOf = (str, match) => {
-  if (!str || !match) {
+  if (!str || !match || str.length < match.length) {
     return -1
   }
   let x = 0 // str 中当前比对到的位置
@@ -17,7 +17,7 @@ const indexOf = (str, match) => {
   }
   // y 没有越界，没匹配完，返回 -1
   // y 越界了，匹配完了，找合适的匹配起始点
-   return y == match.length ? x - y : -1
+  return y == match.length ? x - y : -1
 }
 
 // next[] 中每个数的含义：
@@ -28,10 +28,10 @@ const getNextArray = (match) => {
   let next = new Array(match.length)
   next[0] = -1
   next[1] = 0
-  i = 2
-  cn = 0
+  let i = 2
+  let cn = 0
   while (i < match.length) {
-    if (match[i-1] == match[cn]) {
+    if (match[i - 1] == match[cn]) {
       next[i] = cn + 1
       i++
       cn++
