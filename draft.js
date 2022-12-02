@@ -13,7 +13,6 @@ var strStr = function (haystack, needle) {
   let next = getNextArray(needle)
   let x = 0
   let y = 0
-
   while (x < haystack.length && y < needle.length) {
     if (haystack[x] == needle[y]) {
       x++
@@ -25,20 +24,17 @@ var strStr = function (haystack, needle) {
     }
   }
 
-  if (y >= needle.length) {
-    return x - y
-  } else {
-    return -1
-  }
+  return y == needle.length ? x - y : -1
 }
 
 const getNextArray = (str) => {
   if (str.length == 1) return [-1]
+
   let next = [-1, 0]
   let i = 2
-  let cn = 0 // 对比的下标
+  let cn = 0
   while (i < str.length) {
-    if (str[i - 1] == str[cn]) {
+    if (str[cn] == str[i - 1]) {
       next[i] = cn + 1
       i++
       cn++
