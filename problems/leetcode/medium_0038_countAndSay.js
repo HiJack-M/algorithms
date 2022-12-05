@@ -58,4 +58,4 @@ var countAndSay = function (n) {
   return Dp[n]
 }
 
-console.log(countAndSay(4))
+console.log(countAndSay(4)) //'1211'
