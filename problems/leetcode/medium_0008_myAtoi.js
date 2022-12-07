@@ -35,21 +35,6 @@ var myAtoi = function (s) {
   }
 
   while (p < Math.min(s.length, 11)) {
-    // if (p == 9) {
-    //   if (oriNum > 214748364) return flag == 1 ? Math.pow(2, 31) - 1 : Math.pow(2, 31) * -1
-    //   else if (oriNum == 214748364) {
-    //     if (flag == 1) {
-    //       if (+s[p] >= 7 || /[0-9]/.test(s[p + 1])) {
-    //         return Math.pow(2, 31) - 1
-    //       }
-    //     } else if (flag == -1) {
-    //       if (s[p] > 8 || /[0-9]/.test(s[p + 1])) {
-    //         return Math.pow(2, 31) * -1
-    //       }
-    //     }
-    //   }
-    // }
-
     if (/[0-9]/.test(s[p])) {
       // 数字
       if (afterDot == 0) {
@@ -73,8 +58,6 @@ var myAtoi = function (s) {
   } else {
     return Math.max(flag * oriNum, Math.pow(2, 31) * -1)
   }
-
-  // return flag * oriNum
 }
 
 let s1 = '42'
