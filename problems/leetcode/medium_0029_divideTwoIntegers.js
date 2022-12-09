@@ -21,32 +21,32 @@
 var divide = function (dividend, divisor) {
   if (dividend == 0) return 0
 
-  let INT_MAX = Math.pow(2, 31) - 1 // 2147483647
-  let INT_MIN = -Math.pow(2, 31) // -2147483648
+  const INT_MAX = Math.pow(2, 31) - 1 // 2147483647
+  const INT_MIN = -Math.pow(2, 31) // -2147483648
 
-  // 唯一会发生 overflow 的情况
+  // 唯一会发生 overflow 的情况（给定参数都不会越界，所以都为正数的话是不会越界的，只有 INT_MIN * -1 才会越界）
   if (dividend == INT_MIN && divisor == -1) return INT_MAX
-  // 给定参数都不会越界，所以都为正数的话是不会越界的
 
+  // 取符号位，异或来判断是否异号
   let neg_flag = ((dividend >>> 31) ^ (divisor >>> 31)) == 1
 
   // 其實負數可以表達的範圍反而更大，何不就用負數來進行操作
   dividend = -Math.abs(dividend)
   divisor = -Math.abs(divisor)
 
-  let half_min = INT_MIN >> 1
+  let half_min = INT_MIN >> 1 // 在加倍 divisor 時候，要避免發生 overflow 狀況，當 divisor 已經倍增到大於 INT_MIN 的一半時，就應該停止遞增。
   let result = 0
 
   while (dividend <= divisor) {
     let big_divisor = divisor
-    let power_of_wwo = -1
+    let power_of_two = -1
     // 先让除数追到被除数的一半左右（在加倍 divisor 時候，要避免發生 overflow 狀況，當 divisor 已經倍增到大於 INT_MIN 的一半時，就應該停止遞增。）
-    while (big_divisor > half_min && dividend <= big_divisor * 2) {
+    while (big_divisor > half_min && big_divisor * 2 >= dividend) {
       big_divisor += big_divisor
-      power_of_wwo += power_of_wwo
+      power_of_two += power_of_two // 指数级翻倍
     }
     dividend -= big_divisor
-    result += power_of_wwo
+    result += power_of_two
   }
 
   return neg_flag ? result : -result

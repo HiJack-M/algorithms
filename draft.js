@@ -26,11 +26,11 @@ var divide = function (dividend, divisor) {
 
   // 唯一会发生 overflow 的情况
   if (dividend == INT_MIN && divisor == -1) return INT_MAX
+
   // 给定参数都不会越界，所以都为正数的话是不会越界的
 
   let neg_flag = ((dividend >>> 31) ^ (divisor >>> 31)) == 1
 
-  // 其實負數可以表達的範圍反而更大，何不就用負數來進行操作
   dividend = -Math.abs(dividend)
   divisor = -Math.abs(divisor)
 
@@ -39,30 +39,31 @@ var divide = function (dividend, divisor) {
 
   while (dividend <= divisor) {
     let big_divisor = divisor
-    let power_of_wwo = -1
-    // 先让除数追到被除数的一半左右（在加倍 divisor 時候，要避免發生 overflow 狀況，當 divisor 已經倍增到大於 INT_MIN 的一半時，就應該停止遞增。）
-    while (big_divisor > half_min && dividend <= big_divisor * 2) {
+    let power_of_two = -1
+
+    while (big_divisor > half_min && big_divisor * 2 >= dividend) {
       big_divisor += big_divisor
-      power_of_wwo += power_of_wwo
+      power_of_two += power_of_two
     }
+
     dividend -= big_divisor
-    result += power_of_wwo
+    result += power_of_two
   }
 
   return neg_flag ? result : -result
 }
 
-// let dividend1 = 10
-// let divisor1 = 3
-// let dividend2 = 7
-// let divisor2 = -3
-// let dividend3 = 1
-// let divisor3 = -1
+let dividend1 = 10
+let divisor1 = 3
+let dividend2 = 7
+let divisor2 = -3
+let dividend3 = 1
+let divisor3 = -1
 let dividend4 = -2147483648
 let divisor4 = 2
-// console.log(divide(dividend1, divisor1))
-// console.log(divide(dividend2, divisor2))
-// console.log(divide(dividend3, divisor3))
+console.log(divide(dividend1, divisor1))
+console.log(divide(dividend2, divisor2))
+console.log(divide(dividend3, divisor3))
 console.log(divide(dividend4, divisor4))
 
 // google 出来第一的，勉强能看懂的题解
