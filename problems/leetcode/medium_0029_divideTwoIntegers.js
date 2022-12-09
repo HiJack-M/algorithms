@@ -40,7 +40,9 @@ var divide = function (dividend, divisor) {
   while (dividend <= divisor) {
     let big_divisor = divisor
     let power_of_two = -1
-    // 先让除数追到被除数的一半左右（在加倍 divisor 時候，要避免發生 overflow 狀況，當 divisor 已經倍增到大於 INT_MIN 的一半時，就應該停止遞增。）
+
+    // 将 divisor 做加倍，dividend 可以一次尽可能减去 divisor 更多的倍数
+    // 让除数追到被除数的一半左右（在加倍 divisor 時候，要避免發生 overflow 狀況，當 divisor 已經倍增到大於 INT_MIN 的一半時，就應該停止遞增。）
     while (big_divisor > half_min && big_divisor * 2 >= dividend) {
       big_divisor += big_divisor
       power_of_two += power_of_two // 指数级翻倍
