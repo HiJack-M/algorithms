@@ -21,15 +21,13 @@
 var divide = function (dividend, divisor) {
   if (dividend == 0) return 0
 
-  let INT_MAX = Math.pow(2, 31) - 1 // 2147483647
-  let INT_MIN = -Math.pow(2, 31) // -2147483648
+  let INT_MAX = Math.pow(2, 31) - 1
+  let INT_MIN = -Math.pow(2, 31)
 
-  // 唯一会发生 overflow 的情况
+  // 唯一会越界的情况
   if (dividend == INT_MIN && divisor == -1) return INT_MAX
 
-  // 给定参数都不会越界，所以都为正数的话是不会越界的
-
-  let neg_flag = ((dividend >>> 31) ^ (divisor >>> 31)) == 1
+  let neg_flag = ((dividend >>> 31) ^ (divisor >>> 31)) === 1
 
   dividend = -Math.abs(dividend)
   divisor = -Math.abs(divisor)
