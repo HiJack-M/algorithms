@@ -40,3 +40,36 @@ const nums2 = [3, 2, 1, 0, 4] // false
 
 console.log(canJump(nums1))
 console.log(canJump(nums2))
+
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canJumpDp = function (nums) {
+  if (!nums) return false
+  if (nums.length < 2) return true
+
+  let Dp = new Array(nums.length).fill(-1)
+  Dp[nums.length - 1] = true
+
+  for (let index = nums.length - 2; index >= 0; index--) {
+    if (nums[index] == 0) {
+      Dp[index] = false
+    } else {
+      for (let i = 1; i <= nums[index]; i++) {
+        let curRes = Dp[index + i]
+        if (curRes) {
+          Dp[index] = true
+          break
+        } else {
+          Dp[index] = false
+        }
+      }
+    }
+  }
+
+  return Dp[0]
+}
+
+console.log(canJumpDp(nums1))
+console.log(canJumpDp(nums2))
