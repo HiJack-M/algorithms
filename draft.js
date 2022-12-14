@@ -1,63 +1,42 @@
-// 54. Spiral Matrix
+// 55. Jump Game
 
-// Given an m x n matrix, return all elements of the matrix in spiral order.
+// You are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.
+
+// Return true if you can reach the last index, or false otherwise.
 
 /**
- * @param {number[][]} matrix
- * @return {number[]}
+ * @param {number[]} nums
+ * @return {boolean}
  */
-var spiralOrder = function (matrix) {
-  let ans = []
-  if (!matrix || matrix.length == 0 || matrix[0].length == 0) return ans
+var canJump = function (nums) {
+  if (!nums) return false
+  if (nums.length < 2) return true
 
-  let m = matrix.length
-  let n = matrix[0].length
+  let Dp = new Array(nums.length).fill(-1)
+  Dp[nums.length - 1] = true
 
-  let directions = [
-    [0, 1],
-    [1, 0],
-    [-1, 0],
-    [0, -1],
-  ]
-  let curPointer = 0
-  let updatePointer = () => {
-    curPointer = curPointer + 1 == directions.length ? 0 : curPointer + 1
-  }
+  return takeStep(nums, 0, Dp)
+}
 
-  let inValidRange = (x, y) => {
-    if (x >= 0 && x < m && y >= 0 && y < n && matrix[x][y] != -Infinity) {
+const takeStep = (nums, index, Dp) => {
+  if (index == nums.length - 1) return true
+  if (index < nums.length - 1 && nums[index] == 0) return false
+  if (Dp[index] !== -1) return Dp[index]
+
+  for (let i = 1; i <= nums[index]; i++) {
+    let curRes = takeStep(nums, index + i, Dp)
+    if (curRes) {
+      Dp[index + i] = true
       return true
-    } else return false
-  }
-
-  let i = 0
-  let j = -1
-  while (ans.length < m * n) {
-    let nextI = i + directions[curPointer][0]
-    let nextJ = j + directions[curPointer][1]
-    if (inValidRange(nextI, nextJ)) {
-      i = nextI
-      j = nextJ
-      ans.push(matrix[i][j])
-      matrix[i][j] = -Infinity
-    } else {
-      updatePointer()
     }
   }
 
-  return ans
+  Dp[index] = false
+  return false
 }
 
-const matrix1 = [
-  [1, 2, 3],
-  [4, 5, 6],
-  [7, 8, 9],
-]
-console.log(spiralOrder(matrix1)) // Output: [1,2,3,6,9,8,7,4,5]
+const nums1 = [2, 3, 1, 1, 4] // true
+const nums2 = [3, 2, 1, 0, 4] // false
 
-const matrix2 = [
-  [1, 2, 3, 4],
-  [5, 6, 7, 8],
-  [9, 10, 11, 12],
-]
-console.log(spiralOrder(matrix2)) // Output: [1,2,3,4,8,12,11,10,9,5,6,7]
+console.log(canJump(nums1))
+console.log(canJump(nums2))
