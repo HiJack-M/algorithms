@@ -34,3 +34,42 @@ const nums3 = [7, 7, 7, 7, 7, 7, 7]
 console.log(lengthOfLIS(nums1))
 console.log(lengthOfLIS(nums2))
 console.log(lengthOfLIS(nums3))
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var lengthOfLISGreedy = function (nums) {
+  if (!nums || nums.length == 0) return 0
+
+  let ends = []
+  ends[0] = nums[0]
+  let right = 0
+  let longest = 1
+
+  let l = 0
+  let r = 0
+  let m = 0
+  for (let i = 1; i < nums.length; i++) {
+    l = 0
+    r = right
+    while (l <= r) {
+      m = l + ((r - l) >> 1)
+      if (ends[m] < nums[i]) {
+        l = m + 1
+      } else {
+        r = m - 1
+      }
+    }
+
+    ends[l] = nums[i]
+    right = Math.max(right, l)
+    longest = Math.max(longest, l + 1)
+  }
+
+  return longest
+}
+
+console.log(lengthOfLISGreedy(nums1))
+console.log(lengthOfLISGreedy(nums2))
+console.log(lengthOfLISGreedy(nums3))

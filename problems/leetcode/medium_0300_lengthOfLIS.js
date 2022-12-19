@@ -28,8 +28,12 @@ var lengthOfLIS = function (nums) {
   return longest
 }
 
-const arr1 = [10, 9, 2, 5, 3, 7, 101, 18]
-console.log(lengthOfLIS(arr1))
+const nums1 = [10, 9, 2, 5, 3, 7, 101, 18]
+const nums2 = [0, 1, 0, 3, 2, 3]
+const nums3 = [7, 7, 7, 7, 7, 7, 7]
+console.log(lengthOfLIS(nums1))
+console.log(lengthOfLIS(nums2))
+console.log(lengthOfLIS(nums3))
 
 /**
  * @param {number[]} nums
@@ -39,7 +43,7 @@ var lengthOfLISPerf = function (nums) {
   if (!nums || nums.length == 0) return 0
 
   let N = nums.length
-  const ends = new Array(N) // ends[i] 代表目前所有长度为 i + 1 的递增子序列的最小结尾的值
+  const ends = new Array(N) // ends[i] 代表目前所有长度为 i + 1 的递增子序列的最小结尾的值（ends 里的值是递增的）
   ends[0] = nums[0]
 
   let longest = 1
@@ -69,3 +73,7 @@ var lengthOfLISPerf = function (nums) {
 
   return longest
 }
+
+console.log(lengthOfLISPerf(nums1))
+console.log(lengthOfLISPerf(nums2))
+console.log(lengthOfLISPerf(nums3))
