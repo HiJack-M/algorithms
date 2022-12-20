@@ -5,7 +5,8 @@
   },
   "type": "module",
   "dependencies": {
-    "babel-loader": "^9.1.0"
+    "babel-loader": "^9.1.0",
+    "inquirer": "^9.1.4"
   },
   "name": "algorithms",
   "version": "1.0.0",
