@@ -43,7 +43,9 @@ const createCopyFile = (info) => {
   }
   resNameArr.push(numStr)
 
-  nameArr[0] = nameArr[0].toLowerCase()
+  if (nameArr.length > 1) {
+    nameArr[0] = nameArr[0].toLowerCase()
+  }
   let nameStr = nameArr.join('')
   resNameArr.push(nameStr)
   let resNameStr = resNameArr.join('_')
