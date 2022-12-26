@@ -1,44 +1,59 @@
-// 73. Set Matrix Zeroes
+// 91. Decode Ways
 
-// Given an m x n integer matrix matrix, if an element is 0, set its entire row and column to 0's.
+// A message containing letters from A-Z can be encoded into numbers using the following mapping:
 
-// You must do it in place.
+// 'A' -> "1"
+// 'B' -> "2"
+// ...
+// 'Z' -> "26"
+
+// To decode an encoded message, all the digits must be grouped then mapped back into letters using the reverse of the mapping above (there may be multiple ways). For example, "11106" can be mapped into:
+
+// "AAJF" with the grouping (1 1 10 6)
+// "KJF" with the grouping (11 10 6)
+// Note that the grouping (1 11 06) is invalid because "06" cannot be mapped into 'F' since "6" is different from "06".
+
+// Given a string s containing only digits, return the number of ways to decode it.
+
+// The test cases are generated so that the answer fits in a 32-bit integer.
 
 /**
- * @param {number[][]} matrix
- * @return {void} Do not return anything, modify matrix in-place instead.
+ * @param {string} s
+ * @return {number}
  */
-var setZeroes = function (matrix) {
-  if (!matrix || matrix[0]?.length == 0) return
+var numDecodings = function (s) {
+  if (!s) return 0
 
-  let m = matrix.length
-  let n = matrix[0].length
-  let oriZeros = []
-
-  for (let i = 0; i < m; i++) {
-    for (let j = 0; j < n; j++) {
-      if (matrix[i][j] === 0) {
-        oriZeros.push([i, j])
-      }
-    }
-  }
-
-  while (oriZeros.length > 0) {
-    let zero = oriZeros.shift()
-
-    matrix[zero[0]].fill(0)
-    for (let i = 0; i < m; i++) {
-      matrix[i][zero[1]] = 0
-    }
-  }
-
-  console.log(matrix)
+  let Dp = new Array(s.length + 1).fill(-1)
+  Dp[s.length] = 1
+  return process(s, 0, Dp)
 }
 
-const matrix1 = [
-  [1, 1, 1],
-  [1, 0, 1],
-  [1, 1, 1],
-]
+// 轮到 index 的点做决定
+const process = (s, index, Dp) => {
+  if (Dp[index] !== -1) return Dp[index]
+  // if (index == s.length) return 1
 
-setZeroes(matrix1)
+  // base case
+  if (s[index] === '0') {
+    Dp[index] = 0
+    return 0
+  }
+
+  let ways = 0
+  ways += process(s, index + 1, Dp)
+
+  if (index + 1 < s.length && parseInt(s.slice(index, index + 2)) <= 26) {
+    ways += process(s, index + 2, Dp)
+  }
+
+  Dp[index] = ways
+  return ways
+}
+
+let s1 = '12'
+let s2 = '226'
+let s3 = '06'
+console.log(numDecodings(s1))
+console.log(numDecodings(s2))
+console.log(numDecodings(s3))
