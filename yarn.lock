@@ -663,12 +663,7 @@
     "ansi-styles" "^4.1.0"
     "supports-color" "^7.1.0"
 
-"chalk@^5.0.0":
-  "integrity" "sha512-ree3Gqw/nazQAPuJJEy+avdl7QfZMcUvmHIKgEZkGL+xOBzRvup5Hxo6LHuMceSxOabuJLJm5Yp/92R9eMmMvA=="
-  "resolved" "https://registry.npmmirror.com/chalk/-/chalk-5.2.0.tgz"
-  "version" "5.2.0"
-
-"chalk@^5.1.2":
+"chalk@^5.0.0", "chalk@^5.1.2", "chalk@^5.2.0":
   "integrity" "sha512-ree3Gqw/nazQAPuJJEy+avdl7QfZMcUvmHIKgEZkGL+xOBzRvup5Hxo6LHuMceSxOabuJLJm5Yp/92R9eMmMvA=="
   "resolved" "https://registry.npmmirror.com/chalk/-/chalk-5.2.0.tgz"
   "version" "5.2.0"

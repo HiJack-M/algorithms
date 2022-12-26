@@ -3,6 +3,7 @@
 import inquirer from 'inquirer'
 import path from 'path'
 import { copyFile, constants } from 'node:fs'
+import chalk from 'chalk'
 
 const questions = [
   { type: 'input', name: 'name', message: "What's the problem's name? " },
@@ -27,8 +28,8 @@ inquirer
     createCopyFile(answers)
   })
   .catch((error) => {
-    console.log('error: ', error)
-    console.log('please do it manually, bye.')
+    console.log(chalk.red('error: ', error))
+    console.log(chalk.red('please do it manually, bye.'))
   })
 
 const createCopyFile = (info) => {
@@ -56,10 +57,10 @@ const createCopyFile = (info) => {
 
   copyFile(sourceFileName, destFileName, constants.COPYFILE_EXCL, (error) => {
     if (error) {
-      console.log('error: ', error)
-      console.log('please do it manually, bye.')
+      console.log(chalk.red('error: ', error))
+      console.log(chalk.red('please do it manually, bye.'))
     } else {
-      console.log('solution of the problem was reserved.')
+      console.log(chalk.green('solution of the problem was reserved.'))
     }
   })
 }
