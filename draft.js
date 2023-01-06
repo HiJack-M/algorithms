@@ -1,52 +1,85 @@
-// 116. Populating Next Right Pointers in Each Node
+// 130. Surrounded Regions
 
-// You are given a perfect binary tree where all leaves are on the same level, and every parent has two children. The binary tree has the following definition:
+// Given an m x n matrix board containing 'X' and 'O', capture all regions that are 4-directionally surrounded by 'X'.
 
-// struct Node {
-//   int val;
-//   Node *left;
-//   Node *right;
-//   Node *next;
-// }
-
-// Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
-
-// Initially, all next pointers are set to NULL.
+// A region is captured by flipping all 'O's into 'X's in that surrounded region.
 
 /**
- * // Definition for a Node.
- * function Node(val, left, right, next) {
- *    this.val = val === undefined ? null : val;
- *    this.left = left === undefined ? null : left;
- *    this.right = right === undefined ? null : right;
- *    this.next = next === undefined ? null : next;
- * };
+ * @param {character[][]} board
+ * @return {void} Do not return anything, modify board in-place instead.
  */
+var solve = function (board) {
+  if (!board || board.length == 0 || board[0].length == 0) return
 
-/**
- * @param {Node} root
- * @return {Node}
- */
-var connect = function (root) {
-  if (!root) return null
+  let m = board.length
+  let n = board[0].length
 
-  const traversalQueue = []
-  traversalQueue.push(root)
+  const dfs = (x, y) => {
+    if (x < 0 || x >= m || y < 0 || y >= n || board[x][y] !== 'O') return
 
-  while (traversalQueue.length > 0) {
-    let lineLen = traversalQueue.length
+    board[x][y] = 'A'
+    dfs(x + 1, y)
+    dfs(x - 1, y)
+    dfs(x, y + 1)
+    dfs(x, y - 1)
+  }
 
-    while (lineLen > 0) {
-      let curLeft = traversalQueue.shift()
-      if (curLeft.left) traversalQueue.push(curLeft.left)
-      if (curLeft.right) traversalQueue.push(curLeft.right)
-      lineLen--
+  // 第 1 行 和 最后 1 行
+  for (let i = 0; i < n; i++) {
+    dfs(0, i)
+    dfs(m - 1, i)
+  }
+  // 边界两列
+  for (let i = 1; i < m - 1; i++) {
+    dfs(i, 0)
+    dfs(i, n - 1)
+  }
 
-      if (lineLen > 0) {
-        curLeft.next = traversalQueue[0]
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      if (board[i][j] === 'A') {
+        board[i][j] = 'O'
+      } else if (board[i][j] === 'O') {
+        board[i][j] = 'X'
       }
     }
   }
 
-  return root
+  console.log(board)
 }
+
+// 思路：找出被边界的 'O' 连接的 'O'，标记，剩下的 'O' 都 flip
+
+const board1 = [
+  ['X', 'X', 'X', 'X'],
+  ['X', 'O', 'O', 'X'],
+  ['X', 'X', 'O', 'X'],
+  ['X', 'O', 'X', 'X'],
+]
+const board2 = [['X']]
+const board3 = [
+  ['O', 'O', 'O'],
+  ['O', 'O', 'O'],
+  ['O', 'O', 'O'],
+]
+const board4 = [
+  ['O', 'X', 'X', 'O', 'X'],
+  ['X', 'O', 'O', 'X', 'O'],
+  ['X', 'O', 'X', 'O', 'X'],
+  ['O', 'X', 'O', 'O', 'O'],
+  ['X', 'X', 'O', 'X', 'O'],
+]
+const board5 = [
+  ['O', 'O', 'O', 'O', 'X', 'X'],
+  ['O', 'O', 'O', 'O', 'O', 'O'],
+  ['O', 'X', 'O', 'X', 'O', 'O'],
+  ['O', 'X', 'O', 'O', 'X', 'O'],
+  ['O', 'X', 'O', 'X', 'O', 'O'],
+  ['O', 'X', 'O', 'O', 'O', 'O'],
+]
+
+solve(board1)
+solve(board2)
+solve(board3)
+solve(board4)
+solve(board5)
