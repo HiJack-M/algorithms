@@ -80,3 +80,25 @@ head2.random = head2.next
 head2.next.random = head2.next
 
 console.log(copyRandomList(head2))
+
+// 下面是针对笔试的【快速】【map】版
+/**
+ * @param {Node} head
+ * @return {Node}
+ */
+var copyRandomListUseMap = function (head) {
+  if (head == null) return null
+  const map = new Map()
+  let cur = head
+  while (cur) {
+    map.set(cur, new Node(cur.val))
+    cur = cur.next
+  }
+  cur = head
+  while (cur) {
+    map.get(cur).next = cur.next ? map.get(cur.next) : null
+    map.get(cur).random = cur.random ? map.get(cur.random) : null
+    cur = cur.next
+  }
+  return map.get(head)
+}
