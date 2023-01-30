@@ -16,6 +16,7 @@
 var isHappy = function (n) {
   if (!n) return false
 
+  // 判断是否进入循环
   const calculated = new Set()
   calculated.add(n)
   while (n != 1) {
@@ -66,7 +67,7 @@ var isHappyTwoPoints = function (n) {
     slow = bitSquareSum(slow)
     fast = bitSquareSum(fast)
     fast = bitSquareSum(fast)
-  } while (slow !== fast)
+  } while (slow !== fast) // 要是无环则会都停在 1
 
   return slow == 1
 }

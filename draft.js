@@ -14,13 +14,13 @@
  * @return {boolean}
  */
 var isHappy = function (n) {
-  if (!n) return false
+  if (!n || n <= 0) return false
 
   const calculated = new Set()
   calculated.add(n)
+
   while (n != 1) {
     n = bitSquareSum(n)
-
     if (calculated.has(n)) {
       return false
     }
@@ -58,7 +58,7 @@ console.log(isHappy(2))
  * @return {boolean}
  */
 var isHappyTwoPoints = function (n) {
-  if (!n) return false
+  if (!n || n <= 0) return false
 
   let slow = n
   let fast = n
@@ -66,9 +66,9 @@ var isHappyTwoPoints = function (n) {
     slow = bitSquareSum(slow)
     fast = bitSquareSum(fast)
     fast = bitSquareSum(fast)
-  } while (slow !== fast)
+  } while (slow !== fast) // 要是无环则会都停在 1
 
-  return slow == 1
+  return slow === 1
 }
 
 console.log(isHappyTwoPoints(19))
