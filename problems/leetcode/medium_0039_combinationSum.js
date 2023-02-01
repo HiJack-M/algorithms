@@ -82,3 +82,35 @@ const processBackTracking = (candidates, restAim, index, combine, ans) => {
 }
 
 console.log(combinationSumBackTracking(candidates1, target1))
+
+/**
+ * @param {number[]} candidates
+ * @param {number} target
+ * @return {number[][]}
+ * 2023.02.01
+ * 这跟凑钱找补是一样的思路
+ */
+var combinationSumSelfThinking = function (candidates, target) {
+  let ans = []
+  if (!candidates || candidates.length === 0 || !target) return ans
+
+  processSelfThinking(candidates, 0, [], target, ans)
+
+  return ans
+}
+
+// 现在轮到 index 做决定要不要
+const processSelfThinking = (nums, index, used, rest, ans) => {
+  // base case
+  if (index == nums.length) {
+    if (rest == 0) {
+      ans.push(used)
+    }
+    return
+  }
+
+  for (let count = 0; count * nums[index] <= rest; count++) {
+    let curUse = new Array(count).fill(nums[index])
+    process(nums, index + 1, [...used, ...curUse], rest - count * nums[index], ans)
+  }
+}
