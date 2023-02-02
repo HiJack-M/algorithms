@@ -60,6 +60,7 @@ const createCopyFile = (info) => {
       console.log(chalk.red('error: ', error))
       console.log(chalk.red('please do it manually, bye.'))
     } else {
+      console.log(chalk.yellow('file name: ', resNameStr))
       console.log(chalk.green('solution of the problem was reserved.'))
     }
   })
