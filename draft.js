@@ -1,65 +1,73 @@
-// 230. Kth Smallest Element in a BST
+// 56. Merge Intervals
 
-// Given the root of a binary search tree, and an integer k, return the kth smallest value (1-indexed) of all the values of the nodes in the tree.
-
-// // Definition for a binary tree node.
-// function TreeNode(val, left, right) {
-//   this.val = val === undefined ? 0 : val
-//   this.left = left === undefined ? null : left
-//   this.right = right === undefined ? null : right
-// }
-
-import Node from './structure/binaryTreeNode.js'
-
-function Info(count, ans) {
-  this.count = count || 0
-  this.ans = ans || null
-}
+// Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
 
 /**
- * @param {TreeNode} root
- * @param {number} k
- * @return {number}
+ * @param {number[][]} intervals
+ * @return {number[][]}
  */
-var kthSmallest = function (root, k) {
-  if (!root || k <= 0) return null
+var merge = function (intervals) {
+  let ans = []
+  if (!intervals || intervals.length === 0) return ans
+  if (intervals.length == 1) return intervals
 
-  return preTraversal(root, k).ans
-}
+  intervals.sort((a, b) => a[0] - b[0])
 
-// return {count, ans}
-const preTraversal = (node, rest) => {
-  let leftInfo = null
-  let count = 1
-  let ans = null
-  if (node.left) {
-    leftInfo = preTraversal(node.left, rest)
-    count = count + leftInfo.count
-    ans = leftInfo.ans || ans
-    if (ans !== null) {
-      return new Info(count, ans)
+  while (intervals.length > 0) {
+    let item1 = intervals.shift()
+    if (intervals.length > 0) {
+      let item2 = intervals.shift()
+      if (item1[1] >= item2[0]) {
+        // overlapping, should be dealt with next one
+        intervals.unshift([item1[0], item1[1] >= item2[1] ? item1[1] : item2[1]])
+      } else {
+        // non-overlapping
+        ans.push(item1)
+        intervals.unshift(item2)
+      }
+    } else {
+      ans.push(item1)
     }
   }
-  if (count === rest) {
-    ans = node.val
-    return new Info(count, ans)
-  }
-  if (node.right) {
-    let rightInfo = preTraversal(node.right, rest - count)
-    count = count + rightInfo.count
-    ans = rightInfo.ans || ans
-  }
-  return new Info(count, ans)
+
+  return ans
 }
 
-let head1 = new Node(3)
-head1.left = new Node(1)
-head1.left.right = new Node(2)
-head1.right = new Node(4)
+const intervals1 = [
+  [1, 3],
+  [2, 6],
+  [8, 10],
+  [15, 18],
+] // [[1,6],[8,10],[15,18]]
+console.log(merge(intervals1))
 
-console.log(kthSmallest(head1, 1))
+/**
+ * @param {number[][]} intervals
+ * @return {number[][]}
+ */
+var merge_think_bak = function (intervals) {
+  let ans = []
+  if (!intervals || intervals.length === 0) return ans
+  if (intervals.length == 1) return intervals
 
-let head2 = new Node(1)
-head2.right = new Node(2)
+  intervals.sort((a, b) => a[0] - b[0])
 
-console.log(kthSmallest(head2, 2))
+  let i = 1
+  ans.push(intervals[0])
+  while (i < intervals.length) {
+    let first = ans.pop() // 每次拿出 ans 里的最后一个来与下一个 merge
+    let second = intervals[i]
+    if (first[1] < second[0]) {
+      ans.push(first) // 保持原样扔进 ans
+      ans.push(second)
+    } else if (first[1] < second[1]) {
+      first[1] = second[1]
+      ans.push(first)
+    } else {
+      ans.push(first)
+    }
+    i++
+  }
+
+  return ans
+}
