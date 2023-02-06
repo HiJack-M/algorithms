@@ -1,73 +1,126 @@
-// 56. Merge Intervals
+// 139. Word Break
 
-// Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
+// Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+// Note that the same word in the dictionary may be reused multiple times in the segmentation.
 
 /**
- * @param {number[][]} intervals
- * @return {number[][]}
+ * @param {string} s
+ * @param {string[]} wordDict
+ * @return {boolean}
  */
-var merge = function (intervals) {
-  let ans = []
-  if (!intervals || intervals.length === 0) return ans
-  if (intervals.length == 1) return intervals
+var wordBreakBruteForce = function (s, wordDict) {
+  if (!s || !wordDict || wordDict.length === 0) return false
 
-  intervals.sort((a, b) => a[0] - b[0])
+  return process(s, wordDict, 0)
+}
 
-  while (intervals.length > 0) {
-    let item1 = intervals.shift()
-    if (intervals.length > 0) {
-      let item2 = intervals.shift()
-      if (item1[1] >= item2[0]) {
-        // overlapping, should be dealt with next one
-        intervals.unshift([item1[0], item1[1] >= item2[1] ? item1[1] : item2[1]])
-      } else {
-        // non-overlapping
-        ans.push(item1)
-        intervals.unshift(item2)
+const process = (s, wordDict, index) => {
+  // base case
+  if (index === s.length) return true
+
+  for (let i = index; i < s.length; i++) {
+    let prefix = s.substring(index, i + 1)
+    if (wordDict.indexOf(prefix) !== -1) {
+      // 单词表中存在 s[index...i] 前缀，可用，index 往后移
+      let ans = process(s, wordDict, i + 1)
+      if (ans) return true
+    }
+  }
+  return false
+}
+
+/**
+ * @param {string} s
+ * @param {string[]} wordDict
+ * @return {boolean}
+ */
+var wordBreakDp = function (s, wordDict) {
+  if (!s || !wordDict || wordDict.length === 0) return false
+
+  let N = s.length
+  let Dp = new Array(N + 1).fill(false)
+  Dp[N] = true
+
+  for (let index = N - 1; index >= 0; index--) {
+    for (let i = index; i < s.length; i++) {
+      let prefix = s.substring(index, i + 1)
+      if (wordDict.indexOf(prefix) != -1) {
+        // 单词表中存在 s[index...i] 前缀，可用，index 往后移
+        let ans = Dp[i + 1]
+        if (ans) {
+          Dp[index] = true
+          break
+        }
       }
-    } else {
-      ans.push(item1)
     }
   }
 
-  return ans
+  return Dp[0]
 }
 
-const intervals1 = [
-  [1, 3],
-  [2, 6],
-  [8, 10],
-  [15, 18],
-] // [[1,6],[8,10],[15,18]]
-console.log(merge(intervals1))
+class TrieNode {
+  constructor(end) {
+    this.end = end || false
+    this.next = []
+  }
+}
 
 /**
- * @param {number[][]} intervals
- * @return {number[][]}
+ * @param {string} s
+ * @param {string[]} wordDict
+ * @return {boolean}
  */
-var merge_think_bak = function (intervals) {
-  let ans = []
-  if (!intervals || intervals.length === 0) return ans
-  if (intervals.length == 1) return intervals
+var wordBreak = function (s, wordDict) {
+  if (!s || !wordDict || wordDict.length === 0) return false
 
-  intervals.sort((a, b) => a[0] - b[0])
-
-  let i = 1
-  ans.push(intervals[0])
-  while (i < intervals.length) {
-    let first = ans.pop() // 每次拿出 ans 里的最后一个来与下一个 merge
-    let second = intervals[i]
-    if (first[1] < second[0]) {
-      ans.push(first) // 保持原样扔进 ans
-      ans.push(second)
-    } else if (first[1] < second[1]) {
-      first[1] = second[1]
-      ans.push(first)
-    } else {
-      ans.push(first)
+  let root = new TrieNode()
+  let origin = 'a'.charCodeAt()
+  for (let i = 0; i < wordDict.length; i++) {
+    let node = root
+    let curWord = wordDict[i]
+    for (let j = 0; j < curWord.length; j++) {
+      let curPath = curWord.charCodeAt(j) - origin
+      if (!node.next[curPath]) {
+        node.next[curPath] = new TrieNode(false)
+      }
+      node = node.next[curPath]
     }
-    i++
+    node.end = true
   }
 
-  return ans
+  let N = s.length
+  let Dp = new Array(N + 1).fill(false)
+  Dp[N] = true
+
+  for (let index = N - 1; index >= 0; index--) {
+    let node = root
+    for (let i = index; i < s.length; i++) {
+      let prefix = s.charCodeAt(i) - origin
+      if (!node.next[prefix]) {
+        break
+      }
+
+      node = node.next[prefix]
+      let curAns = node.end
+      if (curAns && Dp[i + 1]) {
+        Dp[index] = true
+        break
+      }
+    }
+  }
+
+  return Dp[0]
 }
+
+let s1 = 'leetcode'
+const wordDict1 = ['leet', 'code']
+console.log(wordBreak(s1, wordDict1))
+
+let s2 = 'applepenapple'
+const wordDict2 = ['apple', 'pen']
+console.log(wordBreak(s2, wordDict2))
+
+let s3 = 'catsandog'
+const wordDict3 = ['cats', 'dog', 'sand', 'and', 'cat']
+console.log(wordBreak(s3, wordDict3))

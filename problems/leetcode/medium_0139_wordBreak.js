@@ -34,7 +34,7 @@ const process = (s, wordDict, index) => {
   return false
 }
 
-var wordBreak = function (s, wordDict) {
+var wordBreakDp = function (s, wordDict) {
   if (!s || !wordDict || wordDict.length == 0) return false
 
   let N = s.length
@@ -59,12 +59,15 @@ var wordBreak = function (s, wordDict) {
 }
 
 /** 前缀树优化 */
-class TrieNode {
-  constructor(end) {
-    this.end = end || false
-    this.nexts = []
-  }
-}
+
+// class TrieNode {
+//   constructor(end) {
+//     this.end = end || false
+//     this.nexts = []
+//   }
+// }
+
+import TrieNode from '../../structure/trieNode.js'
 
 var wordBreak = function (s, wordDict) {
   if (!s || !wordDict || wordDict.length == 0) return false
@@ -109,6 +112,8 @@ var wordBreak = function (s, wordDict) {
 
   return Dp[0]
 }
+
+// 其实前缀树在这里是手动实现了 indexOf 的功能
 
 // true
 const s1 = 'leetcode'
