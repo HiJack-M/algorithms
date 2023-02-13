@@ -2,7 +2,7 @@
 
 // Given an unsorted array nums, reorder it in-place such that nums[0] <= nums[1] >= nums[2] <= nums[3]....
 
-import swap from './methods/tool_functions/swap.js'
+import swap from '../../methods/tool_functions/swap.js'
 
 /**
  * @param {number[]} nums
