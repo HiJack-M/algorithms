@@ -4,7 +4,7 @@
 
 // You may assume the input array always has a valid answer.
 
-import swap from './methods/tool_functions/swap.js'
+import swap from '../../methods/tool_functions/swap.js'
 
 /**
  * @param {number[]} nums

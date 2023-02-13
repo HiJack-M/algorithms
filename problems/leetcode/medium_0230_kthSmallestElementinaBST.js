@@ -9,7 +9,7 @@
 //   this.right = right === undefined ? null : right
 // }
 
-import Node from './structure/binaryTreeNode.js'
+import Node from '../../structure/binaryTreeNode.js'
 
 function Info(count, ans) {
   this.count = count || 0

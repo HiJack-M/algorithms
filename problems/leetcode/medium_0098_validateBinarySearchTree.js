@@ -15,7 +15,7 @@
 //   this.right = right === undefined ? null : right
 // }
 
-import Node from './structure/binaryTreeNode.js'
+import Node from '../../structure/binaryTreeNode.js'
 
 /**
  * @param {TreeNode} root
