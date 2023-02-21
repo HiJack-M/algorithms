@@ -19,8 +19,6 @@ var reverseString = function (s) {
   while (l < r) {
     swap(s, l++, r--)
   }
-
-  return s
 }
 
 const s1 = ['h', 'e', 'l', 'l', 'o']
