@@ -4,7 +4,7 @@
 
 // You must do this by modifying the input array in-place with O(1) extra memory.
 
-import swap from './methods/tool_functions/swap.js'
+import swap from '../../methods/tool_functions/swap.js'
 
 /**
  * @param {character[]} s
