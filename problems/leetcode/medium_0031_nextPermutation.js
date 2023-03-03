@@ -29,30 +29,36 @@ const reverse = (arr, start, end) => {
  * @return {void} Do not return anything, modify nums in-place instead.
  */
 var nextPermutation = function (nums) {
-  if (!nums || nums.length == 0) return nums
+  if (!nums || nums.length == 0) return
+
+  let N = nums.length
 
   // 找到第一组顺序对，取到小值 (较小值尽量靠右)
-  let small = nums.length - 2
-  while (small >= 0 && nums[small] > nums[small + 1]) {
-    small--
+  let smallIndex = N - 2
+  while (smallIndex >= 0 && nums[smallIndex] >= nums[smallIndex + 1]) {
+    smallIndex--
   }
 
-  // 找到逆序中的刚好比较小值大的最小的那个值
-  if (small >= 0) {
-    let big = nums.length - 1
-    while (big > small && nums[big] <= nums[small]) {
-      big--
+  // 找到后方逆序中的刚好比较小值大的最小的那个值
+  if (smallIndex >= 0) {
+    let bigIndex = N - 1
+    while (bigIndex > smallIndex && nums[bigIndex] <= nums[smallIndex]) {
+      bigIndex--
     }
-    swap(nums, small, big)
+    swap(nums, smallIndex, bigIndex)
   }
 
   // 从下标为 small + 1 出开始顺序排序
-  reverse(nums, small + 1, nums.length - 1)
+  reverse(nums, smallIndex + 1, N - 1)
 }
 
 const nums1 = [1, 2, 3]
 nextPermutation(nums1)
 console.log(nums1) // output: [ 1, 3, 2 ]
+
+const nums2 = [3, 2, 5, 4, 1, 0]
+nextPermutation(nums2)
+console.log(nums2) // output: [ 3, 4, 0, 1, 2, 5 ]
 
 // 思路：
 

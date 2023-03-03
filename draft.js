@@ -1,40 +1,45 @@
-// 454. 4Sum II
+// 31. Next Permutation
 
-// Given four integer arrays nums1, nums2, nums3, and nums4 all of length n, return the number of tuples (i, j, k, l) such that:
+// A permutation of an array of integers is an arrangement of its members into a sequence or linear order.
 
-// 0 <= i, j, k, l < n
-// nums1[i] + nums2[j] + nums3[k] + nums4[l] == 0
+// For example, for arr = [1,2,3], the following are all the permutations of arr: [1,2,3], [1,3,2], [2, 1, 3], [2, 3, 1], [3,1,2], [3,2,1].
+// The next permutation of an array of integers is the next lexicographically greater permutation of its integer. More formally, if all the permutations of the array are sorted in one container according to their lexicographical order, then the next permutation of that array is the permutation that follows it in the sorted container. If such arrangement is not possible, the array must be rearranged as the lowest possible order (i.e., sorted in ascending order).
 
-/**
- * @param {number[]} nums1
- * @param {number[]} nums2
- * @param {number[]} nums3
- * @param {number[]} nums4
- * @return {number}
- */
-var fourSumCount = function (nums1, nums2, nums3, nums4) {
-  let Dp = new Array(5)
-  for (let i = 0; i < Dp.length; i++) {
-    Dp[i] = []
+// For example, the next permutation of arr = [1,2,3] is [1,3,2].
+// Similarly, the next permutation of arr = [2,3,1] is [3,1,2].
+// While the next permutation of arr = [3,2,1] is [1,2,3] because [3,2,1] does not have a lexicographical larger rearrangement.
+// Given an array of integers nums, find the next permutation of nums.
+
+// The replacement must be in place and use only constant extra memory.
+
+import swap from './methods/tool_functions/swap.js'
+
+const reverse = (arr, start, end) => {
+  while (start < end) {
+    swap(arr, start++, end--)
   }
-
-  const process = (prevSum, index, Dp) => {
-    if (Dp[index][prevSum] != undefined) return Dp[index][prevSum]
-
-    if (index == 4) {
-      return prevSum === 0 ? 1 : 0
-    }
-
-    let ans = 0
-    let curArr = arguments[index]
-    for (let i = 0; i < curArr.length; i++) {
-      ans += process(prevSum + curArr[i], index + 1, Dp)
-    }
-    Dp[index][prevSum] = ans
-    return ans
-  }
-
-  return process(0, 0, Dp)
 }
 
-console.log(fourSumCount([1, 2], [-2, -1], [-1, 2], [0, 2]))
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var nextPermutation = function (nums) {
+  if (!nums) return
+
+  let N = nums.length
+  let smallIndex = N - 2 // 找顺序对当中的小值
+  while (smallIndex >= 0 && nums[smallIndex] >= nums[smallIndex + 1]) {
+    smallIndex--
+  }
+
+  if (smallIndex >= 0) {
+    let bigIndex = N - 1 // 后方逆序排列中刚好比小值大的那个值
+    while (bigIndex > smallIndex && nums[bigIndex] <= nums[smallIndex]) {
+      bigIndex--
+    }
+    swap(nums, smallIndex, bigIndex)
+  }
+
+  reverse(nums, smallIndex + 1, N - 1)
+}
