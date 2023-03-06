@@ -1,71 +1,79 @@
-// 62. Unique Paths
+// 64. Minimum Path Sum
 
-// There is a robot on an m x n grid. The robot is initially located at the top-left corner (i.e., grid[0][0]). The robot tries to move to the bottom-right corner (i.e., grid[m - 1][n - 1]). The robot can only move either down or right at any point in time.
+// Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right, which minimizes the sum of all numbers along its path.
 
-// Given the two integers m and n, return the number of possible unique paths that the robot can take to reach the bottom-right corner.
-
-// The test cases are generated so that the answer will be less than or equal to 2 * 10^9.
+// Note: You can only move either down or right at any point in time.
 
 /**
- * @param {number} m
- * @param {number} n
+ * @param {number[][]} grid
  * @return {number}
  */
-var uniquePaths = function (m, n) {
-  if (!m || !n || m <= 0 || n <= 0) return 0
+var minPathSum = function (grid) {
+  if (!grid || grid.length == 0 || grid[0].length == 0) return null
 
-  return step(m, n, 0, 0)
+  return stepMinSum(0, 0, grid)
 }
 
-// current point, return the possibilities count
-const step = (m, n, curM, curN) => {
-  if (curM === m - 1 && curN === n - 1) return 1
-
-  let ways = 0
-
-  if (curM < m - 1) {
-    ways += step(m, n, curM + 1, curN)
-  }
-  if (curN < n - 1) {
-    ways += step(m, n, curM, curN + 1)
+// current point so on, return min sum after steps
+const stepMinSum = (m, n, grid) => {
+  if (m == grid.length - 1 && n == grid[0].length - 1) {
+    return grid[m][n]
   }
 
-  return ways
+  let minSumM = Infinity
+  if (m < grid.length - 1) {
+    minSumM = stepMinSum(m + 1, n, grid) + grid[m][n]
+  }
+  let minSumN = Infinity
+  if (n < grid[0].length - 1) {
+    minSumN = stepMinSum(m, n + 1, grid) + grid[m][n]
+  }
+  return Math.min(minSumM, minSumN)
 }
 
-console.log(uniquePaths(3, 7)) // answer: 28
+const grid1 = [
+  [1, 3, 1],
+  [1, 5, 1],
+  [4, 2, 1],
+]
+console.log(minPathSum(grid1)) // answer: 7
 
-console.log(uniquePaths(3, 2)) // answer: 3
+const grid2 = [
+  [1, 2, 3],
+  [4, 5, 6],
+]
+console.log(minPathSum(grid2)) // answer: 12
 
 /**
- * @param {number} m
- * @param {number} n
+ * @param {number[][]} grid
  * @return {number}
  */
-var uniquePathsDp = function (m, n) {
-  if (!m || !n || m <= 0 || n <= 0) return 0
+var minPathSumDp = function (grid) {
+  if (!grid || grid.length == 0 || grid[0].length == 0) return null
 
-  let Dp = new Array(m)
-  for (let i = 0; i < m; i++) {
-    Dp[i] = new Array(n).fill(0)
+  let M = grid.length
+  let N = grid[0].length
+  let Dp = new Array(M)
+  for (let i = 0; i < M; i++) {
+    Dp[i] = new Array(N)
   }
 
-  for (let i = m - 1; i >= 0; i--) {
-    for (let j = n - 1; j >= 0; j--) {
-      let ways = 0
-      if (i == m - 1 && j === n - 1) {
-        Dp[i][j] = 1
-      } else {
-        if (i < m - 1) {
-          ways += Dp[i + 1][j]
-        }
-        if (j < n - 1) {
-          ways += Dp[i][j + 1]
-        }
-        Dp[i][j] = ways
-      }
+  Dp[M - 1][N - 1] = grid[M - 1][N - 1]
+
+  for (let i = M - 2; i >= 0; i--) {
+    Dp[i][N - 1] = Dp[i + 1][N - 1] + grid[i][N - 1]
+  }
+  for (let i = N - 2; i >= 0; i--) {
+    Dp[M - 1][i] = Dp[M - 1][i + 1] + grid[M - 1][i]
+  }
+  for (let i = M - 2; i >= 0; i--) {
+    for (let j = N - 2; j >= 0; j--) {
+      Dp[i][j] = Math.min(Dp[i][j + 1], Dp[i + 1][j]) + grid[i][j]
     }
   }
 
   return Dp[0][0]
 }
+
+console.log(minPathSumDp(grid1)) // answer: 7
+console.log(minPathSumDp(grid2)) // answer: 7
