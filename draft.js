@@ -1,45 +1,71 @@
-// 31. Next Permutation
+// 62. Unique Paths
 
-// A permutation of an array of integers is an arrangement of its members into a sequence or linear order.
+// There is a robot on an m x n grid. The robot is initially located at the top-left corner (i.e., grid[0][0]). The robot tries to move to the bottom-right corner (i.e., grid[m - 1][n - 1]). The robot can only move either down or right at any point in time.
 
-// For example, for arr = [1,2,3], the following are all the permutations of arr: [1,2,3], [1,3,2], [2, 1, 3], [2, 3, 1], [3,1,2], [3,2,1].
-// The next permutation of an array of integers is the next lexicographically greater permutation of its integer. More formally, if all the permutations of the array are sorted in one container according to their lexicographical order, then the next permutation of that array is the permutation that follows it in the sorted container. If such arrangement is not possible, the array must be rearranged as the lowest possible order (i.e., sorted in ascending order).
+// Given the two integers m and n, return the number of possible unique paths that the robot can take to reach the bottom-right corner.
 
-// For example, the next permutation of arr = [1,2,3] is [1,3,2].
-// Similarly, the next permutation of arr = [2,3,1] is [3,1,2].
-// While the next permutation of arr = [3,2,1] is [1,2,3] because [3,2,1] does not have a lexicographical larger rearrangement.
-// Given an array of integers nums, find the next permutation of nums.
-
-// The replacement must be in place and use only constant extra memory.
-
-import swap from './methods/tool_functions/swap.js'
-
-const reverse = (arr, start, end) => {
-  while (start < end) {
-    swap(arr, start++, end--)
-  }
-}
+// The test cases are generated so that the answer will be less than or equal to 2 * 10^9.
 
 /**
- * @param {number[]} nums
- * @return {void} Do not return anything, modify nums in-place instead.
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
  */
-var nextPermutation = function (nums) {
-  if (!nums) return
+var uniquePaths = function (m, n) {
+  if (!m || !n || m <= 0 || n <= 0) return 0
 
-  let N = nums.length
-  let smallIndex = N - 2 // 找顺序对当中的小值
-  while (smallIndex >= 0 && nums[smallIndex] >= nums[smallIndex + 1]) {
-    smallIndex--
+  return step(m, n, 0, 0)
+}
+
+// current point, return the possibilities count
+const step = (m, n, curM, curN) => {
+  if (curM === m - 1 && curN === n - 1) return 1
+
+  let ways = 0
+
+  if (curM < m - 1) {
+    ways += step(m, n, curM + 1, curN)
+  }
+  if (curN < n - 1) {
+    ways += step(m, n, curM, curN + 1)
   }
 
-  if (smallIndex >= 0) {
-    let bigIndex = N - 1 // 后方逆序排列中刚好比小值大的那个值
-    while (bigIndex > smallIndex && nums[bigIndex] <= nums[smallIndex]) {
-      bigIndex--
+  return ways
+}
+
+console.log(uniquePaths(3, 7)) // answer: 28
+
+console.log(uniquePaths(3, 2)) // answer: 3
+
+/**
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var uniquePathsDp = function (m, n) {
+  if (!m || !n || m <= 0 || n <= 0) return 0
+
+  let Dp = new Array(m)
+  for (let i = 0; i < m; i++) {
+    Dp[i] = new Array(n).fill(0)
+  }
+
+  for (let i = m - 1; i >= 0; i--) {
+    for (let j = n - 1; j >= 0; j--) {
+      let ways = 0
+      if (i == m - 1 && j === n - 1) {
+        Dp[i][j] = 1
+      } else {
+        if (i < m - 1) {
+          ways += Dp[i + 1][j]
+        }
+        if (j < n - 1) {
+          ways += Dp[i][j + 1]
+        }
+        Dp[i][j] = ways
+      }
     }
-    swap(nums, smallIndex, bigIndex)
   }
 
-  reverse(nums, smallIndex + 1, N - 1)
+  return Dp[0][0]
 }
