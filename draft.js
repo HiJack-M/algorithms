@@ -1,79 +1,36 @@
-// 64. Minimum Path Sum
+// 238. Product of Array Except Self
 
-// Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right, which minimizes the sum of all numbers along its path.
+// Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
 
-// Note: You can only move either down or right at any point in time.
+// The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
 
-/**
- * @param {number[][]} grid
- * @return {number}
- */
-var minPathSum = function (grid) {
-  if (!grid || grid.length == 0 || grid[0].length == 0) return null
-
-  return stepMinSum(0, 0, grid)
-}
-
-// current point so on, return min sum after steps
-const stepMinSum = (m, n, grid) => {
-  if (m == grid.length - 1 && n == grid[0].length - 1) {
-    return grid[m][n]
-  }
-
-  let minSumM = Infinity
-  if (m < grid.length - 1) {
-    minSumM = stepMinSum(m + 1, n, grid) + grid[m][n]
-  }
-  let minSumN = Infinity
-  if (n < grid[0].length - 1) {
-    minSumN = stepMinSum(m, n + 1, grid) + grid[m][n]
-  }
-  return Math.min(minSumM, minSumN)
-}
-
-const grid1 = [
-  [1, 3, 1],
-  [1, 5, 1],
-  [4, 2, 1],
-]
-console.log(minPathSum(grid1)) // answer: 7
-
-const grid2 = [
-  [1, 2, 3],
-  [4, 5, 6],
-]
-console.log(minPathSum(grid2)) // answer: 12
+// You must write an algorithm that runs in O(n) time and without using the division operation.
 
 /**
- * @param {number[][]} grid
- * @return {number}
+ * @param {number[]} nums
+ * @return {number[]}
  */
-var minPathSumDp = function (grid) {
-  if (!grid || grid.length == 0 || grid[0].length == 0) return null
+var productExceptSelf = function (nums) {
+  if (!nums) return null
+  if (nums.length == 0) return []
 
-  let M = grid.length
-  let N = grid[0].length
-  let Dp = new Array(M)
-  for (let i = 0; i < M; i++) {
-    Dp[i] = new Array(N)
+  let ans = [] // calc leftProduct first
+  ans[0] = 1
+  for (let i = 1; i < nums.length; i++) {
+    ans[i] = ans[i - 1] * nums[i - 1]
   }
 
-  Dp[M - 1][N - 1] = grid[M - 1][N - 1]
-
-  for (let i = M - 2; i >= 0; i--) {
-    Dp[i][N - 1] = Dp[i + 1][N - 1] + grid[i][N - 1]
-  }
-  for (let i = N - 2; i >= 0; i--) {
-    Dp[M - 1][i] = Dp[M - 1][i + 1] + grid[M - 1][i]
-  }
-  for (let i = M - 2; i >= 0; i--) {
-    for (let j = N - 2; j >= 0; j--) {
-      Dp[i][j] = Math.min(Dp[i][j + 1], Dp[i + 1][j]) + grid[i][j]
-    }
+  let R = 1 // rightProduct
+  for (let i = nums.length - 1; i >= 0; i--) {
+    ans[i] = ans[i] * R
+    R = R * nums[i]
   }
 
-  return Dp[0][0]
+  return ans
 }
 
-console.log(minPathSumDp(grid1)) // answer: 7
-console.log(minPathSumDp(grid2)) // answer: 7
+const nums1 = [1, 2, 3, 4]
+console.log(productExceptSelf(nums1)) // [24,12,8,6]
+
+const nums2 = [-1, 1, 0, -3, 3]
+console.log(productExceptSelf(nums2)) // [0,0,9,0,0]
