@@ -1,59 +1,39 @@
-// 48. Rotate Image
+// 75. Sort Colors
 
-// You are given an n x n 2D matrix representing an image, rotate the image by 90 degrees (clockwise).
+// Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.
 
-// You have to rotate the image in-place, which means you have to modify the input 2D matrix directly. DO NOT allocate another 2D matrix and do the rotation.
+// We will use the integers 0, 1, and 2 to represent the color red, white, and blue, respectively.
+
+// You must solve this problem without using the library's sort function.
+
+import swap from './methods/tool_functions/swap.js'
 
 /**
- * @param {number[][]} matrix
- * @return {void} Do not return anything, modify matrix in-place instead.
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
  */
-var rotate = function (matrix) {
-  if (!matrix || matrix.length === 0 || matrix[0].length === 0) return
+var sortColors = function (nums) {
+  if (!nums || nums.length === 0) return
 
-  let n = matrix.length
-
-  for (let i = 0; i < Math.floor(n / 2); i++) {
-    for (let j = i; j < n - 1 - i; j++) {
-      circleSwap(matrix, i, j)
+  let l = -1
+  let r = nums.length
+  let i = 0
+  while (i < r) {
+    if (nums[i] < 1) {
+      swap(nums, ++l, i++)
+    } else if (nums[i] === 1) {
+      i++
+    } else {
+      swap(nums, --r, i)
     }
   }
+
+  // TODO: do not return
+  console.log(nums)
 }
 
-const circleSwap = (matrix, x, y) => {
-  let n = matrix.length
-  let temp = matrix[x][y]
-  matrix[x][y] = matrix[n - 1 - y][x]
-  matrix[n - 1 - y][x] = matrix[n - 1 - x][n - 1 - y]
-  matrix[n - 1 - x][n - 1 - y] = matrix[y][n - 1 - x]
-  matrix[y][n - 1 - x] = temp
-}
+const nums1 = [2, 0, 2, 1, 1, 0]
+sortColors(nums1)
 
-const matrix1 = [
-  [1, 2, 3],
-  [4, 5, 6],
-  [7, 8, 9],
-]
-console.log(rotate(matrix1))
-
-const matrix2 = [
-  [5, 1, 9, 11],
-  [2, 4, 8, 10],
-  [13, 3, 6, 7],
-  [15, 14, 12, 16],
-]
-console.log(rotate(matrix2))
-
-// find the relation and connection within the four point
-
-// [0][0]  [0][3]
-// [3][0]  [3][3]
-
-// [1][1]  [1][2]
-// [2][1]  [2][2]
-
-// [0][1]  [1][3]
-// [2][0]  [3][2]
-
-// [x][y]  [y][n-1-x]
-// [n-1-y][x]  [n-1-x][n-1-y]
+const nums2 = [2, 0, 1]
+sortColors(nums2)

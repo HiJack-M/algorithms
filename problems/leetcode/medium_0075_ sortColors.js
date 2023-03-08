@@ -6,6 +6,8 @@
 
 // You must solve this problem without using the library's sort function.
 
+import swap from '../../methods/tool_functions/swap.js'
+
 /**
  * @param {number[]} nums
  * @return {void} Do not return anything, modify nums in-place instead.
@@ -24,10 +26,13 @@ var sortColors = function (nums) {
       pivot++
     }
   }
+
+  // TODO: do not return
+  console.log(nums)
 }
 
-const swap = (arr, i, j) => {
-  let temp = arr[i]
-  arr[i] = arr[j]
-  arr[j] = temp
-}
+const nums1 = [2, 0, 2, 1, 1, 0]
+sortColors(nums1)
+
+const nums2 = [2, 0, 1]
+sortColors(nums2)
