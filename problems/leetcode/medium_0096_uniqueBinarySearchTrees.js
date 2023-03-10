@@ -62,14 +62,11 @@ var numTreesDp = function (n) {
   return Dp[0][n - 1]
 }
 
-console.log(numTreesDp(3))
-console.log(numTreesDp(4))
-
 /**
  * @param {number} n
  * @return {number}
  */
-var numTrees = function (n) {
+var numTreesBruteForce = function (n) {
   if (n <= 0) return 0
 
   return possibilities(1, n)
