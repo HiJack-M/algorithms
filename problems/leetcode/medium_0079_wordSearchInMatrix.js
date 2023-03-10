@@ -126,49 +126,47 @@ var existStandardBC = function (board, word) {
     visitedGrid[i].fill(false)
   }
 
-  let exist = false
-  for (let i = 0; i < m; i++) {
-    for (let j = 0; j < n; j++) {
-      let curExist = check(board, word, 0, i, j, visitedGrid)
-      if (curExist) {
-        exist = curExist
-        break
-      }
-    }
-  }
-  return exist
-}
-
-const check = (board, word, index, x, y, visitedGrid) => {
-  if (word[index] != board[x][y]) {
-    return false
-  } else if (index == word.length - 1) {
-    return true
-  }
-
-  visitedGrid[x][y] = true
-
-  let exist = false
   let direction = [
     [1, 0],
     [-1, 0],
     [0, 1],
     [0, -1],
   ]
-  for (const [dx, dy] of direction) {
-    let newX = x + dx
-    let newY = y + dy
-    if (newX >= 0 && newX < board.length && newY >= 0 && newY < board[0].length) {
-      if (!visitedGrid[newX][newY]) {
-        let curExist = check(board, word, index + 1, newX, newY, visitedGrid)
+
+  const check = (index, x, y, visitedGrid) => {
+    if (word[index] != board[x][y]) return false
+
+    // precondition：board[x][y] == word[index]
+    if (index == word.length - 1) return true
+
+    visitedGrid[x][y] = true
+
+    let exist = false
+    for (const [dx, dy] of direction) {
+      let newX = x + dx
+      let newY = y + dy
+      if (newX >= 0 && newX < m && newY >= 0 && newY < n && !visitedGrid[newX][newY]) {
+        let curExist = check(index + 1, newX, newY, visitedGrid)
         if (curExist) {
           exist = curExist
           break
         }
       }
     }
+
+    visitedGrid[x][y] = false
+    return exist
   }
 
-  visitedGrid[x][y] = false
+  let exist = false
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      let curExist = check(0, i, j, visitedGrid)
+      if (curExist) {
+        exist = curExist
+        break
+      }
+    }
+  }
   return exist
 }
