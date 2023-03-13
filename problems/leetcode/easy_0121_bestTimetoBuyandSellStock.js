@@ -31,20 +31,19 @@ var maxProfitFailAC = function (prices) {
 
 // 贪心算法
 var maxProfit = function (prices) {
-  let max = 0
-  if (!prices || prices.length < 2) return max
+  if (!prices || prices.length < 2) return 0
 
-  // 每天的卖出交易，都看交易日 i 前的最低价，如果在那一天 minPriceDay 买入就是 i 日卖出能获取最大收益的 minPriceDay
-  let minPrice = Infinity
+  let curMin = prices[0]
+  let maxProfit = 0
   for (let i = 0; i < prices.length; i++) {
-    if (prices[i] < minPrice) {
-      minPrice = prices[i]
-    } else if (prices[i] - minPrice > max) {
-      max = prices[i] - minPrice
-    }
+    if (prices[i] < curMin) {
+      curMin = prices[i]
+    } else if (prices[i] > curMin) {
+      maxProfit = Math.max(maxProfit, prices[i] - curMin)
+    } // 当天价格与之前的最低价相同则不动作
   }
 
-  return max
+  return maxProfit
 }
 
 // 动态规划思想
@@ -62,3 +61,9 @@ var maxProfitDp = function (prices) {
 
   return max
 }
+
+const prices1 = [7, 1, 5, 3, 6, 4] // answer: 5
+console.log(maxProfit(prices1))
+
+const prices2 = [7, 6, 4, 3, 1] // answer: 0
+console.log(maxProfit(prices2))
