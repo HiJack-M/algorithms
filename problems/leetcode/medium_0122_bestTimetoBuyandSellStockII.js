@@ -13,6 +13,42 @@
 var maxProfit = function (prices) {
   if (!prices || prices.length < 2) return 0
 
+  let profit = 0
+  let hold = null
+  for (let i = 0; i < prices.length; i++) {
+    if (hold === null) {
+      // 手里没有股票就买当天的
+      hold = prices[i]
+    }
+    // 只要出现峰值就卖（第二天会跌）
+    if (i == prices.length - 1 || prices[i + 1] < prices[i]) {
+      profit += prices[i] - hold
+      hold = null
+    }
+  }
+
+  return profit
+}
+
+const prices1 = [7, 1, 5, 3, 6, 4] // answer: 7
+console.log(maxProfit(prices1))
+
+const prices2 = [1, 2, 3, 4, 5] // answer: 4
+console.log(maxProfit(prices2))
+
+const prices3 = [7, 6, 4, 3, 1] // answer: 0
+console.log(maxProfit(prices3))
+
+const prices4 = [2, 1, 2, 0, 1] // answer: 2
+console.log(maxProfit(prices4))
+
+/**
+ * @param {number[]} prices
+ * @return {number}
+ */
+var maxProfit_old = function (prices) {
+  if (!prices || prices.length < 2) return 0
+
   let lowest = prices[0]
   let profit = 0
 
@@ -39,12 +75,6 @@ var maxProfit = function (prices) {
 
   return profit
 }
-
-const prices1 = [7, 1, 5, 3, 6, 4]
-console.log(maxProfit(prices1))
-
-const prices2 = [1, 2, 3, 4, 5]
-console.log(maxProfit(prices2))
 
 /**
  * @param {number[]} prices
