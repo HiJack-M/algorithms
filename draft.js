@@ -21,21 +21,26 @@
 var detectCycle = function (head) {
   if (!head || !head.next) return null
 
-  let slow = head.next
+  // why should they move forward once?
   let fast = head.next.next
+  let slow = head.next
 
-  while (fast !== null && fast.next !== null) {
+  while (fast && fast.next) {
     if (fast == slow) break
-    slow = slow.next
     fast = fast.next.next
+    slow = slow.next
   }
 
-  if (fast === null || fast.next === null) return null
+  if (!fast || !fast.next) {
+    // no cycle
+    return null
+  }
 
-  fast = head
-  while (slow !== fast) {
-    slow = slow.next
+  // has cycle
+  fast = head // reset fast
+  while (fast != slow) {
     fast = fast.next
+    slow = slow.next
   }
 
   return fast
