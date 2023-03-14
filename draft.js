@@ -1,54 +1,40 @@
-// 226. Invert Binary Tree
+// 234. Palindrome Linked List
 
-// Given the root of a binary tree, invert the tree, and return its root.
+// Given the head of a singly linked list, return true if it is a palindrome or false otherwise.
 
 /**
- * Definition for a binary tree node.
- * function TreeNode(val, left, right) {
+ * Definition for singly-linked list.
+ * function ListNode(val, next) {
  *     this.val = (val===undefined ? 0 : val)
- *     this.left = (left===undefined ? null : left)
- *     this.right = (right===undefined ? null : right)
+ *     this.next = (next===undefined ? null : next)
  * }
  */
 /**
- * @param {TreeNode} root
- * @return {TreeNode}
+ * @param {ListNode} head
+ * @return {boolean}
  */
-var invertTree = function (root) {
-  if (!root) return null
+var isPalindrome = function (head) {
+  if (!head || head.length < 2) return true
 
-  invertProcess(root)
-  return root
-}
-
-const invertProcess = (node) => {
-  let left = node.left
-  node.left = node.right
-  node.right = left
-
-  if (node.left) invertProcess(node.left)
-  if (node.right) invertProcess(node.right)
-}
-
-/**
- * @param {TreeNode} root
- * @return {TreeNode}
- */
-var invertTree_iteration = function (root) {
-  if (!root) return null
-
+  let slow = head
+  let fast = head
   let help = []
-  help.push(root)
-  while (help.length > 0) {
-    let curNode = help.shift()
-    if (curNode.left || curNode.right) {
-      let left = curNode.left
-      curNode.left = curNode.right
-      curNode.right = left
-    }
 
-    if (curNode.left) help.push(curNode.left)
-    if (curNode.right) help.push(curNode.right)
+  while (fast !== null && fast.next !== null) {
+    help.push(slow.val)
+    slow = slow.next
+    fast = fast.next.next
   }
-  return root
+
+  if (fast !== null && fast.next === null) {
+    // linked list is odd
+    slow = slow.next // skip center node
+  }
+
+  while (help.length > 0) {
+    if (slow.val !== help.pop()) return false
+    slow = slow.next
+  }
+
+  return true
 }
