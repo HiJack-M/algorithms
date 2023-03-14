@@ -1,40 +1,42 @@
-// 234. Palindrome Linked List
+// 142. Linked List Cycle II
 
-// Given the head of a singly linked list, return true if it is a palindrome or false otherwise.
+// Given the head of a linked list, return the node where the cycle begins. If there is no cycle, return null.
+
+// There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer. Internally, pos is used to denote the index of the node that tail's next pointer is connected to (0-indexed). It is -1 if there is no cycle. Note that pos is not passed as a parameter.
+
+// Do not modify the linked list.
 
 /**
  * Definition for singly-linked list.
- * function ListNode(val, next) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.next = (next===undefined ? null : next)
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
  * }
  */
+
 /**
  * @param {ListNode} head
- * @return {boolean}
+ * @return {ListNode}
  */
-var isPalindrome = function (head) {
-  if (!head || head.length < 2) return true
+var detectCycle = function (head) {
+  if (!head || !head.next) return null
 
-  let slow = head
-  let fast = head
-  let help = []
+  let slow = head.next
+  let fast = head.next.next
 
   while (fast !== null && fast.next !== null) {
-    help.push(slow.val)
+    if (fast == slow) break
     slow = slow.next
     fast = fast.next.next
   }
 
-  if (fast !== null && fast.next === null) {
-    // linked list is odd
-    slow = slow.next // skip center node
-  }
+  if (fast === null || fast.next === null) return null
 
-  while (help.length > 0) {
-    if (slow.val !== help.pop()) return false
+  fast = head
+  while (slow !== fast) {
     slow = slow.next
+    fast = fast.next
   }
 
-  return true
+  return fast
 }

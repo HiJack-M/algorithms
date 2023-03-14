@@ -21,6 +21,7 @@
 var detectCycle = function (head) {
   if (!head || !head.next) return null
 
+  // why should they move forward once?
   let fast = head.next.next
   let slow = head.next
 
@@ -33,13 +34,13 @@ var detectCycle = function (head) {
   if (!fast || !fast.next) {
     // no cycle
     return null
-  } else {
-    // has cycle
-    fast = head // reset fast
-    while (fast != slow) {
-      fast = fast.next
-      slow = slow.next
-    }
+  }
+
+  // has cycle
+  fast = head // reset fast
+  while (fast != slow) {
+    fast = fast.next
+    slow = slow.next
   }
 
   return fast
