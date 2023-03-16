@@ -25,8 +25,7 @@ const mergeSortNode = (node) => {
 
   let fast = node.next
   let slow = node
-  while (fast) {
-    if (!fast.next) break
+  while (fast && fast.next) {
     fast = fast.next.next
     slow = slow.next
   }
