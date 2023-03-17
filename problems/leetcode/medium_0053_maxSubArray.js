@@ -28,3 +28,20 @@ const nums3 = [5, 4, -1, 7, 8]
 console.log(maxSubArray(nums1))
 console.log(maxSubArray(nums2))
 console.log(maxSubArray(nums3))
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxSubArray_20230317 = function (nums) {
+  if (!nums || nums.length == 0) return 0
+  let ans = nums[0]
+  let curMax = nums[0]
+
+  for (let i = 1; i < nums.length; i++) {
+    curMax = Math.max(curMax + nums[i], nums[i])
+    ans = Math.max(ans, curMax)
+  }
+
+  return ans
+}
