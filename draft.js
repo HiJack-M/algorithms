@@ -1,29 +1,29 @@
-// 152. Maximum Product Subarray
+// 283. Move Zeroes
 
-// Given an integer array nums, find a subarray that has the largest product, and return the product.
+// Given an integer array nums, move all 0's to the end of it while maintaining the relative order of the non-zero elements.
 
-// The test cases are generated so that the answer will fit in a 32-bit integer.
+// Note that you must do this in-place without making a copy of the array.
+
+import swap from './methods/tool_functions/swap.js'
 
 /**
  * @param {number[]} nums
- * @return {number}
+ * @return {void} Do not return anything, modify nums in-place instead.
  */
-var maxProduct = function (nums) {
-  if (!nums || nums.length === 0) return 0
+var moveZeroes = function (nums) {
+  if (!nums || nums.length < 2) return
 
-  let ans = nums[0]
-  let min = nums[0] // 以每个点结尾的最小积（这样后面就可以延续了）
-  let max = nums[0] // 以每个点结尾的最大积
-  for (let i = 1; i < nums.length; i++) {
-    let curMin = Math.min(nums[i], Math.min(min * nums[i], max * nums[i]))
-    let curMax = Math.max(nums[i], Math.max(min * nums[i], max * nums[i]))
-    min = curMin
-    max = curMax
-    ans = Math.max(ans, max)
+  let firstZeroIndex = -1
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] !== 0 && firstZeroIndex !== -1) {
+      swap(nums, i, firstZeroIndex)
+      firstZeroIndex++
+    } else if (nums[i] === 0 && firstZeroIndex === -1) {
+      firstZeroIndex = i
+    }
   }
-
-  return ans
 }
 
-const nums1 = [2, 3, -2, 4]
-console.log(maxProduct(nums1))
+const nums1 = [0, 1, 0, 3, 12]
+moveZeroes(nums1)
+console.log(nums1)
