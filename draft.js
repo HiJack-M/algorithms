@@ -1,51 +1,91 @@
-// 198. House Robber
+// 207. Course Schedule
 
-// You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security systems connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
+// There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
 
-// Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.
+// For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1.
+// Return true if you can finish all courses. Otherwise, return false.
 
-/**
- * @param {number[]} nums
- * @return {number}
- */
-var rob = function (nums) {
-  if (!nums || nums.length === 0) return null
-
-  let N = nums.length
-  let Dp = new Array(N + 1).fill(0)
-  Dp[N - 1] = nums[N - 1]
-
-  for (let i = N - 2; i >= 0; i--) {
-    Dp[i] = Math.max(nums[i] + Dp[i + 2], Dp[i + 1])
+class Node {
+  constructor(val) {
+    this.value = val
+    this.in = 0
+    this.next = []
   }
-
-  return Dp[0]
 }
 
-const nums1 = [1, 2, 3, 1]
-console.log(rob(nums1))
-
-const nums2 = [2, 7, 9, 3, 1]
-console.log(rob(nums2))
+class Graph {
+  constructor() {
+    this.nodes = new Map() // key: val, value: node
+  }
+}
 
 /**
- * @param {number[]} nums
- * @return {number}
- *  Time Limited Exceed
+ * @param {number} numCourses
+ * @param {number[][]} prerequisites
+ * @return {boolean}
  */
-var rob_bruteforce = function (nums) {
-  if (!nums || nums.length === 0) return null
+var canFinish = function (numCourses, prerequisites) {
+  if (!prerequisites || prerequisites.length < 2) return true
 
-  // 当前轮到 index 做决定要不要
-  // 返回值是当前及之后做完决定的最大值
-  const process = (index) => {
-    if (index == nums.length) return 0
-    if (index == nums.length - 1) return nums[nums.length - 1]
+  const courseGraph = new Graph()
+  for (let i = 0; i < prerequisites.length; i++) {
+    let item = prerequisites[i]
 
-    let yes = nums[index] + process(index + 2)
-    let no = process(index + 1)
-    return Math.max(yes, no)
+    let inNode
+    if (courseGraph.nodes.has(item[1])) {
+      inNode = courseGraph.nodes.get(item[1])
+    } else {
+      inNode = new Node(item[1])
+      courseGraph.nodes.set(item[1], inNode)
+    }
+
+    let nextNode
+    if (courseGraph.nodes.has(item[0])) {
+      nextNode = courseGraph.nodes.get(item[0])
+    } else {
+      nextNode = new Node(item[0])
+      courseGraph.nodes.set(item[0], nextNode)
+    }
+
+    inNode.next.push(nextNode)
+    nextNode.in++
   }
 
-  return process(0, nums)
+  let needPrerequisites = courseGraph.nodes.size
+
+  let zeroInNode = []
+  for (let node of courseGraph.nodes.values()) {
+    if (node.in === 0) {
+      zeroInNode.push(node)
+    }
+  }
+
+  let count = 0
+
+  while (zeroInNode.length > 0) {
+    let inNode = zeroInNode.shift()
+    count++
+
+    for (let i = 0; i < inNode.next.length; i++) {
+      let nextNode = inNode.next[i]
+      nextNode.in--
+
+      if (nextNode.in === 0) {
+        zeroInNode.push(nextNode)
+      }
+    }
+  }
+
+  return needPrerequisites === count
 }
+
+let numCourses1 = 2
+const prerequisites1 = [[1, 0]]
+console.log(canFinish(numCourses1, prerequisites1))
+
+let numCourses2 = 2
+const prerequisites2 = [
+  [1, 0],
+  [0, 1],
+]
+console.log(canFinish(numCourses2, prerequisites2))
