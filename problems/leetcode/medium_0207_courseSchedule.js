@@ -25,7 +25,7 @@ class Graph {
  * @return {boolean}
  */
 var canFinish = function (numCourses, prerequisites) {
-  if (!prerequisites || prerequisites.length == 0) return true
+  if (!prerequisites || prerequisites.length < 2) return true
 
   let courseGraph = new Graph()
   for (let [to, from] of prerequisites) {
