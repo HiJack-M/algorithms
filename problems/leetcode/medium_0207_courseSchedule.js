@@ -52,6 +52,7 @@ var canFinish = function (numCourses, prerequisites) {
 
   let count = 0
 
+  // 若有循环，该循环一开始就找不到入度为 0 的点，不会进入 while
   while (zeroInQueue.length > 0) {
     let cur = zeroInQueue.shift()
     count++
