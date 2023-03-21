@@ -14,7 +14,7 @@ var wiggleSort = function (nums) {
   if (!nums || nums.length < 2) return
 
   let N = nums.length
-  quickSelect(nums, 0, nums.length, parseInt(N / 2)) // 放置中位数
+  quickSelect(nums, 0, N, parseInt(N / 2)) // 放置中位数
   let mid = nums[parseInt(N / 2)]
 
   // 3-way-partition (荷兰国旗)
@@ -31,7 +31,7 @@ var wiggleSort = function (nums) {
     }
   }
 
-  // 为了在穿插时不让相等的元素摆在一起
+  // 为了在穿插时不让相等的元素摆在一起，把前半部分逆序
   p1 = 0
   p2 = Math.ceil(N / 2) - 1
   while (p1 < p2) {
