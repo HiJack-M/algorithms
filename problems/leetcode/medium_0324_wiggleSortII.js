@@ -55,7 +55,7 @@ const quickSelect = (arr, start, end, n) => {
   if (start == end) return
 
   let t = arr[end - 1]
-  let i = start
+  let i = start // 大于区第一个数
   let j = start
 
   while (j < end) {
