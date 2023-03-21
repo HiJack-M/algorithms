@@ -1,91 +1,56 @@
-// 207. Course Schedule
+// 215. Kth Largest Element in an Array
 
-// There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
+// Given an integer array nums and an integer k, return the kth largest element in the array.
 
-// For example, the pair [0, 1], indicates that to take course 0 you have to first take course 1.
-// Return true if you can finish all courses. Otherwise, return false.
+// Note that it is the kth largest element in the sorted order, not the kth distinct element.
 
-class Node {
-  constructor(val) {
-    this.value = val
-    this.in = 0
-    this.next = []
-  }
-}
+// You must solve it in O(n) time complexity.
 
-class Graph {
-  constructor() {
-    this.nodes = new Map() // key: val, value: node
-  }
-}
+import swap from './methods/tool_functions/swap.js'
 
 /**
- * @param {number} numCourses
- * @param {number[][]} prerequisites
- * @return {boolean}
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
  */
-var canFinish = function (numCourses, prerequisites) {
-  if (!prerequisites || prerequisites.length < 2) return true
+var findKthLargest = function (nums, k) {
+  if (!nums || nums.length === 0 || k < 1) return null
 
-  const courseGraph = new Graph()
-  for (let i = 0; i < prerequisites.length; i++) {
-    let item = prerequisites[i]
-
-    let inNode
-    if (courseGraph.nodes.has(item[1])) {
-      inNode = courseGraph.nodes.get(item[1])
-    } else {
-      inNode = new Node(item[1])
-      courseGraph.nodes.set(item[1], inNode)
-    }
-
-    let nextNode
-    if (courseGraph.nodes.has(item[0])) {
-      nextNode = courseGraph.nodes.get(item[0])
-    } else {
-      nextNode = new Node(item[0])
-      courseGraph.nodes.set(item[0], nextNode)
-    }
-
-    inNode.next.push(nextNode)
-    nextNode.in++
-  }
-
-  let needPrerequisites = courseGraph.nodes.size
-
-  let zeroInNode = []
-  for (let node of courseGraph.nodes.values()) {
-    if (node.in === 0) {
-      zeroInNode.push(node)
-    }
-  }
-
-  let count = 0
-
-  while (zeroInNode.length > 0) {
-    let inNode = zeroInNode.shift()
-    count++
-
-    for (let i = 0; i < inNode.next.length; i++) {
-      let nextNode = inNode.next[i]
-      nextNode.in--
-
-      if (nextNode.in === 0) {
-        zeroInNode.push(nextNode)
-      }
-    }
-  }
-
-  return needPrerequisites === count
+  return process(nums, 0, nums.length - 1, nums.length - k)
 }
 
-let numCourses1 = 2
-const prerequisites1 = [[1, 0]]
-console.log(canFinish(numCourses1, prerequisites1))
+const process = (nums, l, r, index) => {
+  let i = partition(nums, l, r)
+  if (i === index) return nums[i]
+  if (i < index) return process(nums, i + 1, r, index)
+  if (i > index) return process(nums, l, i - 1, index)
+}
 
-let numCourses2 = 2
-const prerequisites2 = [
-  [1, 0],
-  [0, 1],
-]
-console.log(canFinish(numCourses2, prerequisites2))
+const partition = (nums, l, r) => {
+  if (l === r) return l
+
+  let pivot = nums[r]
+  let smallI = l - 1
+  let bigI = r + 1
+  let p = l
+
+  while (p < bigI) {
+    if (nums[p] < pivot) {
+      swap(nums, ++smallI, p++)
+    } else if (nums[p] === pivot) {
+      p++
+    } else {
+      swap(nums, --bigI, p)
+    }
+  }
+
+  return smallI + 1
+}
+
+const nums1 = [3, 2, 1, 5, 6, 4]
+let k1 = 2
+console.log(findKthLargest(nums1, k1))
+
+const nums2 = [3, 2, 3, 1, 2, 4, 5, 5, 6]
+let k2 = 4
+console.log(findKthLargest(nums2, k2))

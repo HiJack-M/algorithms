@@ -6,6 +6,8 @@
 
 // You must solve it in O(n) time complexity.
 
+import swap from '../../methods/tool_functions/swap.js'
+
 /**
  * @param {number[]} nums
  * @param {number} k
@@ -18,13 +20,9 @@ var findKthLargest = function (nums, k) {
 
 const process = (nums, l, r, index) => {
   let i = partition(nums, l, r)
-  if (i == index) {
-    return nums[i]
-  } else if (i < index) {
-    return process(nums, i + 1, r, index)
-  } else {
-    return process(nums, l, i - 1, index)
-  }
+  if (i == index) return nums[i]
+  if (i < index) return process(nums, i + 1, r, index)
+  else return process(nums, l, i - 1, index)
 }
 
 const partition = (nums, l, r) => {
@@ -44,12 +42,10 @@ const partition = (nums, l, r) => {
   return smallI + 1
 }
 
-const swap = (arr, i, j) => {
-  let temp = arr[i]
-  arr[i] = arr[j]
-  arr[j] = temp
-}
+const nums1 = [3, 2, 1, 5, 6, 4]
+let k1 = 2
+console.log(findKthLargest(nums1, k1))
 
-const arr1 = [3, 2, 1, 5, 6, 4]
-
-console.log(findKthLargest(arr1, 2))
+const nums2 = [3, 2, 3, 1, 2, 4, 5, 5, 6]
+let k2 = 4
+console.log(findKthLargest(nums2, k2))
