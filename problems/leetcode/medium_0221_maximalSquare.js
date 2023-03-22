@@ -7,54 +7,56 @@
  * @return {number}
  */
 var maximalSquare = function (matrix) {
-  if (!matrix || matrix.length == 0 || matrix[0].length == 0) return 0
+  if (!matrix || matrix.length === 0 || matrix[0].length === 0) return 0
 
-  let M = matrix.length
-  let N = matrix[0].length
-  let Dp = new Array(M)
-  for (let i = 0; i < M; i++) {
-    Dp[i] = new Array(N)
-    Dp[i].fill(0)
+  let ans = 0
+  let m = matrix.length
+  let n = matrix[0].length
+
+  // the area starting from i
+  let Dp = new Array(m)
+  for (let i = 0; i < m; i++) {
+    Dp[i] = new Array(n).fill(0)
   }
 
-  let max = 0
+  // fill the last row
+  for (let i = 0; i < n; i++) {
+    Dp[m - 1][i] = matrix[m - 1][i] === '1' ? 1 : 0
+    ans = Math.max(ans, Dp[m - 1][i])
+  }
+  // fill the last colume
+  for (let i = 0; i < m; i++) {
+    Dp[i][n - 1] = matrix[i][n - 1] === '1' ? 1 : 0
+    ans = Math.max(ans, Dp[i][n - 1])
+  }
 
-  for (let i = 0; i < M; i++) {
-    Dp[i][0] = matrix[i][0] == '1' ? 1 : 0
-    if (Dp[i][0] > max) {
-      max = Dp[i][0]
-    }
-  }
-  for (let j = 1; j < N; j++) {
-    Dp[0][j] = matrix[0][j] == '1' ? 1 : 0
-    if (Dp[0][j] > max) {
-      max = Dp[0][j]
-    }
-  }
-  for (let i = 1; i < M; i++) {
-    for (let j = 1; j < N; j++) {
-      if (matrix[i][j] == '0') {
-        Dp[i][j] = 0
-      } else {
-        // Dp[i][j] = 1
-        if (matrix[i - 1][j - 1] == '1' && matrix[i - 1][j] == '1' && matrix[i][j - 1] == '1') {
-          Dp[i][j] = Math.pow(
-            Math.sqrt(Math.min(Dp[i - 1][j - 1], Dp[i - 1][j], Dp[i][j - 1])) + 1,
-            2
-          )
-        } else {
+  for (let i = m - 2; i >= 0; i--) {
+    for (let j = n - 2; j >= 0; j--) {
+      // if is '0', continue
+      if (matrix[i][j] !== '0') {
+        if (matrix[i + 1][j + 1] === '0') {
           Dp[i][j] = 1
+        } else {
+          let minArea = Math.min(Dp[i][j + 1], Dp[i + 1][j], Dp[i + 1][j + 1])
+          Dp[i][j] = Math.pow(Math.sqrt(minArea) + 1, 2)
         }
-      }
-      if (Dp[i][j] > max) {
-        max = Dp[i][j]
+        ans = Math.max(ans, Dp[i][j])
       }
     }
   }
-  return max
+
+  return ans
 }
 
 const matrix1 = [
+  ['1', '0', '1', '0', '0'],
+  ['1', '0', '1', '1', '1'],
+  ['1', '1', '1', '1', '1'],
+  ['1', '0', '0', '1', '0'],
+]
+console.log(maximalSquare(matrix1))
+
+const matrix2 = [
   ['1', '0', '1', '0', '0', '1', '1', '1', '0'],
   ['1', '1', '1', '0', '0', '0', '0', '0', '1'],
   ['0', '0', '1', '1', '0', '0', '0', '1', '1'],
@@ -66,5 +68,4 @@ const matrix1 = [
   ['0', '1', '1', '1', '1', '0', '0', '1', '0'],
   ['1', '0', '0', '1', '1', '1', '0', '0', '0'],
 ]
-
-console.log(maximalSquare(matrix1))
+console.log(maximalSquare(matrix2))

@@ -1,56 +1,71 @@
-// 215. Kth Largest Element in an Array
+// 221. Maximal Square
 
-// Given an integer array nums and an integer k, return the kth largest element in the array.
-
-// Note that it is the kth largest element in the sorted order, not the kth distinct element.
-
-// You must solve it in O(n) time complexity.
-
-import swap from './methods/tool_functions/swap.js'
+// Given an m x n binary matrix filled with 0's and 1's, find the largest square containing only 1's and return its area.
 
 /**
- * @param {number[]} nums
- * @param {number} k
+ * @param {character[][]} matrix
  * @return {number}
  */
-var findKthLargest = function (nums, k) {
-  if (!nums || nums.length === 0 || k < 1) return null
+var maximalSquare = function (matrix) {
+  if (!matrix || matrix.length === 0 || matrix[0].length === 0) return 0
 
-  return process(nums, 0, nums.length - 1, nums.length - k)
-}
+  let ans = 0
+  let m = matrix.length
+  let n = matrix[0].length
 
-const process = (nums, l, r, index) => {
-  let i = partition(nums, l, r)
-  if (i === index) return nums[i]
-  if (i < index) return process(nums, i + 1, r, index)
-  if (i > index) return process(nums, l, i - 1, index)
-}
+  // the area starting from i
+  let Dp = new Array(m)
+  for (let i = 0; i < m; i++) {
+    Dp[i] = new Array(n).fill(0)
+  }
 
-const partition = (nums, l, r) => {
-  if (l === r) return l
+  // fill the last row
+  for (let i = 0; i < n; i++) {
+    Dp[m - 1][i] = matrix[m - 1][i] === '1' ? 1 : 0
+    ans = Math.max(ans, Dp[m - 1][i])
+  }
+  // fill the last colume
+  for (let i = 0; i < m; i++) {
+    Dp[i][n - 1] = matrix[i][n - 1] === '1' ? 1 : 0
+    ans = Math.max(ans, Dp[i][n - 1])
+  }
 
-  let pivot = nums[r]
-  let smallI = l - 1
-  let bigI = r + 1
-  let p = l
-
-  while (p < bigI) {
-    if (nums[p] < pivot) {
-      swap(nums, ++smallI, p++)
-    } else if (nums[p] === pivot) {
-      p++
-    } else {
-      swap(nums, --bigI, p)
+  for (let i = m - 2; i >= 0; i--) {
+    for (let j = n - 2; j >= 0; j--) {
+      // if is '0', continue
+      if (matrix[i][j] !== '0') {
+        if (matrix[i + 1][j + 1] === '0') {
+          Dp[i][j] = 1
+        } else {
+          let minArea = Math.min(Dp[i][j + 1], Dp[i + 1][j], Dp[i + 1][j + 1])
+          Dp[i][j] = Math.pow(Math.sqrt(minArea) + 1, 2)
+        }
+        ans = Math.max(ans, Dp[i][j])
+      }
     }
   }
 
-  return smallI + 1
+  return ans
 }
 
-const nums1 = [3, 2, 1, 5, 6, 4]
-let k1 = 2
-console.log(findKthLargest(nums1, k1))
+const matrix1 = [
+  ['1', '0', '1', '0', '0'],
+  ['1', '0', '1', '1', '1'],
+  ['1', '1', '1', '1', '1'],
+  ['1', '0', '0', '1', '0'],
+]
+console.log(maximalSquare(matrix1))
 
-const nums2 = [3, 2, 3, 1, 2, 4, 5, 5, 6]
-let k2 = 4
-console.log(findKthLargest(nums2, k2))
+const matrix2 = [
+  ['1', '0', '1', '0', '0', '1', '1', '1', '0'],
+  ['1', '1', '1', '0', '0', '0', '0', '0', '1'],
+  ['0', '0', '1', '1', '0', '0', '0', '1', '1'],
+  ['0', '1', '1', '0', '0', '1', '0', '0', '1'],
+  ['1', '1', '0', '1', '1', '0', '0', '1', '0'],
+  ['0', '1', '1', '1', '1', '1', '1', '0', '1'],
+  ['1', '0', '1', '1', '1', '0', '0', '1', '0'],
+  ['1', '1', '1', '0', '1', '0', '0', '0', '1'],
+  ['0', '1', '1', '1', '1', '0', '0', '1', '0'],
+  ['1', '0', '0', '1', '1', '1', '0', '0', '0'],
+]
+console.log(maximalSquare(matrix2))
