@@ -1,71 +1,56 @@
-// 221. Maximal Square
+// 240. Search a 2D Matrix II
 
-// Given an m x n binary matrix filled with 0's and 1's, find the largest square containing only 1's and return its area.
+// Write an efficient algorithm that searches for a value target in an m x n integer matrix matrix. This matrix has the following properties:
+
+// Integers in each row are sorted in ascending from left to right.
+// Integers in each column are sorted in ascending from top to bottom.
 
 /**
- * @param {character[][]} matrix
- * @return {number}
+ * @param {number[][]} matrix
+ * @param {number} target
+ * @return {boolean}
  */
-var maximalSquare = function (matrix) {
-  if (!matrix || matrix.length === 0 || matrix[0].length === 0) return 0
+var searchMatrix = function (matrix, target) {
+  if (!matrix || matrix.length === 0 || matrix[0].length === 0 || !target) return false
 
-  let ans = 0
   let m = matrix.length
   let n = matrix[0].length
 
-  // the area starting from i
-  let Dp = new Array(m)
-  for (let i = 0; i < m; i++) {
-    Dp[i] = new Array(n).fill(0)
-  }
-
-  // fill the last row
-  for (let i = 0; i < n; i++) {
-    Dp[m - 1][i] = matrix[m - 1][i] === '1' ? 1 : 0
-    ans = Math.max(ans, Dp[m - 1][i])
-  }
-  // fill the last colume
-  for (let i = 0; i < m; i++) {
-    Dp[i][n - 1] = matrix[i][n - 1] === '1' ? 1 : 0
-    ans = Math.max(ans, Dp[i][n - 1])
-  }
-
-  for (let i = m - 2; i >= 0; i--) {
-    for (let j = n - 2; j >= 0; j--) {
-      // if is '0', continue
-      if (matrix[i][j] !== '0') {
-        if (matrix[i + 1][j + 1] === '0') {
-          Dp[i][j] = 1
-        } else {
-          let minArea = Math.min(Dp[i][j + 1], Dp[i + 1][j], Dp[i + 1][j + 1])
-          Dp[i][j] = Math.pow(Math.sqrt(minArea) + 1, 2)
-        }
-        ans = Math.max(ans, Dp[i][j])
-      }
+  // 从右上角开始搜索
+  // 可以使其中一维处于最小【x】，另一维处于最大【y】，方便缩小范围，只能往左或者下方缩小
+  // 每次都能排除某个点所在行或者列
+  let x = 0
+  let y = n - 1
+  while (x < m && y >= 0) {
+    if (matrix[x][y] === target) return true
+    if (matrix[x][y] < target) {
+      // 当前值小于目标，由于都是升序，要往更大看，【y】的一维已经是最大了，所以【x】维度加大，x++
+      x++
+    } else {
+      // 当前值大于目标，由于都是升序，要往更小看，【x】的一维已经是最小了，所以【y】维度减小，y--
+      y--
     }
   }
 
-  return ans
+  return false
 }
 
 const matrix1 = [
-  ['1', '0', '1', '0', '0'],
-  ['1', '0', '1', '1', '1'],
-  ['1', '1', '1', '1', '1'],
-  ['1', '0', '0', '1', '0'],
+  [1, 4, 7, 11, 15],
+  [2, 5, 8, 12, 19],
+  [3, 6, 9, 16, 22],
+  [10, 13, 14, 17, 24],
+  [18, 21, 23, 26, 30],
 ]
-console.log(maximalSquare(matrix1))
+let target1 = 5
+console.log(searchMatrix(matrix1, target1))
 
 const matrix2 = [
-  ['1', '0', '1', '0', '0', '1', '1', '1', '0'],
-  ['1', '1', '1', '0', '0', '0', '0', '0', '1'],
-  ['0', '0', '1', '1', '0', '0', '0', '1', '1'],
-  ['0', '1', '1', '0', '0', '1', '0', '0', '1'],
-  ['1', '1', '0', '1', '1', '0', '0', '1', '0'],
-  ['0', '1', '1', '1', '1', '1', '1', '0', '1'],
-  ['1', '0', '1', '1', '1', '0', '0', '1', '0'],
-  ['1', '1', '1', '0', '1', '0', '0', '0', '1'],
-  ['0', '1', '1', '1', '1', '0', '0', '1', '0'],
-  ['1', '0', '0', '1', '1', '1', '0', '0', '0'],
+  [1, 4, 7, 11, 15],
+  [2, 5, 8, 12, 19],
+  [3, 6, 9, 16, 22],
+  [10, 13, 14, 17, 24],
+  [18, 21, 23, 26, 30],
 ]
-console.log(maximalSquare(matrix2))
+let target2 = 20
+console.log(searchMatrix(matrix2, target2))
