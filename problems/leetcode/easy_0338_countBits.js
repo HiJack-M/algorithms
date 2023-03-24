@@ -36,6 +36,7 @@ var countBitsDp = function (n) {
   let highBit = 0
   for (let i = 1; i <= n; i++) {
     // 如果正整数 y 是 2 的整数次幂，则 y 的二进制表示中只有最高位是 1，其余都是 0，因此 y & (y−1) = 0
+    // 随着 i 的变大，在不断试图得出更大的”最高有效位“
     if ((i & (i - 1)) == 0) {
       highBit = i
     }
