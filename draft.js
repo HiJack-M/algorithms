@@ -1,34 +1,25 @@
-// 287. Find the Duplicate Number
+// 279. Perfect Squares
 
-// Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive.
+// Given an integer n, return the least number of perfect square numbers that sum to n.
 
-// There is only one repeated number in nums, return this repeated number.
-
-// You must solve the problem without modifying the array nums and uses only constant extra space.
+// A perfect square is an integer that is the square of an integer; in other words, it is the product of some integer with itself. For example, 1, 4, 9, and 16 are perfect squares while 3 and 11 are not.
 
 /**
- * @param {number[]} nums
+ * @param {number} n
  * @return {number}
  */
-var findDuplicate = function (nums) {
-  if (!nums || nums.length < 2) return null
-
-  let fast = nums[nums[0]]
-  let slow = nums[0]
-
-  while (fast < nums.length) {
-    if (fast === slow) break
-    fast = nums[nums[fast]]
-    slow = nums[slow]
+var numSquares = function (n) {
+  let res = n // res 为结果，最少需要多少个数，先用最坏打算，n 个 1
+  let num = 2 //perfect squares 的 根，num * num 则为当前的完全平方数
+  while (num * num <= n) {
+    // 当前的完全平方数在 n 之内
+    let quotient = Math.floor(n / (num * num)) // a 为需要几个当前的完全平方数 // need how many cur square number
+    let remainder = n % (num * num) // 剩余的值再来一遍暴力解，找出最少需要的个数
+    res = Math.min(res, quotient + numSquares(remainder))
+    num++
   }
-
-  fast = 0
-  while (fast !== slow) {
-    fast = nums[fast]
-    slow = nums[slow]
-  }
-
-  return fast
+  return res
 }
-const nums1 = [1, 2, 3, 4, 2]
-console.log(findDuplicate(nums1))
+
+console.log(numSquares(12))
+console.log(numSquares(13))

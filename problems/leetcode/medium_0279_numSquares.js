@@ -13,10 +13,36 @@ var numSquares = function (n) {
   let num = 2 //perfect squares 的 根，num * num 则为当前的完全平方数
   while (num * num <= n) {
     // 当前的完全平方数在 n 之内
-    let a = parseInt(n / (num * num)) // a 为需要几个当前的完全平方数
-    let b = n % (num * num) // 剩余的值再来一遍暴力解，找出最少需要的个数
-    res = Math.min(res, a + numSquares(b))
+    let quotient = Math.floor(n / (num * num)) // a 为需要几个当前的完全平方数 // need how many cur square number
+    let remainder = n % (num * num) // 剩余的值再来一遍暴力解，找出最少需要的个数
+    res = Math.min(res, quotient + numSquares(remainder))
     num++
   }
   return res
 }
+
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var numSquares_brute_force = function (n) {
+  let map = new Map()
+  return process(n, map)
+}
+
+const process = (rest, map) => {
+  if (map.has(rest)) return map.get(rest)
+
+  if (rest <= 0) return 0
+  if (rest === 1) return 1
+
+  let least = Infinity
+  for (let i = 1; i * i <= rest; i++) {
+    least = Math.min(least, process(rest - i * i, map) + 1)
+  }
+  map.set(rest, least)
+  return least
+}
+
+console.log(numSquares(12))
+console.log(numSquares(13))
