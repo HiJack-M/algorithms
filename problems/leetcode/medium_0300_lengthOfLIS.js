@@ -7,25 +7,23 @@
  * @return {number}
  */
 var lengthOfLIS = function (nums) {
-  if (!nums || nums.length == 0) return 0
+  if (!nums || nums.length === 0) return 0
 
   let N = nums.length
-  let Dp = new Array(N)
-  Dp[0] = 1
+  let Dp = new Array(N).fill(1) // LIS initial whit cur num itself
 
-  let longest = 1
+  let ans = 1
 
   for (let i = 1; i < N; i++) {
-    Dp[i] = 1
     for (let j = 0; j < i; j++) {
       if (nums[j] < nums[i]) {
         Dp[i] = Math.max(Dp[i], Dp[j] + 1)
       }
+      ans = Math.max(ans, Dp[i])
     }
-    longest = Math.max(longest, Dp[i])
   }
 
-  return longest
+  return ans
 }
 
 const nums1 = [10, 9, 2, 5, 3, 7, 101, 18]
@@ -61,7 +59,7 @@ var lengthOfLISPerf = function (nums) {
     while (l <= r) {
       m = l + ((r - l) >> 1)
       if (ends[m] < nums[i]) {
-        l = m + 1
+        l = m + 1 // 正是在这一步有可能把 right 突破原有的大小
       } else {
         r = m - 1
       }
