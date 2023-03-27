@@ -1,46 +1,53 @@
-// 300. Longest Increasing Subsequence
+// 322. Coin Change
 
-// Given an integer array nums, return the length of the longest strictly increasing subsequence.
+// You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
+
+// Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.
+
+// You may assume that you have an infinite number of each kind of coin.
 
 /**
- * @param {number[]} nums
+ * @param {number[]} coins
+ * @param {number} amount
  * @return {number}
  */
-var lengthOfLIS = function (nums) {
-  if (!nums || nums.length === 0) return 0
+var coinChange = function (coins, amount) {
+  if (!coins || coins.length === 0 || amount < 0) return -1
 
-  let N = nums.length
-  let ends = new Array(N) // 以 i + 1 长度的 LIS 的最小结尾数
-  ends[0] = nums[0]
-
-  let longest = 1
-  let right = 0
-
-  for (let i = 1; i < N; i++) {
-    let l = 0
-    let r = right
-    let m = 0
-
-    while (l <= r) {
-      m = l + ((r - l) >> 1)
-      if (ends[m] < nums[i]) {
-        l = m + 1
-      } else {
-        r = m - 1
-      }
-    }
-
-    right = Math.max(right, l + 1)
-    ends[l] = nums[i]
-    longest = Math.max(longest, l + 1)
+  let N = coins.length
+  let Dp = new Array(N + 1)
+  for (let i = 0; i < Dp.length; i++) {
+    Dp[i] = new Array(amount + 1)
   }
 
-  return longest
+  Dp[N].fill(-1)
+  Dp[N][0] = 0
+
+  for (let index = N - 1; index >= 0; index--) {
+    for (let rest = 0; rest <= amount; rest++) {
+      let count = Infinity
+      for (let i = 0; i * coins[index] <= rest; i++) {
+        let nextCount = Dp[index + 1][rest - i * coins[index]]
+        if (nextCount !== -1) {
+          count = Math.min(count, nextCount + i)
+        }
+      }
+
+      Dp[index][rest] = count == Infinity ? -1 : count
+    }
+  }
+
+  return Dp[0][amount]
 }
 
-const nums1 = [10, 9, 2, 5, 3, 7, 101, 18]
-const nums2 = [0, 1, 0, 3, 2, 3]
-const nums3 = [7, 7, 7, 7, 7, 7, 7]
-console.log(lengthOfLIS(nums1))
-console.log(lengthOfLIS(nums2))
-console.log(lengthOfLIS(nums3))
+const coins1 = [1, 2, 5]
+let amount1 = 11
+console.log(coinChange(coins1, amount1))
+
+const coins2 = [2]
+let amount2 = 3
+console.log(coinChange(coins2, amount2))
+
+const coins3 = [1]
+let amount3 = 0
+console.log(coinChange(coins3, amount3))
