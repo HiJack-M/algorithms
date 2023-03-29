@@ -1,53 +1,31 @@
-// 322. Coin Change
+// 448. Find All Numbers Disappeared in an Array
 
-// You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
-
-// Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.
-
-// You may assume that you have an infinite number of each kind of coin.
+// Given an array nums of n integers where nums[i] is in the range [1, n], return an array of all the integers in the range [1, n] that do not appear in nums.
 
 /**
- * @param {number[]} coins
- * @param {number} amount
- * @return {number}
+ * @param {number[]} nums
+ * @return {number[]}
+ * 【鸽笼原理】，由题意可得，n个笼子，若出现过，相应的“鸽笼”就会被占掉，我们将数字置为负数表示被占掉了。 再遍历一遍，如果“鸽笼”为正数就是没出现的数字。
  */
-var coinChange = function (coins, amount) {
-  if (!coins || coins.length === 0 || amount < 0) return -1
+var findDisappearedNumbers = function (nums) {
+  let ans = []
+  if (!nums || nums.length == 0) return ans
 
-  let N = coins.length
-  let Dp = new Array(N + 1)
-  for (let i = 0; i < Dp.length; i++) {
-    Dp[i] = new Array(amount + 1)
+  for (let n of nums) {
+    nums[Math.abs(n) - 1] = -Math.abs(nums[Math.abs(n) - 1])
   }
 
-  Dp[N].fill(-1)
-  Dp[N][0] = 0
-
-  for (let index = N - 1; index >= 0; index--) {
-    for (let rest = 0; rest <= amount; rest++) {
-      let count = Infinity
-      for (let i = 0; i * coins[index] <= rest; i++) {
-        let nextCount = Dp[index + 1][rest - i * coins[index]]
-        if (nextCount !== -1) {
-          count = Math.min(count, nextCount + i)
-        }
-      }
-
-      Dp[index][rest] = count == Infinity ? -1 : count
+  for (let [i, num] of nums.entries()) {
+    if (num > 0) {
+      ans.push(i + 1)
     }
   }
 
-  return Dp[0][amount]
+  return ans
 }
 
-const coins1 = [1, 2, 5]
-let amount1 = 11
-console.log(coinChange(coins1, amount1))
+const nums1 = [4, 3, 2, 7, 8, 2, 3, 1]
+console.log(findDisappearedNumbers(nums1))
 
-const coins2 = [2]
-let amount2 = 3
-console.log(coinChange(coins2, amount2))
-
-const coins3 = [1]
-let amount3 = 0
-console.log(coinChange(coins3, amount3))
+const nums2 = [1, 1]
+console.log(findDisappearedNumbers(nums2))

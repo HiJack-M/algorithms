@@ -31,6 +31,28 @@ console.log(findDisappearedNumbers(nums2))
 /**
  * @param {number[]} nums
  * @return {number[]}
+ * 【鸽笼原理】，由题意可得，n个笼子，若出现过，相应的“鸽笼”就会被占掉，我们将数字置为负数表示被占掉了。 再遍历一遍，如果“鸽笼”为正数就是没出现的数字。
+ */
+var findDisappearedNumbers_elegant = function (nums) {
+  let ans = []
+  if (!nums || nums.length == 0) return ans
+
+  for (let n of nums) {
+    nums[Math.abs(n) - 1] = -Math.abs(nums[Math.abs(n) - 1])
+  }
+
+  for (let [i, num] of nums.entries()) {
+    if (num > 0) {
+      ans.push(i + 1)
+    }
+  }
+
+  return ans
+}
+
+/**
+ * @param {number[]} nums
+ * @return {number[]}
  */
 var findDisappearedNumbersSaveSpace = function (nums) {
   let ans = []
