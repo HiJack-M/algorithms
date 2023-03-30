@@ -1,31 +1,53 @@
-// 448. Find All Numbers Disappeared in an Array
+// 337. House Robber III
 
-// Given an array nums of n integers where nums[i] is in the range [1, n], return an array of all the integers in the range [1, n] that do not appear in nums.
+// The thief has found himself a new place for his thievery again. There is only one entrance to this area, called root.
+
+// Besides the root, each house has one and only one parent house. After a tour, the smart thief realized that all houses in this place form a binary tree. It will automatically contact the police if two directly-linked houses were broken into on the same night.
+
+// Given the root of the binary tree, return the maximum amount of money the thief can rob without alerting the police.
 
 /**
- * @param {number[]} nums
- * @return {number[]}
- * 【鸽笼原理】，由题意可得，n个笼子，若出现过，相应的“鸽笼”就会被占掉，我们将数字置为负数表示被占掉了。 再遍历一遍，如果“鸽笼”为正数就是没出现的数字。
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
  */
-var findDisappearedNumbers = function (nums) {
-  let ans = []
-  if (!nums || nums.length == 0) return ans
 
-  for (let n of nums) {
-    nums[Math.abs(n) - 1] = -Math.abs(nums[Math.abs(n) - 1])
+class Info {
+  constructor(yes, no, max) {
+    this.yes = yes
+    this.no = no
+    this.max = max
   }
-
-  for (let [i, num] of nums.entries()) {
-    if (num > 0) {
-      ans.push(i + 1)
-    }
-  }
-
-  return ans
 }
 
-const nums1 = [4, 3, 2, 7, 8, 2, 3, 1]
-console.log(findDisappearedNumbers(nums1))
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var rob = function (root) {
+  let info = getNodeInfo(root)
+  return info === null ? 0 : info.max
+}
 
-const nums2 = [1, 1]
-console.log(findDisappearedNumbers(nums2))
+const getNodeInfo = (node) => {
+  if (!node) return null
+
+  let leftInfo = getNodeInfo(node.left)
+  let rightInfo = getNodeInfo(node.right)
+
+  let yes = node.val
+  let no = 0
+  if (leftInfo !== null) {
+    yes += leftInfo.no
+    no += leftInfo.max
+  }
+  if (rightInfo !== null) {
+    yes += rightInfo.no
+    no += rightInfo.max
+  }
+
+  return new Info(yes, no, Math.max(yes, no))
+}
