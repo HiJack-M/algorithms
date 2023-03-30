@@ -5,8 +5,32 @@
 /**
  * @param {number} n
  * @return {number[]}
+ * !!! 左神 YYDS
  */
 var countBits = function (n) {
+  let ans = [0]
+  if (n === 0) return ans
+
+  for (let i = 1; i <= n; i++) {
+    let count = 0
+    let num = i
+    let rightOne
+    while (num !== 0) {
+      rightOne = num & (~num + 1)
+      count++
+      num = num ^ rightOne
+    }
+    ans.push(count)
+  }
+
+  return ans
+}
+
+/**
+ * @param {number} n
+ * @return {number[]}
+ */
+var countBits_raw = function (n) {
   let ans = []
   if (n == null || n == undefined) return ans
 
