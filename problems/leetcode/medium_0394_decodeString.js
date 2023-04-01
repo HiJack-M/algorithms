@@ -19,6 +19,7 @@ var decodeString = function (s) {
   return process(s, 0).str
 }
 
+// 每次 process 处理的都是一个 [] 内部的 encode，最外层就想象成一个无形的 [] 框住
 // 返回值 { str, end }
 const process = (s, index) => {
   let str = ''

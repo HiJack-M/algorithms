@@ -1,97 +1,58 @@
-// 347. Top K Frequent Elements
+// 394. Decode String
 
-// Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.
+// Given an encoded string, return its decoded string.
 
-class Node {
-  constructor(value, freq) {
-    this.value = value
-    this.freq = freq
-  }
-}
+// The encoding rule is: k[encoded_string], where the encoded_string inside the square brackets is being repeated exactly k times. Note that k is guaranteed to be a positive integer.
 
-class MaxPriorityQueue {
-  constructor() {
-    this.heap = []
-  }
+// You may assume that the input string is always valid; there are no extra white spaces, square brackets are well-formed, etc. Furthermore, you may assume that the original data does not contain any digits and that digits are only for those repeat numbers, k. For example, there will not be input like 3a or 2[4].
 
-  swap(i, j) {
-    let temp = this.heap[i]
-    this.heap[i] = this.heap[j]
-    this.heap[j] = temp
-  }
-
-  insert(node) {
-    this.heap.push(node)
-    let index = this.heap.length - 1
-    while (index > 0) {
-      let parentIndex = Math.floor((index - 1) / 2)
-
-      if (this.heap[index].freq <= this.heap[parentIndex].freq) break
-
-      this.swap(index, parentIndex)
-      index = parentIndex
-    }
-  }
-
-  heapify(index) {
-    if (index >= this.heap.length - 1) return
-    let leftIndex = index * 2 + 1
-
-    while (leftIndex < this.heap.length) {
-      let big = this.heap[index].freq > this.heap[leftIndex].freq ? index : leftIndex
-      if (leftIndex + 1 < this.heap.length) {
-        big = this.heap[big].freq > this.heap[leftIndex + 1].freq ? big : leftIndex + 1
-      }
-      if (big == index) break
-
-      this.swap(index, big)
-      index = big
-      leftIndex = index * 2 + 1
-    }
-  }
-
-  pop() {
-    if (this.heap.length > 0) {
-      this.swap(0, this.heap.length - 1)
-      let res = this.heap.pop()
-      this.heapify(0)
-      return res
-    }
-  }
-}
+// The test cases are generated so that the length of the output will never exceed 105.
 
 /**
- * @param {number[]} nums
- * @param {number} k
- * @return {number[]}
+ * @param {string} s
+ * @return {string}
  */
-var topKFrequent = function (nums, k) {
-  if (!nums || nums.length < k) return null
+var decodeString = function (s) {
+  if (!s) return null
 
-  let map = new Map()
-  for (let i = 0; i < nums.length; i++) {
-    if (!map.has(nums[i])) {
-      map.set(nums[i], new Node(nums[i], 1))
-    } else {
-      let node = map.get(nums[i])
-      node.freq = node.freq + 1
+  return process(s, 0).res
+}
+
+// function: get the result of times * inner string
+// return: res, endIndex
+const process = (s, index) => {
+  let res = ''
+  let times = 0
+  while (index < s.length && s[index] !== ']') {
+    if (/[a-zA-Z]/.test(s[index])) {
+      res += s[index++]
+    } else if (/[0-9]/.test(s[index])) {
+      times = times * 10 + parseInt(s[index++])
+    } else if (s[index] == '[') {
+      let inner = process(s, index + 1)
+      res += timesString(inner.res, times)
+      index = inner.endIndex + 1
+      times = 0
     }
   }
 
-  let queue = new MaxPriorityQueue()
-  for (let value of map.values()) {
-    queue.insert(value)
-  }
-
-  let ans = []
-
-  for (let i = 1; i <= k; i++) {
-    ans.push(queue.pop().value)
-  }
-
-  return ans
+  return { res, endIndex: index }
 }
 
-const nums1 = [1, 1, 1, 2, 2, 3]
-let k1 = 2
-console.log(topKFrequent(nums1, k1))
+const timesString = (str, times) => {
+  let res = ''
+  while (times > 0) {
+    res += str
+    times--
+  }
+  return res
+}
+
+const s1 = '3[a]2[bc]'
+console.log(decodeString(s1))
+
+const s2 = '3[a2[c]]'
+console.log(decodeString(s2))
+
+const s3 = '2[abc]3[cd]ef'
+console.log(decodeString(s3))
