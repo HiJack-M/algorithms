@@ -1,58 +1,61 @@
-// 394. Decode String
+// 13. Roman to Integer
 
-// Given an encoded string, return its decoded string.
+// Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
 
-// The encoding rule is: k[encoded_string], where the encoded_string inside the square brackets is being repeated exactly k times. Note that k is guaranteed to be a positive integer.
+// Symbol       Value
+// I             1
+// V             5
+// X             10
+// L             50
+// C             100
+// D             500
+// M             1000
 
-// You may assume that the input string is always valid; there are no extra white spaces, square brackets are well-formed, etc. Furthermore, you may assume that the original data does not contain any digits and that digits are only for those repeat numbers, k. For example, there will not be input like 3a or 2[4].
+// For example, 2 is written as II in Roman numeral, just two ones added together. 12 is written as XII, which is simply X + II. The number 27 is written as XXVII, which is XX + V + II.
 
-// The test cases are generated so that the length of the output will never exceed 105.
+// Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not IIII. Instead, the number four is written as IV. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as IX. There are six instances where subtraction is used:
+
+// I can be placed before V (5) and X (10) to make 4 and 9.
+// X can be placed before L (50) and C (100) to make 40 and 90.
+// C can be placed before D (500) and M (1000) to make 400 and 900.
+// Given a roman numeral, convert it to an integer.
 
 /**
  * @param {string} s
- * @return {string}
+ * @return {number}
  */
-var decodeString = function (s) {
-  if (!s) return null
+var romanToInt = function (s) {
+  if (!s) return 0
 
-  return process(s, 0).res
-}
+  let romanObj = {
+    I: 1,
+    V: 5,
+    X: 10,
+    L: 50,
+    C: 100,
+    D: 500,
+    M: 1000,
+  }
 
-// function: get the result of times * inner string
-// return: res, endIndex
-const process = (s, index) => {
-  let res = ''
-  let times = 0
-  while (index < s.length && s[index] !== ']') {
-    if (/[a-zA-Z]/.test(s[index])) {
-      res += s[index++]
-    } else if (/[0-9]/.test(s[index])) {
-      times = times * 10 + parseInt(s[index++])
-    } else if (s[index] == '[') {
-      let inner = process(s, index + 1)
-      res += timesString(inner.res, times)
-      index = inner.endIndex + 1
-      times = 0
+  let ans = 0
+  let prev = romanObj[s[0]]
+  for (let i = 1; i < s.length; i++) {
+    let cur = romanObj[s[i]]
+    if (prev >= cur) {
+      ans += prev
+    } else {
+      ans -= prev
     }
+    prev = cur
   }
+  ans += romanObj[s[s.length - 1]]
 
-  return { res, endIndex: index }
+  return ans
 }
 
-const timesString = (str, times) => {
-  let res = ''
-  while (times > 0) {
-    res += str
-    times--
-  }
-  return res
-}
-
-const s1 = '3[a]2[bc]'
-console.log(decodeString(s1))
-
-const s2 = '3[a2[c]]'
-console.log(decodeString(s2))
-
-const s3 = '2[abc]3[cd]ef'
-console.log(decodeString(s3))
+let s1 = 'III'
+console.log(romanToInt(s1)) // 3
+let s2 = 'LVIII'
+console.log(romanToInt(s2)) // 58
+let s3 = 'MCMXCIV'
+console.log(romanToInt(s3)) // 1994
