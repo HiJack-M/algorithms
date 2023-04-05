@@ -2,25 +2,19 @@
 
 // Given the head of a linked list, return the list after sorting it in ascending order.
 
-/**
- * Definition for singly-linked list.
- */
-
-function ListNode(val, next) {
-  this.val = val === undefined ? 0 : val
-  this.next = next === undefined ? null : next
-}
+import ListNode from '../../structure/linkedListNode.js'
 
 /**
  * @param {ListNode} head
  * @return {ListNode}
  */
 var sortList = function (head) {
-  if (!head || !head.next) return head
-  return mergeSortNode(head)
+  if (!head) return head
+
+  return process(head)
 }
 
-const mergeSortNode = (node) => {
+const process = (node) => {
   if (!node.next) return node
 
   let fast = node.next
@@ -29,37 +23,37 @@ const mergeSortNode = (node) => {
     fast = fast.next.next
     slow = slow.next
   }
-  let partTwo = slow.next
+  let node2 = slow.next
   slow.next = null
-
-  let headL = mergeSortNode(node)
-  let headR = mergeSortNode(partTwo)
-  let newHead = mergeList(headL, headR)
+  let head1 = process(node)
+  let head2 = process(node2)
+  let newHead = merge(head1, head2)
   return newHead
 }
 
-const mergeList = (nodeL, nodeR) => {
-  let head = new ListNode(0)
-  let p = head
-  while (nodeL && nodeR) {
-    if (nodeL.val <= nodeR.val) {
-      p.next = nodeL
-      nodeL = nodeL.next
+const merge = (node1, node2) => {
+  let dummy = new ListNode(0)
+  let node = dummy
+  while (node1 && node2) {
+    if (node1.val <= node2.val) {
+      node.next = node1
+      node1 = node1.next
     } else {
-      p.next = nodeR
-      nodeR = nodeR.next
+      node.next = node2
+      node2 = node2.next
     }
-    p = p.next
-    p.next = null
+    node = node.next
+    node.next = null
+  }
+  if (node1) {
+    node.next = node1
+  } else {
+    node.next = node2
   }
 
-  if (nodeL) {
-    p.next = nodeL
-  } else if (nodeR) {
-    p.next = nodeR
-  }
-
-  return head.next
+  let newHead = dummy.next
+  dummy.next = null
+  return newHead
 }
 
 let head1 = new ListNode(4)

@@ -1,35 +1,64 @@
-// 26. Remove Duplicates from Sorted Array
+// 148. Sort List
 
-// Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same. Then return the number of unique elements in nums.
+// Given the head of a linked list, return the list after sorting it in ascending order.
 
-// Consider the number of unique elements of nums be k, to get accepted, you need to do the following things:
-
-// Change the array nums such that the first k elements of nums contain the unique elements in the order they were present in nums initially. The remaining elements of nums are not important as well as the size of nums.
-// Return k.
+import ListNode from './structure/linkedListNode.js'
 
 /**
- * @param {number[]} nums
- * @return {number}
+ * @param {ListNode} head
+ * @return {ListNode}
  */
-var removeDuplicates = function (nums) {
-  if (!nums || nums.length === 0) return 0
-  if (nums.length === 1) return 1
+var sortList = function (head) {
+  if (!head) return head
 
-  let fast = 1
-  let slow = 0
-  while (fast < nums.length) {
-    if (nums[fast] > nums[slow]) {
-      nums[++slow] = nums[fast++]
-    } else {
-      fast++
-    }
-  }
-
-  return slow + 1
+  return process(head)
 }
 
-const nums1 = [1, 1, 2]
-console.log(removeDuplicates(nums1))
+const process = (node) => {
+  if (!node.next) return node
 
-const nums2 = [0, 0, 1, 1, 1, 2, 2, 3, 3, 4]
-console.log(removeDuplicates(nums2))
+  let fast = node.next
+  let slow = node
+  while (fast && fast.next) {
+    fast = fast.next.next
+    slow = slow.next
+  }
+  let node2 = slow.next
+  slow.next = null
+  let head1 = process(node)
+  let head2 = process(node2)
+  let newHead = merge(head1, head2)
+  return newHead
+}
+
+const merge = (node1, node2) => {
+  let dummy = new ListNode(0)
+  let node = dummy
+  while (node1 && node2) {
+    if (node1.val <= node2.val) {
+      node.next = node1
+      node1 = node1.next
+    } else {
+      node.next = node2
+      node2 = node2.next
+    }
+    node = node.next
+    node.next = null
+  }
+  if (node1) {
+    node.next = node1
+  } else {
+    node.next = node2
+  }
+
+  let newHead = dummy.next
+  dummy.next = null
+  return newHead
+}
+
+let head1 = new ListNode(4)
+head1.next = new ListNode(2)
+head1.next.next = new ListNode(1)
+head1.next.next.next = new ListNode(3)
+
+console.log(sortList(head1))
