@@ -1,64 +1,29 @@
-// 148. Sort List
+// 7. Reverse Integer
 
-// Given the head of a linked list, return the list after sorting it in ascending order.
+// Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-231, 231 - 1], then return 0.
 
-import ListNode from './structure/linkedListNode.js'
+// Assume the environment does not allow you to store 64-bit integers (signed or unsigned).
 
 /**
- * @param {ListNode} head
- * @return {ListNode}
+ * @param {number} x
+ * @return {number}
  */
-var sortList = function (head) {
-  if (!head) return head
+var reverse = function (x) {
+  if (!x || x === 0) return 0
 
-  return process(head)
-}
+  let ans = 0
+  while (x !== 0) {
+    let remainder = x % 10
+    if (ans > 214748364 || (ans == 214748364 && remainder > 7)) return 0
+    if (ans < -214748364 || (ans == 214748364 && remainder < -8)) return 0
 
-const process = (node) => {
-  if (!node.next) return node
-
-  let fast = node.next
-  let slow = node
-  while (fast && fast.next) {
-    fast = fast.next.next
-    slow = slow.next
-  }
-  let node2 = slow.next
-  slow.next = null
-  let head1 = process(node)
-  let head2 = process(node2)
-  let newHead = merge(head1, head2)
-  return newHead
-}
-
-const merge = (node1, node2) => {
-  let dummy = new ListNode(0)
-  let node = dummy
-  while (node1 && node2) {
-    if (node1.val <= node2.val) {
-      node.next = node1
-      node1 = node1.next
-    } else {
-      node.next = node2
-      node2 = node2.next
-    }
-    node = node.next
-    node.next = null
-  }
-  if (node1) {
-    node.next = node1
-  } else {
-    node.next = node2
+    ans = ans * 10 + remainder
+    x = parseInt(x / 10)
   }
 
-  let newHead = dummy.next
-  dummy.next = null
-  return newHead
+  return ans
 }
 
-let head1 = new ListNode(4)
-head1.next = new ListNode(2)
-head1.next.next = new ListNode(1)
-head1.next.next.next = new ListNode(3)
-
-console.log(sortList(head1))
+console.log(reverse(123))
+console.log(reverse(-321))
+console.log(reverse(120))
