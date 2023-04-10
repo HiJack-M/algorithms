@@ -1,29 +1,78 @@
-// 7. Reverse Integer
+// 36. Valid Sudoku
 
-// Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-231, 231 - 1], then return 0.
+// Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
 
-// Assume the environment does not allow you to store 64-bit integers (signed or unsigned).
+// Each row must contain the digits 1-9 without repetition.
+// Each column must contain the digits 1-9 without repetition.
+// Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
+
+// Note:
+
+// - A Sudoku board (partially filled) could be valid but is not necessarily solvable.
+// - Only the filled cells need to be validated according to the mentioned rules.
 
 /**
- * @param {number} x
- * @return {number}
+ * @param {character[][]} board
+ * @return {boolean}
  */
-var reverse = function (x) {
-  if (!x || x === 0) return 0
+var isValidSudoku = function (board) {
+  if (!board || board.length === 0 || board[0].length === 0) return false
 
-  let ans = 0
-  while (x !== 0) {
-    let remainder = x % 10
-    if (ans > 214748364 || (ans == 214748364 && remainder > 7)) return 0
-    if (ans < -214748364 || (ans == 214748364 && remainder < -8)) return 0
+  let N = board.length
+  let help = new Array(N)
 
-    ans = ans * 10 + remainder
-    x = parseInt(x / 10)
+  // validate row
+  for (let i = 0; i < N; i++) {
+    help.fill(false)
+    for (let j = 0; j < N; j++) {
+      if (board[i][j] !== '.') {
+        let curNum = parseInt(board[i][j])
+        if (help[curNum] === true) {
+          return false
+        }
+        help[curNum] = true
+      }
+    }
   }
 
-  return ans
-}
+  // validate column
+  for (let i = 0; i < N; i++) {
+    help.fill(false)
+    for (let j = 0; j < N; j++) {
+      if (board[j][i] !== '.') {
+        let curNum = parseInt(board[j][i])
+        if (help[curNum] === true) {
+          return false
+        }
+        help[curNum] = true
+      }
+    }
+  }
 
-console.log(reverse(123))
-console.log(reverse(-321))
-console.log(reverse(120))
+  // return boolean
+  const validateSub = (x, y) => {
+    help.fill(false)
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (board[x + i][y + j] !== '.') {
+          let curNum = parseInt(board[x + i][y + j])
+          if (help[curNum] === true) {
+            return false
+          }
+          help[curNum] = true
+        }
+      }
+    }
+    return true
+  }
+
+  // validate sub-boxes
+  for (let i = 0; i < N; i = i + 3) {
+    for (let j = 0; j < N; j = j + 3) {
+      let subValid = validateSub(i, j)
+      if (!subValid) return false
+    }
+  }
+
+  return true
+}
