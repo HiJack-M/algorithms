@@ -1,78 +1,42 @@
-// 36. Valid Sudoku
+// 66. Plus One
 
-// Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need to be validated according to the following rules:
+// You are given a large integer represented as an integer array digits, where each digits[i] is the ith digit of the integer. The digits are ordered from most significant to least significant in left-to-right order. The large integer does not contain any leading 0's.
 
-// Each row must contain the digits 1-9 without repetition.
-// Each column must contain the digits 1-9 without repetition.
-// Each of the nine 3 x 3 sub-boxes of the grid must contain the digits 1-9 without repetition.
-
-// Note:
-
-// - A Sudoku board (partially filled) could be valid but is not necessarily solvable.
-// - Only the filled cells need to be validated according to the mentioned rules.
+// Increment the large integer by one and return the resulting array of digits.
 
 /**
- * @param {character[][]} board
- * @return {boolean}
+ * @param {number[]} digits
+ * @return {number[]}
  */
-var isValidSudoku = function (board) {
-  if (!board || board.length === 0 || board[0].length === 0) return false
+var plusOne = function (digits) {
+  if (!digits || digits.length === 0) return
 
-  let N = board.length
-  let help = new Array(N)
-
-  // validate row
-  for (let i = 0; i < N; i++) {
-    help.fill(false)
-    for (let j = 0; j < N; j++) {
-      if (board[i][j] !== '.') {
-        let curNum = parseInt(board[i][j])
-        if (help[curNum] === true) {
-          return false
-        }
-        help[curNum] = true
-      }
+  let carry = 0
+  let N = digits.length
+  for (let i = N - 1; i >= 0; i--) {
+    if (i === N - 1) {
+      digits[i] += 1
     }
+    digits[i] += carry
+
+    carry = Math.floor(digits[i] / 10)
+
+    if (carry === 0) break // // 再无进位就提前停止
+    digits[i] = digits[i] % 10
   }
 
-  // validate column
-  for (let i = 0; i < N; i++) {
-    help.fill(false)
-    for (let j = 0; j < N; j++) {
-      if (board[j][i] !== '.') {
-        let curNum = parseInt(board[j][i])
-        if (help[curNum] === true) {
-          return false
-        }
-        help[curNum] = true
-      }
-    }
+  if (carry === 1) {
+    digits.unshift(1)
   }
 
-  // return boolean
-  const validateSub = (x, y) => {
-    help.fill(false)
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        if (board[x + i][y + j] !== '.') {
-          let curNum = parseInt(board[x + i][y + j])
-          if (help[curNum] === true) {
-            return false
-          }
-          help[curNum] = true
-        }
-      }
-    }
-    return true
-  }
-
-  // validate sub-boxes
-  for (let i = 0; i < N; i = i + 3) {
-    for (let j = 0; j < N; j = j + 3) {
-      let subValid = validateSub(i, j)
-      if (!subValid) return false
-    }
-  }
-
-  return true
+  return digits
 }
+
+const digits1 = [1, 2, 3]
+console.log(plusOne(digits1)) // Output: [1,2,4]
+
+const digits2 = [4, 3, 2, 1]
+console.log(plusOne(digits2)) // Output: [4,3,2,2]
+
+const digits3 = [9]
+console.log(plusOne(digits3)) // Output: [1,0]
