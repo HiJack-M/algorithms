@@ -1,33 +1,34 @@
-// 69. Sqrt(x)
-
-// Given a non-negative integer x, return the square root of x rounded down to the nearest integer. The returned integer should be non-negative as well.
-
-// You must not use any built-in exponent function or operator.
-
-// For example, do not use pow(x, 0.5) in c++ or x ** 0.5 in python.
+// 38. Count and Say
 
 /**
- * @param {number} x
- * @return {number}
+ * @param {number} n
+ * @return {string}
  */
-var mySqrt = function (x) {
-  if (x === 0) return 0
+var countAndSay = function (n) {
+  if (n < 1) return ''
+  if (n === 1) return '1'
 
-  let ans = -1
-  let l = 0
-  let r = x
-  while (l <= r) {
-    let mid = l + ((r - l) >> 1)
-    if (mid * mid <= x) {
-      ans = mid
-      l = mid + 1
+  let string = countAndSay(n - 1)
+  let result = ''
+
+  let i = 1
+  let current = string[0]
+  let count = 1
+  while (i < string.length) {
+    if (string[i] !== current) {
+      result += count + current
+      current = string[i]
+      count = 1
     } else {
-      r = mid - 1
+      count++
     }
+    i++
   }
 
-  return ans
+  return result + count + current
 }
 
-console.log(mySqrt(4)) // Output: 2
-console.log(mySqrt(8)) // Output: 2
+console.log(countAndSay(1))
+console.log(countAndSay(2))
+console.log(countAndSay(3))
+console.log(countAndSay(4))
